@@ -1,0 +1,29 @@
+{
+  "name": "@ai-doodle/renderer",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/exports.ts",
+    "./composition": "./src/compositions/VideoComposition.tsx",
+    "./demo-project": "./src/demo-project.ts"
+  },
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render:demo": "remotion render src/index.ts Demo ../../output/demo.mp4 --overwrite",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@ai-doodle/animation-engine": "workspace:*",
+    "@ai-doodle/asset-library": "workspace:*",
+    "@ai-doodle/video-schema": "workspace:*",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.399"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.399",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5"
+  }
+}

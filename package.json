@@ -1,0 +1,38 @@
+{
+  "name": "ai-doodle-video",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "dev": "pnpm --filter @ai-doodle/web dev",
+    "render:demo": "pnpm --filter @ai-doodle/renderer render:demo",
+    "studio": "pnpm --filter @ai-doodle/renderer studio",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.34.0",
+    "@types/node": "^24.3.0",
+    "eslint": "^9.34.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.3.0",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.41.0",
+    "vitest": "^3.2.4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"],
+    "overrides": {
+      "react": "18.3.1",
+      "react-dom": "18.3.1",
+      "remotion": "4.0.399",
+      "@remotion/cli": "4.0.399",
+      "@remotion/player": "4.0.399",
+      "@remotion/renderer": "4.0.399",
+      "@remotion/bundler": "4.0.399",
+      "@remotion/media-utils": "4.0.399"
+    }
+  }
+}

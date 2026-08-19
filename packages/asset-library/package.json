@@ -1,0 +1,13 @@
+{
+  "name": "@ai-doodle/asset-library",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./demos/demo-project.json": "./demos/demo-project.json"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

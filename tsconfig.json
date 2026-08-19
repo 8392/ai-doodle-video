@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/video-schema" },
+    { "path": "./packages/animation-engine" },
+    { "path": "./packages/asset-library" },
+    { "path": "./apps/renderer" },
+    { "path": "./apps/web" }
+  ]
+}

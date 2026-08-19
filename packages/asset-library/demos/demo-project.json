@@ -1,0 +1,219 @@
+{
+  "id": "demo-sanctions",
+  "name": "为什么美国长期制裁伊朗",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "durationInFrames": 540,
+  "background": {
+    "type": "paper",
+    "color": "#E7E7E7"
+  },
+  "language": "zh",
+  "narration": {
+    "src": "/audio/demo.wav",
+    "startFrame": 0,
+    "durationInFrames": 540,
+    "volume": 0.7
+  },
+  "scenes": [
+    {
+      "id": "scene-usa",
+      "startFrame": 0,
+      "durationInFrames": 90,
+      "narration": "为什么美国长期制裁伊朗？",
+      "camera": {
+        "x": 0,
+        "y": 0,
+        "scale": 1,
+        "durationInFrames": 18,
+        "easing": "ease-in-out"
+      },
+      "elements": [
+        {
+          "id": "el-usa",
+          "type": "svg",
+          "assetId": "usa",
+          "x": 140,
+          "y": 360,
+          "width": 800,
+          "height": 520,
+          "zIndex": 1,
+          "animation": {
+            "type": "draw",
+            "durationInFrames": 72,
+            "easing": "linear"
+          }
+        }
+      ]
+    },
+    {
+      "id": "scene-iran",
+      "startFrame": 90,
+      "durationInFrames": 90,
+      "narration": "伊朗处在关键的地缘位置。",
+      "camera": {
+        "x": 0,
+        "y": -620,
+        "scale": 1,
+        "durationInFrames": 24,
+        "easing": "ease-in-out"
+      },
+      "elements": [
+        {
+          "id": "el-iran",
+          "type": "svg",
+          "assetId": "iran",
+          "x": 160,
+          "y": 980,
+          "width": 760,
+          "height": 620,
+          "zIndex": 1,
+          "animation": {
+            "type": "draw",
+            "durationInFrames": 72,
+            "easing": "linear"
+          }
+        }
+      ]
+    },
+    {
+      "id": "scene-oil",
+      "startFrame": 180,
+      "durationInFrames": 120,
+      "narration": "石油工厂，成为双方博弈的核心。",
+      "camera": {
+        "x": 0,
+        "y": -1280,
+        "scale": 1.22,
+        "durationInFrames": 36,
+        "easing": "ease-in-out"
+      },
+      "elements": [
+        {
+          "id": "el-oil-factory",
+          "type": "svg",
+          "assetId": "oil-factory",
+          "x": 70,
+          "y": 1680,
+          "width": 940,
+          "height": 620,
+          "zIndex": 1,
+          "animation": {
+            "type": "draw",
+            "durationInFrames": 90,
+            "easing": "linear"
+          }
+        }
+      ]
+    },
+    {
+      "id": "scene-dollar",
+      "startFrame": 300,
+      "durationInFrames": 90,
+      "narration": "美元结算通道被切断。",
+      "camera": {
+        "x": 0,
+        "y": -2040,
+        "scale": 1.08,
+        "durationInFrames": 28,
+        "easing": "ease-in-out"
+      },
+      "elements": [
+        {
+          "id": "el-dollar",
+          "type": "svg",
+          "assetId": "dollar",
+          "x": 280,
+          "y": 2400,
+          "width": 520,
+          "height": 640,
+          "zIndex": 1,
+          "animation": {
+            "type": "draw",
+            "durationInFrames": 70,
+            "easing": "linear"
+          }
+        }
+      ]
+    },
+    {
+      "id": "scene-money-box",
+      "startFrame": 390,
+      "durationInFrames": 150,
+      "narration": "资金被锁进箱子，流动停滞。",
+      "camera": {
+        "x": 0,
+        "y": -2760,
+        "scale": 1,
+        "durationInFrames": 40,
+        "easing": "ease-in-out"
+      },
+      "elements": [
+        {
+          "id": "el-businessman",
+          "type": "svg",
+          "assetId": "businessman",
+          "x": 80,
+          "y": 3140,
+          "width": 420,
+          "height": 560,
+          "zIndex": 1,
+          "animation": {
+            "type": "draw",
+            "durationInFrames": 70,
+            "easing": "linear"
+          }
+        },
+        {
+          "id": "el-money-box",
+          "type": "svg",
+          "assetId": "money-box",
+          "x": 520,
+          "y": 3220,
+          "width": 480,
+          "height": 400,
+          "zIndex": 2,
+          "animation": {
+            "type": "draw",
+            "durationInFrames": 64,
+            "delayInFrames": 48,
+            "easing": "linear"
+          }
+        }
+      ]
+    }
+  ],
+  "captions": [
+    {
+      "text": "为什么美国长期制裁伊朗？",
+      "startFrame": 0,
+      "endFrame": 90,
+      "style": { "fontSize": 42, "color": "#171717" }
+    },
+    {
+      "text": "伊朗处在关键的地缘位置。",
+      "startFrame": 90,
+      "endFrame": 180,
+      "style": { "fontSize": 42, "color": "#171717" }
+    },
+    {
+      "text": "石油成为双方博弈的核心。",
+      "startFrame": 180,
+      "endFrame": 300,
+      "style": { "fontSize": 42, "color": "#171717" }
+    },
+    {
+      "text": "美元与金融渠道被切断。",
+      "startFrame": 300,
+      "endFrame": 390,
+      "style": { "fontSize": 42, "color": "#171717" }
+    },
+    {
+      "text": "资金被锁进箱子里。",
+      "startFrame": 390,
+      "endFrame": 540,
+      "style": { "fontSize": 42, "color": "#171717" }
+    }
+  ]
+}
