@@ -24,3 +24,17 @@ body {
 .font-display {
   font-family: "Noto Serif SC", "IBM Plex Sans", serif;
 }
+
+.icon-moveable .moveable-control {
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  margin-left: -5px;
+  border: 2px solid #fff;
+  border-radius: 2px;
+  background: var(--cobalt);
+}
+
+.icon-moveable .moveable-line {
+  background: var(--cobalt);
+}

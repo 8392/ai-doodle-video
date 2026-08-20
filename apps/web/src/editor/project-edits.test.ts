@@ -2,13 +2,19 @@ import { describe, expect, it } from "vitest";
 import type { VideoProject } from "@ai-doodle/video-schema";
 import {
   addAssetToScene,
+  addScene,
   applyAspectRatio,
   flattenSceneCameras,
+  moveElementInScene,
+  moveScene,
   removeElement,
+  removeScene,
+  retimeProject,
   setDefaultTransition,
   setProjectName,
   setSceneTransition,
   updateElement,
+  updateScene,
 } from "./project-edits";
 
 const project: VideoProject = {
@@ -85,6 +91,155 @@ describe("project-edits", () => {
     const next = flattenSceneCameras(stacked);
     expect(next.scenes[0]?.camera).toMatchObject({ x: 0, y: 0, scale: 1 });
     expect(next.scenes[0]?.elements[0]?.y).toBe(360);
+  });
+
+  it("retimes start frames, duration, and one caption per scene", () => {
+    const next = retimeProject({
+      ...project,
+      durationInFrames: 10,
+      captions: [{ text: "旧字幕", startFrame: 0, endFrame: 10 }],
+      scenes: [
+        {
+          id: "s1",
+          startFrame: 99,
+          durationInFrames: 30,
+          narration: "第一段",
+          elements: [],
+        },
+        {
+          id: "s2",
+          startFrame: 0,
+          durationInFrames: 45,
+          narration: "第二段",
+          elements: [],
+        },
+      ],
+    });
+    expect(next.durationInFrames).toBe(75);
+    expect(next.scenes[0]).toMatchObject({ id: "s1", startFrame: 0 });
+    expect(next.scenes[1]).toMatchObject({ id: "s2", startFrame: 30 });
+    expect(next.captions).toEqual([
+      { text: "第一段", startFrame: 0, endFrame: 30, style: undefined },
+      { text: "第二段", startFrame: 30, endFrame: 75, style: undefined },
+    ]);
+  });
+
+  it("adds a scene after the current one and keeps captions aligned", () => {
+    const twoScenes = retimeProject({
+      ...project,
+      scenes: [
+        project.scenes[0]!,
+        {
+          id: "s2",
+          startFrame: 90,
+          durationInFrames: 60,
+          narration: "第二段",
+          elements: [],
+        },
+      ],
+    });
+    const { project: next, sceneId } = addScene(twoScenes, "s1");
+    expect(next.scenes.map((scene) => scene.id)).toEqual(["s1", sceneId, "s2"]);
+    expect(next.scenes[1]).toMatchObject({
+      id: sceneId,
+      startFrame: 90,
+      durationInFrames: 90,
+      narration: "新场景",
+      elements: [],
+    });
+    expect(next.durationInFrames).toBe(240);
+    expect(next.captions?.map((caption) => caption.text)).toEqual([
+      "Scene 1",
+      "新场景",
+      "第二段",
+    ]);
+  });
+
+  it("refuses to remove the last remaining scene", () => {
+    expect(removeScene(project, "s1")).toBe(project);
+  });
+
+  it("removes a scene and rewrites later start frames", () => {
+    const twoScenes = retimeProject({
+      ...project,
+      scenes: [
+        { ...project.scenes[0]!, narration: "第一段" },
+        {
+          id: "s2",
+          startFrame: 90,
+          durationInFrames: 60,
+          narration: "第二段",
+          elements: [],
+        },
+      ],
+    });
+    const next = removeScene(twoScenes, "s1");
+    expect(next.scenes).toHaveLength(1);
+    expect(next.scenes[0]).toMatchObject({ id: "s2", startFrame: 0 });
+    expect(next.durationInFrames).toBe(60);
+    expect(next.captions?.[0]?.text).toBe("第二段");
+  });
+
+  it("moves a scene and keeps its caption", () => {
+    const twoScenes = retimeProject({
+      ...project,
+      scenes: [
+        { ...project.scenes[0]!, narration: "第一段" },
+        {
+          id: "s2",
+          startFrame: 90,
+          durationInFrames: 60,
+          narration: "第二段",
+          elements: [],
+        },
+      ],
+    });
+    const next = moveScene(twoScenes, "s2", -1);
+    expect(next.scenes.map((scene) => scene.id)).toEqual(["s2", "s1"]);
+    expect(next.scenes[0]?.startFrame).toBe(0);
+    expect(next.scenes[1]?.startFrame).toBe(60);
+    expect(next.captions?.map((caption) => caption.text)).toEqual([
+      "第二段",
+      "第一段",
+    ]);
+  });
+
+  it("updates scene duration and narration", () => {
+    const next = updateScene(project, "s1", {
+      durationInFrames: 120,
+      narration: "新旁白",
+    });
+    expect(next.scenes[0]).toMatchObject({
+      durationInFrames: 120,
+      narration: "新旁白",
+    });
+    expect(next.durationInFrames).toBe(120);
+    expect(next.captions?.[0]?.text).toBe("新旁白");
+  });
+
+  it("reorders elements in a scene", () => {
+    const withTwo = {
+      ...project,
+      scenes: [
+        {
+          ...project.scenes[0]!,
+          elements: [
+            { id: "el-1", type: "svg" as const, assetId: "usa", x: 0, y: 0 },
+            { id: "el-2", type: "svg" as const, assetId: "dollar", x: 10, y: 10 },
+          ],
+        },
+      ],
+    };
+    const down = moveElementInScene(withTwo, "s1", "el-1", 1);
+    expect(down.scenes[0]?.elements.map((element) => element.id)).toEqual([
+      "el-2",
+      "el-1",
+    ]);
+    expect(
+      moveElementInScene(withTwo, "s1", "el-1", -1).scenes[0]?.elements.map(
+        (element) => element.id,
+      ),
+    ).toEqual(["el-1", "el-2"]);
   });
 
   it("stores a per-scene transition override", () => {

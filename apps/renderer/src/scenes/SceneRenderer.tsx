@@ -8,6 +8,7 @@ import { isDrawAnimationActive } from "../elements/motion";
 import { sequenceElementAnimations } from "../elements/sequence";
 import { DrawingHand } from "../hand/DrawingHand";
 import { hiddenPoint, StrokeProvider, type StrokePoint } from "../hand/StrokeContext";
+import { fillFrameStyle } from "../lib/fill-frame";
 import { findSceneIndexAtFrame, visibleScenes } from "../lib/scenes";
 import {
   incomingTransitionProgress,
@@ -71,8 +72,7 @@ export function SceneRenderer({ project }: { project: VideoProject }) {
           height,
         );
         const layerStyle: CSSProperties = {
-          position: "absolute",
-          inset: 0,
+          ...fillFrameStyle,
           overflow: "hidden",
           opacity: style.opacity,
           transform: style.transform,

@@ -1,16 +1,33 @@
-import { Download, Save } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Download, Play, Save } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { downloadJson } from "../lib/local-project";
 import { useEditorStore } from "../stores/editor-store";
+import { usePreviewStore } from "../stores/preview-store";
+import { ExportMp4Button } from "./ExportMp4Button";
 
 export function EditorHeader() {
+  const navigate = useNavigate();
   const project = useEditorStore((state) => state.project);
   const saveStatus = useEditorStore((state) => state.saveStatus);
   const setName = useEditorStore((state) => state.setName);
   const persist = useEditorStore((state) => state.persist);
+  const setPreviewProject = usePreviewStore((state) => state.setProject);
 
   if (!project) {
     return null;
+  }
+
+  const current = project;
+  const jsonName = `${current.id}.json`;
+
+  function downloadProjectJson() {
+    downloadJson(jsonName, JSON.stringify(current, null, 2));
+  }
+
+  function openPreview() {
+    persist();
+    setPreviewProject(current);
+    navigate(`/preview/${current.id}`);
   }
 
   return (
@@ -25,7 +42,7 @@ export function EditorHeader() {
           className="min-w-0 max-w-md truncate border-b border-transparent bg-transparent font-display text-lg outline-none focus:border-ink"
         />
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex min-w-0 items-center gap-2">
         {saveStatus === "saved" ? (
           <span className="text-xs text-ink/40">已保存到浏览器本地</span>
         ) : null}
@@ -42,24 +59,21 @@ export function EditorHeader() {
         </button>
         <button
           type="button"
-          onClick={() =>
-            downloadJson(`${project.id}.json`, JSON.stringify(project, null, 2))
-          }
+          onClick={downloadProjectJson}
           className="inline-flex items-center gap-1.5 rounded-lg border border-ink/10 px-3 py-1.5 text-sm hover:bg-paper"
         >
           <Download size={14} />
           导出 JSON
         </button>
+        <ExportMp4Button project={project} />
         <button
           type="button"
-          title="MP4 仍走本地命令 pnpm render:demo，本阶段没有云渲染"
-          className="rounded-lg border border-ink/10 px-3 py-1.5 text-sm text-ink/45"
+          onClick={openPreview}
+          className="inline-flex items-center gap-1.5 rounded-lg bg-ink px-3 py-1.5 text-sm text-paper hover:bg-ink/90"
         >
-          导出 MP4
-        </button>
-        <span className="rounded-lg bg-ink px-3 py-1.5 text-sm text-paper">
+          <Play size={14} />
           预览
-        </span>
+        </button>
       </div>
     </header>
   );

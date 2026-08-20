@@ -45,6 +45,7 @@ export function screenToCompositionPoint(options: {
   compositionWidth: number;
   compositionHeight: number;
   camera: { x: number; y: number; scale: number };
+  allowOutside?: boolean;
 }): { x: number; y: number } | null {
   const display = getCompositionDisplayRect(
     options.containerRect.width,
@@ -57,10 +58,11 @@ export function screenToCompositionPoint(options: {
   const localY = options.clientY - options.containerRect.top - display.top;
 
   if (
-    localX < 0 ||
-    localY < 0 ||
-    localX > display.width ||
-    localY > display.height
+    !options.allowOutside &&
+    (localX < 0 ||
+      localY < 0 ||
+      localX > display.width ||
+      localY > display.height)
   ) {
     return null;
   }
@@ -176,6 +178,46 @@ export function elementOverlayRect(options: {
     top: topLeft.y,
     width: bottomRight.x - topLeft.x,
     height: bottomRight.y - topLeft.y,
+  };
+}
+
+export function overlayRectToElementPatch(options: {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  containerRect: Pick<DOMRect, "left" | "top" | "width" | "height">;
+  compositionWidth: number;
+  compositionHeight: number;
+  camera: { x: number; y: number; scale: number };
+}): { x: number; y: number; width: number; height: number; scale: number } | null {
+  const topLeft = screenToCompositionPoint({
+    clientX: options.containerRect.left + options.left,
+    clientY: options.containerRect.top + options.top,
+    containerRect: options.containerRect,
+    compositionWidth: options.compositionWidth,
+    compositionHeight: options.compositionHeight,
+    camera: options.camera,
+    allowOutside: true,
+  });
+  const bottomRight = screenToCompositionPoint({
+    clientX: options.containerRect.left + options.left + options.width,
+    clientY: options.containerRect.top + options.top + options.height,
+    containerRect: options.containerRect,
+    compositionWidth: options.compositionWidth,
+    compositionHeight: options.compositionHeight,
+    camera: options.camera,
+    allowOutside: true,
+  });
+  if (!topLeft || !bottomRight) {
+    return null;
+  }
+  return {
+    x: Math.round(topLeft.x),
+    y: Math.round(topLeft.y),
+    width: Math.max(8, Math.round(bottomRight.x - topLeft.x)),
+    height: Math.max(8, Math.round(bottomRight.y - topLeft.y)),
+    scale: 1,
   };
 }
 

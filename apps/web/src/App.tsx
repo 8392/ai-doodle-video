@@ -9,7 +9,7 @@ export function App() {
       <Route path="/" element={<Navigate to="/create" replace />} />
       <Route path="/create" element={<CreatePage />} />
       <Route path="/editor/:projectId" element={<EditorPage />} />
-      <Route path="/preview" element={<PreviewPage />} />
+      <Route path="/preview/:projectId?" element={<PreviewPage />} />
     </Routes>
   );
 }

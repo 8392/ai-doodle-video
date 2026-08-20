@@ -1,5 +1,6 @@
 import type { AudioTrack } from "@ai-doodle/video-schema";
-import { Audio, Sequence } from "remotion";
+import { Audio } from "@remotion/media";
+import { Sequence } from "remotion";
 import { toStaticSrc } from "../lib/to-static-src";
 
 function Track({ track }: { track: AudioTrack }) {

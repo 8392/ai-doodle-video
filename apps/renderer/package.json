@@ -11,12 +11,14 @@
   "scripts": {
     "studio": "remotion studio src/index.ts",
     "render:demo": "remotion render src/index.ts Demo ../../output/demo.mp4 --overwrite",
+    "render:json": "vite-node ./scripts/render-json.ts --",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "@ai-doodle/animation-engine": "workspace:*",
     "@ai-doodle/asset-library": "workspace:*",
     "@ai-doodle/video-schema": "workspace:*",
+    "@remotion/media": "4.0.399",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "remotion": "4.0.399"
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@remotion/cli": "4.0.399",
     "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5"
+    "@types/react-dom": "^18.3.5",
+    "vite-node": "3.2.4"
   }
 }

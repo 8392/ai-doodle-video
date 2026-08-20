@@ -36,6 +36,21 @@ describe("parseVideoProject", () => {
     expect(project.scenes).toHaveLength(1);
   });
 
+  it("accepts a scene with no elements", () => {
+    const project = parseVideoProject({
+      ...validProject,
+      scenes: [
+        {
+          id: "empty",
+          startFrame: 0,
+          durationInFrames: 90,
+          elements: [],
+        },
+      ],
+    });
+    expect(project.scenes[0]?.elements).toEqual([]);
+  });
+
   it("rejects empty scenes", () => {
     expect(() =>
       parseVideoProject({ ...validProject, scenes: [] }),

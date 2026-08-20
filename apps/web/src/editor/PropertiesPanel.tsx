@@ -1,7 +1,7 @@
 import { getAsset } from "@ai-doodle/asset-library";
 import { DEFAULT_TRANSITION } from "@ai-doodle/renderer";
 import type { TransitionConfig, TransitionType } from "@ai-doodle/video-schema";
-import { Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { useEffect } from "react";
 import { findElement, findScene } from "./project-edits";
 import { useEditorStore } from "../stores/editor-store";
@@ -23,6 +23,8 @@ export function PropertiesPanel() {
   const patchElement = useEditorStore((state) => state.patchElement);
   const patchDefaultTransition = useEditorStore((state) => state.patchDefaultTransition);
   const patchSceneTransition = useEditorStore((state) => state.patchSceneTransition);
+  const patchScene = useEditorStore((state) => state.patchScene);
+  const reorderElement = useEditorStore((state) => state.reorderElement);
   const removeSelectedElement = useEditorStore((state) => state.removeSelectedElement);
 
   useEffect(() => {
@@ -64,6 +66,15 @@ export function PropertiesPanel() {
         <h2 className="mt-2 font-display text-lg">{scene?.id ?? "未选择场景"}</h2>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3">
+        {scene ? (
+          <SceneSettings
+            fps={project.fps}
+            durationInFrames={scene.durationInFrames}
+            narration={scene.narration ?? ""}
+            onChange={patchScene}
+          />
+        ) : null}
+
         <TransitionSettings
           projectDefault={project.defaultTransition}
           sceneTransition={scene?.transition}
@@ -71,20 +82,38 @@ export function PropertiesPanel() {
           onChangeScene={patchSceneTransition}
         />
 
-        <p className="mb-2 mt-5 text-xs text-ink/45">当前 Scene 元素</p>
+        <p className="mb-2 mt-5 text-xs text-ink/45">当前 Scene 元素（上到下 = 播放先后）</p>
         <ul className="space-y-1">
-          {scene?.elements.map((item) => (
-            <li key={item.id}>
+          {scene?.elements.map((item, index) => (
+            <li key={item.id} className="flex items-center gap-1">
               <button
                 type="button"
                 onClick={() => selectElement(item.id)}
-                className={`w-full rounded-lg border px-2.5 py-1.5 text-left text-sm ${
+                className={`min-w-0 flex-1 rounded-lg border px-2.5 py-1.5 text-left text-sm ${
                   item.id === selectedElementId
                     ? "border-ink bg-paper"
                     : "border-transparent hover:bg-paper"
                 }`}
               >
                 {getAsset(item.assetId ?? "")?.name ?? item.id}
+              </button>
+              <button
+                type="button"
+                title="上移（更早描边）"
+                disabled={index === 0}
+                onClick={() => reorderElement(item.id, -1)}
+                className="rounded-md p-1 text-ink/45 hover:bg-paper hover:text-ink disabled:opacity-30"
+              >
+                <ChevronUp size={14} />
+              </button>
+              <button
+                type="button"
+                title="下移（更晚描边）"
+                disabled={index === scene.elements.length - 1}
+                onClick={() => reorderElement(item.id, 1)}
+                className="rounded-md p-1 text-ink/45 hover:bg-paper hover:text-ink disabled:opacity-30"
+              >
+                <ChevronDown size={14} />
               </button>
             </li>
           ))}
@@ -134,11 +163,54 @@ export function PropertiesPanel() {
           </div>
         ) : (
           <p className="mt-6 text-sm text-ink/45">
-            在预览中点击图标选中，可拖动改位置；右侧可删除。
+            在预览中点击图标选中，拖动手柄改大小，拖图标改位置。按住 Shift 等比缩放。
           </p>
         )}
       </div>
     </aside>
+  );
+}
+
+function SceneSettings({
+  fps,
+  durationInFrames,
+  narration,
+  onChange,
+}: {
+  fps: number;
+  durationInFrames: number;
+  narration: string;
+  onChange: (patch: { durationInFrames?: number; narration?: string }) => void;
+}) {
+  const seconds = Number((durationInFrames / fps).toFixed(2));
+  return (
+    <div className="mb-5 space-y-3 border-b border-ink/10 pb-4">
+      <p className="text-xs text-ink/45">当前画布</p>
+      <NumberField
+        label="时长 (秒)"
+        value={seconds}
+        step={0.1}
+        onChange={(value) =>
+          onChange({ durationInFrames: Math.max(1, Math.round(value * fps)) })
+        }
+      />
+      <NumberField
+        label="时长 (帧)"
+        value={durationInFrames}
+        onChange={(value) => onChange({ durationInFrames: Math.max(1, value) })}
+      />
+      <label className="block">
+        <span className="mb-1 block text-[11px] uppercase tracking-wider text-ink/40">
+          旁白文案
+        </span>
+        <textarea
+          rows={3}
+          value={narration}
+          onChange={(event) => onChange({ narration: event.target.value })}
+          className="w-full resize-none rounded-lg border border-ink/10 bg-paper px-2.5 py-1.5 text-sm outline-none focus:border-cobalt"
+        />
+      </label>
+    </div>
   );
 }
 

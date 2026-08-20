@@ -15,7 +15,7 @@ export const VideoComposition = ({
   hideElements = false,
 }: VideoCompositionProps) => {
   return (
-    <AbsoluteFill style={{ overflow: "hidden" }}>
+    <AbsoluteFill style={{ overflow: "hidden", backgroundColor: project.background.color }}>
       <PaperBackground color={project.background.color} />
       {hideElements ? null : <SceneRenderer project={project} />}
       <CaptionRenderer captions={project.captions ?? []} />

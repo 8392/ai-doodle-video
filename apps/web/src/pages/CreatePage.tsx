@@ -102,7 +102,7 @@ export function CreatePage() {
             </button>
           </div>
           <p className="mt-3 text-xs leading-5 text-ink/45">
-            「生成视频」当前不可用（没有 AI）。MP4 导出仍使用 <code>pnpm render:demo</code>。
+            「生成视频」当前不可用（没有 AI）。编辑器里「导出 MP4」会在本机渲染当前项目。
           </p>
         </section>
 

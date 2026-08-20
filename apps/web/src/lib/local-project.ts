@@ -8,12 +8,15 @@ export function loadProjectJson(projectId: string): string | null {
   return localStorage.getItem(`${STORAGE_PREFIX}${projectId}`);
 }
 
-export function downloadJson(filename: string, json: string): void {
-  const blob = new Blob([json], { type: "application/json" });
+export function downloadBlob(filename: string, blob: Blob): void {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
   link.download = filename;
   link.click();
   URL.revokeObjectURL(url);
+}
+
+export function downloadJson(filename: string, json: string): void {
+  downloadBlob(filename, new Blob([json], { type: "application/json" }));
 }

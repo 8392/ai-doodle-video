@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "pnpm --filter @ai-doodle/web dev",
     "render:demo": "pnpm --filter @ai-doodle/renderer render:demo",
+    "render:json": "pnpm --filter @ai-doodle/renderer render:json --",
     "studio": "pnpm --filter @ai-doodle/renderer studio",
     "typecheck": "pnpm -r --if-present typecheck",
     "lint": "eslint .",
@@ -32,7 +33,9 @@
       "@remotion/player": "4.0.399",
       "@remotion/renderer": "4.0.399",
       "@remotion/bundler": "4.0.399",
-      "@remotion/media-utils": "4.0.399"
+      "@remotion/media-utils": "4.0.399",
+      "@remotion/media": "4.0.399",
+      "@remotion/web-renderer": "4.0.399"
     }
   }
 }

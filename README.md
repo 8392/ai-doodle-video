@@ -18,7 +18,7 @@ Explicitly **mock / placeholder**:
 
 - Audio is `public/audio/demo.wav` (placeholder tones, **not TTS**; no ffmpeg on this machine so it is WAV rather than MP3)
 - Hand and country/factory artwork are demo assets
-- No LLM, no editor, no API
+- No LLM, no cloud render, no TTS
 
 ## Commands
 
@@ -29,12 +29,13 @@ pnpm test
 pnpm typecheck
 pnpm lint
 pnpm render:demo
+pnpm render:json ./packages/asset-library/demos/demo-project.json
 ```
 
 Preview: `http://localhost:5173/create`
 
 Editor: `http://localhost:5173/editor/demo`
 
-Phase 2 editor saves to **localStorage** (not a database). Export JSON downloads the VideoProject. MP4 is still `pnpm render:demo`. Generate is disabled until Phase 3.
+Phase 2 editor saves to **localStorage** (not a database). Timeline can add, delete, and reorder canvases; the properties panel can change scene duration, narration, and icon draw order. Export JSON downloads the VideoProject. **导出 MP4** encodes in the browser (Chrome + WebCodecs) and downloads `<id>.mp4`. If that fails, run `pnpm render:json ./output/<id>.json`. Generate stays disabled until later phases.
 
 Render needs a local Chrome/Chromium for Remotion.

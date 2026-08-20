@@ -1,21 +1,16 @@
 import type { PlayerRef } from "@remotion/player";
 import { getAsset } from "@ai-doodle/asset-library";
 import { useEffect, useRef, useState, type PointerEvent, type RefObject } from "react";
+import { flushSync } from "react-dom";
+import Moveable from "react-moveable";
 import {
   elementOverlayRect,
   hitTestElement,
+  overlayRectToElementPatch,
   screenToCompositionPoint,
 } from "./preview-coords";
 import { findSceneIndexAtFrame, resolveCameraAtFrame } from "./project-edits";
 import { useEditorStore } from "../stores/editor-store";
-
-type DragState = {
-  elementId: string;
-  startX: number;
-  startY: number;
-  originX: number;
-  originY: number;
-};
 
 export function PreviewOverlay({
   containerRef,
@@ -36,8 +31,9 @@ export function PreviewOverlay({
   const [frame, setFrame] = useState(0);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [hoverId, setHoverId] = useState<string | null>(null);
-  const [dragging, setDragging] = useState(false);
-  const dragRef = useRef<DragState | null>(null);
+  const [keepRatio, setKeepRatio] = useState(false);
+  const targetRef = useRef<HTMLDivElement>(null);
+  const [target, setTarget] = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -65,6 +61,41 @@ export function PreviewOverlay({
     return () => cancelAnimationFrame(raf);
   }, [playerRef]);
 
+  useEffect(() => {
+    setTarget(selectedElementId ? targetRef.current : null);
+  }, [selectedElementId, size, frame, project]);
+
+  useEffect(() => {
+    function isTypingTarget(target: EventTarget | null) {
+      return (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        (target instanceof HTMLElement && target.isContentEditable)
+      );
+    }
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Shift" && !isTypingTarget(event.target)) {
+        setKeepRatio(true);
+      }
+    }
+    function onKeyUp(event: KeyboardEvent) {
+      if (event.key === "Shift") {
+        setKeepRatio(false);
+      }
+    }
+    function onBlur() {
+      setKeepRatio(false);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    window.addEventListener("blur", onBlur);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("blur", onBlur);
+    };
+  }, []);
+
   if (!project || size.width === 0 || size.height === 0 || !showAssets) {
     return null;
   }
@@ -91,8 +122,40 @@ export function PreviewOverlay({
     });
   }
 
+  function commitTargetBox(box: HTMLElement | SVGElement) {
+    const container = containerRef.current;
+    const elementId = selectedElementId;
+    if (!container || !project || !elementId || !(box instanceof HTMLElement)) {
+      return;
+    }
+    const patch = overlayRectToElementPatch({
+      left: Number.parseFloat(box.style.left) || box.offsetLeft,
+      top: Number.parseFloat(box.style.top) || box.offsetTop,
+      width: box.offsetWidth,
+      height: box.offsetHeight,
+      containerRect: container.getBoundingClientRect(),
+      compositionWidth: project.width,
+      compositionHeight: project.height,
+      camera: resolveCameraAtFrame(
+        project,
+        playerRef.current?.getCurrentFrame() ?? frame,
+      ),
+    });
+    if (!patch) {
+      return;
+    }
+    moveElement(elementId, patch);
+  }
+
   function handlePointerDown(event: PointerEvent<HTMLDivElement>) {
     if (!enabled || event.button !== 0 || !scene) {
+      return;
+    }
+    const eventTarget = event.target;
+    if (
+      eventTarget instanceof Element &&
+      eventTarget.closest(".moveable-control-box, .moveable-line, [data-element-target]")
+    ) {
       return;
     }
     const point = compositionPoint(event.clientX, event.clientY);
@@ -105,63 +168,27 @@ export function PreviewOverlay({
       selectElement(null);
       return;
     }
-
-    event.preventDefault();
-    event.currentTarget.setPointerCapture(event.pointerId);
     selectScene(scene.id);
     selectElement(hit.id);
-    dragRef.current = {
-      elementId: hit.id,
-      startX: point.x,
-      startY: point.y,
-      originX: hit.x,
-      originY: hit.y,
-    };
     playerRef.current?.pause();
-    setDragging(true);
   }
 
   function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
+    if (!enabled) {
+      return;
+    }
     const point = compositionPoint(event.clientX, event.clientY);
-    const drag = dragRef.current;
-    if (!drag) {
-      setHoverId(point ? hitTestElement(elements, point)?.id ?? null : null);
-      return;
-    }
-    if (!point || !project) {
-      return;
-    }
-    if (useEditorStore.getState().selectedElementId !== drag.elementId) {
-      selectElement(drag.elementId);
-    }
-    moveElement(drag.elementId, {
-      x: Math.round(drag.originX + point.x - drag.startX),
-      y: Math.round(drag.originY + point.y - drag.startY),
-    });
-  }
-
-  function handlePointerUp(event: PointerEvent<HTMLDivElement>) {
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-    dragRef.current = null;
-    setDragging(false);
+    setHoverId(point ? hitTestElement(elements, point)?.id ?? null : null);
   }
 
   return (
     <div
       className={`absolute inset-0 z-20 ${enabled ? "" : "pointer-events-none"} ${
-        dragging ? "cursor-grabbing" : hoverId ? "cursor-grab" : "cursor-default"
+        hoverId && hoverId !== selectedElementId ? "cursor-pointer" : "cursor-default"
       }`}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerUp}
-      onPointerLeave={() => {
-        if (!dragRef.current) {
-          setHoverId(null);
-        }
-      }}
+      onPointerLeave={() => setHoverId(null)}
       style={{ touchAction: "none" }}
     >
       {elements.map((element) => {
@@ -179,12 +206,14 @@ export function PreviewOverlay({
         return (
           <div
             key={element.id}
-            className={`pointer-events-none absolute overflow-hidden rounded-md border-2 ${
+            ref={selected ? targetRef : undefined}
+            data-element-target={selected ? "true" : undefined}
+            className={`absolute overflow-hidden rounded-md ${
               selected
-                ? "border-cobalt bg-white/40"
+                ? "z-10"
                 : hovered
-                  ? "border-ink/35 bg-white/25"
-                  : "border-transparent"
+                  ? "border-2 border-ink/35 bg-white/25"
+                  : "border-2 border-transparent"
             }`}
             style={{
               left: rect.left,
@@ -198,12 +227,41 @@ export function PreviewOverlay({
                 src={asset.src}
                 alt={asset.name}
                 draggable={false}
-                className="h-full w-full object-contain"
+                className="pointer-events-none h-full w-full object-contain"
               />
             ) : null}
           </div>
         );
       })}
+      {enabled && target ? (
+        <Moveable
+          key={selectedElementId}
+          flushSync={flushSync}
+          target={target}
+          draggable
+          resizable
+          origin={false}
+          keepRatio={keepRatio}
+          keepRatioFinally={keepRatio}
+          useResizeObserver
+          throttleDrag={1}
+          throttleResize={1}
+          renderDirections={["nw", "n", "ne", "w", "e", "sw", "s", "se"]}
+          className="icon-moveable"
+          onDrag={({ target: box, left, top }) => {
+            box.style.left = `${left}px`;
+            box.style.top = `${top}px`;
+          }}
+          onResize={({ target: box, width, height, drag }) => {
+            box.style.width = `${width}px`;
+            box.style.height = `${height}px`;
+            box.style.left = `${drag.left}px`;
+            box.style.top = `${drag.top}px`;
+          }}
+          onDragEnd={({ target: box }) => commitTargetBox(box)}
+          onResizeEnd={({ target: box }) => commitTargetBox(box)}
+        />
+      ) : null}
     </div>
   );
 }

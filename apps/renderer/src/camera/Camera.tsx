@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { fillFrameStyle } from "../lib/fill-frame";
 import type { ResolvedCamera } from "./interpolate-camera";
 
 type CameraViewProps = {
@@ -12,8 +13,7 @@ export function CameraView({ camera, width, height, children }: CameraViewProps)
   return (
     <div
       style={{
-        position: "absolute",
-        inset: 0,
+        ...fillFrameStyle,
         transformOrigin: `${width / 2}px ${height / 2}px`,
         transform: `translate(${camera.x}px, ${camera.y}px) scale(${camera.scale})`,
       }}

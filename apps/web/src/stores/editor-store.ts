@@ -4,12 +4,17 @@ import { create } from "zustand";
 import { loadProjectJson, saveProjectJson } from "../lib/local-project";
 import {
   addAssetToScene,
+  addScene,
   flattenSceneCameras,
+  moveElementInScene,
+  moveScene,
   removeElement,
+  removeScene,
   setDefaultTransition,
   setProjectName,
   setSceneTransition,
   updateElement,
+  updateScene,
 } from "../editor/project-edits";
 import type { AssetDefinition } from "@ai-doodle/asset-library";
 import type { TransitionConfig } from "@ai-doodle/video-schema";
@@ -31,6 +36,11 @@ type EditorState = {
   moveElement: (elementId: string, patch: ElementPatch) => void;
   patchDefaultTransition: (transition: TransitionConfig) => void;
   patchSceneTransition: (transition: TransitionConfig | undefined) => void;
+  addSceneAfterSelected: () => void;
+  removeSelectedScene: () => void;
+  moveSelectedScene: (direction: -1 | 1) => void;
+  patchScene: (patch: { durationInFrames?: number; narration?: string }) => void;
+  reorderElement: (elementId: string, direction: -1 | 1) => void;
   removeSelectedElement: () => void;
   persist: () => void;
 };
@@ -132,6 +142,58 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     }
     withProject(set, get, (project) =>
       setSceneTransition(project, selectedSceneId, transition),
+    );
+  },
+  addSceneAfterSelected: () => {
+    const { project, selectedSceneId } = get();
+    if (!project) {
+      return;
+    }
+    const result = addScene(project, selectedSceneId);
+    set({
+      project: result.project,
+      selectedSceneId: result.sceneId,
+      selectedElementId: null,
+      saveStatus: "idle",
+    });
+  },
+  removeSelectedScene: () => {
+    const { project, selectedSceneId } = get();
+    if (!project || !selectedSceneId || project.scenes.length <= 1) {
+      return;
+    }
+    const index = project.scenes.findIndex((scene) => scene.id === selectedSceneId);
+    const next = removeScene(project, selectedSceneId);
+    const fallback =
+      next.scenes[Math.max(0, index - 1)] ?? next.scenes[0];
+    set({
+      project: next,
+      selectedSceneId: fallback?.id ?? null,
+      selectedElementId: fallback?.elements[0]?.id ?? null,
+      saveStatus: "idle",
+    });
+  },
+  moveSelectedScene: (direction) => {
+    const { selectedSceneId } = get();
+    if (!selectedSceneId) {
+      return;
+    }
+    withProject(set, get, (project) => moveScene(project, selectedSceneId, direction));
+  },
+  patchScene: (patch) => {
+    const { selectedSceneId } = get();
+    if (!selectedSceneId) {
+      return;
+    }
+    withProject(set, get, (project) => updateScene(project, selectedSceneId, patch));
+  },
+  reorderElement: (elementId, direction) => {
+    const { selectedSceneId } = get();
+    if (!selectedSceneId) {
+      return;
+    }
+    withProject(set, get, (project) =>
+      moveElementInScene(project, selectedSceneId, elementId, direction),
     );
   },
   removeSelectedElement: () => {

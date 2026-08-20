@@ -7,6 +7,7 @@ output
 .turbo
 .cache
 .vite
+.render-props.json
 coverage
 *.tsbuildinfo
 .env

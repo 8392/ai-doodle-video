@@ -192,6 +192,125 @@ export function removeElement(
   };
 }
 
+export function retimeProject(project: VideoProject): VideoProject {
+  let startFrame = 0;
+  const scenes = project.scenes.map((scene) => {
+    const next = { ...scene, startFrame };
+    startFrame += Math.max(1, scene.durationInFrames);
+    return next;
+  });
+  const captionsBySceneId = new Map(
+    project.scenes.map((scene, index) => [scene.id, project.captions?.[index]]),
+  );
+  const durationInFrames = Math.max(1, startFrame);
+  const captions = scenes.map((scene, index) => {
+    const previous = captionsBySceneId.get(scene.id);
+    const narration = scene.narration?.trim();
+    return {
+      text: narration || previous?.text?.trim() || `Scene ${index + 1}`,
+      startFrame: scene.startFrame,
+      endFrame: scene.startFrame + scene.durationInFrames,
+      style: previous?.style,
+    };
+  });
+  return {
+    ...project,
+    scenes,
+    durationInFrames,
+    captions,
+  };
+}
+
+export function addScene(
+  project: VideoProject,
+  afterSceneId?: string | null,
+): { project: VideoProject; sceneId: string } {
+  const sceneId = `scene-${crypto.randomUUID().slice(0, 8)}`;
+  const insertAfter = afterSceneId
+    ? project.scenes.findIndex((scene) => scene.id === afterSceneId)
+    : project.scenes.length - 1;
+  const index = insertAfter >= 0 ? insertAfter + 1 : project.scenes.length;
+  const scene: Scene = {
+    id: sceneId,
+    startFrame: 0,
+    durationInFrames: Math.max(1, project.fps * 3),
+    narration: "新场景",
+    elements: [],
+    camera: { x: 0, y: 0, scale: 1, durationInFrames: 1 },
+  };
+  const scenes = [...project.scenes];
+  scenes.splice(index, 0, scene);
+  return { sceneId, project: retimeProject({ ...project, scenes }) };
+}
+
+export function removeScene(
+  project: VideoProject,
+  sceneId: string,
+): VideoProject {
+  if (project.scenes.length <= 1) {
+    return project;
+  }
+  return retimeProject({
+    ...project,
+    scenes: project.scenes.filter((scene) => scene.id !== sceneId),
+  });
+}
+
+export function moveScene(
+  project: VideoProject,
+  sceneId: string,
+  direction: -1 | 1,
+): VideoProject {
+  const index = project.scenes.findIndex((scene) => scene.id === sceneId);
+  const nextIndex = index + direction;
+  if (index < 0 || nextIndex < 0 || nextIndex >= project.scenes.length) {
+    return project;
+  }
+  const scenes = [...project.scenes];
+  const [scene] = scenes.splice(index, 1);
+  if (!scene) {
+    return project;
+  }
+  scenes.splice(nextIndex, 0, scene);
+  return retimeProject({ ...project, scenes });
+}
+
+export function updateScene(
+  project: VideoProject,
+  sceneId: string,
+  patch: Partial<Pick<Scene, "durationInFrames" | "narration">>,
+): VideoProject {
+  return retimeProject(
+    replaceScene(project, sceneId, (scene) => ({
+      ...scene,
+      ...patch,
+      durationInFrames: Math.max(1, patch.durationInFrames ?? scene.durationInFrames),
+    })),
+  );
+}
+
+export function moveElementInScene(
+  project: VideoProject,
+  sceneId: string,
+  elementId: string,
+  direction: -1 | 1,
+): VideoProject {
+  return replaceScene(project, sceneId, (scene) => {
+    const index = scene.elements.findIndex((element) => element.id === elementId);
+    const nextIndex = index + direction;
+    if (index < 0 || nextIndex < 0 || nextIndex >= scene.elements.length) {
+      return scene;
+    }
+    const elements = [...scene.elements];
+    const [element] = elements.splice(index, 1);
+    if (!element) {
+      return scene;
+    }
+    elements.splice(nextIndex, 0, element);
+    return { ...scene, elements };
+  });
+}
+
 export function applyAspectRatio(
   project: VideoProject,
   ratio: "9:16" | "16:9" | "1:1",

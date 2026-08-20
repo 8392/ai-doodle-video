@@ -34,10 +34,6 @@ function collectSemanticIssues(project: VideoProject): string[] {
       );
     }
 
-    if (scene.elements.length === 0) {
-      issues.push(`scene "${scene.id}" has no elements`);
-    }
-
     for (const element of scene.elements) {
       if (elementIds.has(element.id)) {
         issues.push(`duplicate element id "${element.id}"`);

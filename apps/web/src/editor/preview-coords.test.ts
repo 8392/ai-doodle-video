@@ -5,6 +5,7 @@ import {
   dropPointToElementOrigin,
   getCompositionDisplayRect,
   hitTestElement,
+  overlayRectToElementPatch,
   screenToCompositionPoint,
 } from "./preview-coords";
 
@@ -120,5 +121,25 @@ describe("resolveCameraAtFrame", () => {
     };
     expect(resolveCameraAtFrame(project, 75).y).toBe(-200);
     expect(resolveCameraAtFrame(project, 60).y).toBe(-200);
+  });
+
+  it("converts an overlay box back into element x/y/width/height", () => {
+    const patch = overlayRectToElementPatch({
+      left: 135,
+      top: 240,
+      width: 270,
+      height: 480,
+      containerRect: { left: 0, top: 0, width: 540, height: 960 },
+      compositionWidth: 1080,
+      compositionHeight: 1920,
+      camera: { x: 0, y: 0, scale: 1 },
+    });
+    expect(patch).toEqual({
+      x: 270,
+      y: 480,
+      width: 540,
+      height: 960,
+      scale: 1,
+    });
   });
 });
