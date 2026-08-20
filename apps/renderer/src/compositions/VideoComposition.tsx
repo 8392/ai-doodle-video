@@ -7,13 +7,17 @@ import { SceneRenderer } from "../scenes/SceneRenderer";
 
 export type VideoCompositionProps = {
   project: VideoProject;
+  hideElements?: boolean;
 };
 
-export const VideoComposition = ({ project }: VideoCompositionProps) => {
+export const VideoComposition = ({
+  project,
+  hideElements = false,
+}: VideoCompositionProps) => {
   return (
     <AbsoluteFill style={{ overflow: "hidden" }}>
       <PaperBackground color={project.background.color} />
-      <SceneRenderer project={project} />
+      {hideElements ? null : <SceneRenderer project={project} />}
       <CaptionRenderer captions={project.captions ?? []} />
       <AudioLayer
         narration={project.narration}

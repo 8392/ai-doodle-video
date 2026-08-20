@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { elementSchema } from "./element";
+import { transitionSchema } from "./transition";
 
 export const cameraSchema = z.object({
   x: z.number(),
@@ -16,6 +17,7 @@ export const sceneSchema = z.object({
   narration: z.string().optional(),
   elements: z.array(elementSchema),
   camera: cameraSchema.optional(),
+  transition: transitionSchema.optional(),
 });
 
 export type Camera = z.infer<typeof cameraSchema>;

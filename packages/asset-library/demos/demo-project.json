@@ -10,6 +10,11 @@
     "color": "#E7E7E7"
   },
   "language": "zh",
+  "defaultTransition": {
+    "type": "fade",
+    "durationInFrames": 18,
+    "easing": "ease-in-out"
+  },
   "narration": {
     "src": "/audio/demo.wav",
     "startFrame": 0,
@@ -26,8 +31,7 @@
         "x": 0,
         "y": 0,
         "scale": 1,
-        "durationInFrames": 18,
-        "easing": "ease-in-out"
+        "durationInFrames": 1
       },
       "elements": [
         {
@@ -54,10 +58,9 @@
       "narration": "伊朗处在关键的地缘位置。",
       "camera": {
         "x": 0,
-        "y": -620,
+        "y": 0,
         "scale": 1,
-        "durationInFrames": 24,
-        "easing": "ease-in-out"
+        "durationInFrames": 1
       },
       "elements": [
         {
@@ -65,7 +68,7 @@
           "type": "svg",
           "assetId": "iran",
           "x": 160,
-          "y": 980,
+          "y": 360,
           "width": 760,
           "height": 620,
           "zIndex": 1,
@@ -84,9 +87,13 @@
       "narration": "石油工厂，成为双方博弈的核心。",
       "camera": {
         "x": 0,
-        "y": -1280,
-        "scale": 1.22,
-        "durationInFrames": 36,
+        "y": 0,
+        "scale": 1,
+        "durationInFrames": 1
+      },
+      "transition": {
+        "type": "slide-up",
+        "durationInFrames": 20,
         "easing": "ease-in-out"
       },
       "elements": [
@@ -95,7 +102,7 @@
           "type": "svg",
           "assetId": "oil-factory",
           "x": 70,
-          "y": 1680,
+          "y": 380,
           "width": 940,
           "height": 620,
           "zIndex": 1,
@@ -114,9 +121,13 @@
       "narration": "美元结算通道被切断。",
       "camera": {
         "x": 0,
-        "y": -2040,
-        "scale": 1.08,
-        "durationInFrames": 28,
+        "y": 0,
+        "scale": 1,
+        "durationInFrames": 1
+      },
+      "transition": {
+        "type": "slide-left",
+        "durationInFrames": 16,
         "easing": "ease-in-out"
       },
       "elements": [
@@ -125,7 +136,7 @@
           "type": "svg",
           "assetId": "dollar",
           "x": 280,
-          "y": 2400,
+          "y": 400,
           "width": 520,
           "height": 640,
           "zIndex": 1,
@@ -144,10 +155,9 @@
       "narration": "资金被锁进箱子，流动停滞。",
       "camera": {
         "x": 0,
-        "y": -2760,
+        "y": 0,
         "scale": 1,
-        "durationInFrames": 40,
-        "easing": "ease-in-out"
+        "durationInFrames": 1
       },
       "elements": [
         {
@@ -155,7 +165,7 @@
           "type": "svg",
           "assetId": "businessman",
           "x": 80,
-          "y": 3140,
+          "y": 400,
           "width": 420,
           "height": 560,
           "zIndex": 1,
@@ -170,7 +180,7 @@
           "type": "svg",
           "assetId": "money-box",
           "x": 520,
-          "y": 3220,
+          "y": 480,
           "width": 480,
           "height": 400,
           "zIndex": 2,

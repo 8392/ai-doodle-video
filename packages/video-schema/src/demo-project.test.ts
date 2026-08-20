@@ -16,5 +16,7 @@ describe("demo-project.json", () => {
     const project = parseVideoProject(raw);
     expect(project.scenes).toHaveLength(5);
     expect(project.captions?.length).toBe(5);
+    expect(project.defaultTransition?.type).toBe("fade");
+    expect(project.scenes[2]?.transition?.type).toBe("slide-up");
   });
 });

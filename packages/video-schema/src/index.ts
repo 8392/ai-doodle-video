@@ -33,3 +33,9 @@ export {
   type Camera,
   type Scene,
 } from "./scene";
+export {
+  transitionSchema,
+  transitionTypeSchema,
+  type TransitionConfig,
+  type TransitionType,
+} from "./transition";

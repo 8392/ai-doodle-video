@@ -60,7 +60,7 @@ export function DrawSvg({
       return;
     }
     const svg = svgRef.current;
-    if (!svg || lengths.length === 0 || progress <= 0 || progress >= 1) {
+    if (!svg || lengths.length === 0 || progress >= 1) {
       setPoint(hiddenPoint);
       return;
     }
@@ -87,6 +87,14 @@ export function DrawSvg({
     setPoint(point);
   }, [lengths, offsetX, offsetY, progress, reportStroke, setPoint, width, height]);
 
+  useLayoutEffect(() => {
+    return () => {
+      if (reportStroke) {
+        setPoint(hiddenPoint);
+      }
+    };
+  }, [reportStroke, setPoint]);
+
   if (!loaded) {
     return null;
   }
@@ -104,7 +112,12 @@ export function DrawSvg({
     >
       {loaded.paths.map((path, index) => {
         const length = lengths[index] ?? 0;
-        const pathProgress = measured ? (sequence.pathProgress[index] ?? 0) : 0;
+        const drawn = sequence.pathProgress[index] ?? 0;
+        const pathProgress = measured
+          ? reportStroke && index === Math.max(0, sequence.activePathIndex)
+            ? Math.max(drawn, 0.02)
+            : drawn
+          : 0;
         const dashOffset = measured ? length * (1 - pathProgress) : 1;
         const fillOpacity =
           path.fill === "none" ? 0 : pathProgress >= 1 ? 1 : Math.max(0, (pathProgress - 0.72) / 0.28);

@@ -1,6 +1,7 @@
 import { searchAssets, type AssetCategory, type AssetDefinition } from "@ai-doodle/asset-library";
 import { Search } from "lucide-react";
 import { useMemo, useState } from "react";
+import { setAssetDragData } from "./drag-drop";
 import { useEditorStore } from "../stores/editor-store";
 
 const CATEGORY_LABEL: Record<AssetCategory, string> = {
@@ -27,7 +28,7 @@ export function AssetLibrary() {
   }, [query, category]);
 
   return (
-    <aside className="flex h-full min-h-0 flex-col border-r border-ink/10 bg-white">
+    <aside className="flex h-full w-[260px] min-h-0 shrink-0 flex-col border-r border-ink/10 bg-white">
       <div className="border-b border-ink/10 px-4 py-3">
         <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-ink/45">
           素材库
@@ -70,7 +71,7 @@ export function AssetLibrary() {
           </ul>
         )}
         <p className="mt-4 px-1 text-[11px] leading-5 text-ink/40">
-          点击素材会加入当前 Scene。手绘描边只对 SVG 生效。
+          拖动素材到右侧视频区域指定位置；点击也会加入当前 Scene。
         </p>
       </div>
     </aside>
@@ -111,13 +112,18 @@ function AssetCard({
   return (
     <button
       type="button"
+      draggable
+      onDragStart={(event) => {
+        setAssetDragData(event.dataTransfer, asset.id);
+      }}
       onClick={onAdd}
-      className="group flex w-full flex-col overflow-hidden rounded-xl border border-ink/10 bg-paper text-left transition hover:border-cobalt/50 hover:bg-white"
+      className="group flex w-full cursor-grab flex-col overflow-hidden rounded-xl border border-ink/10 bg-paper text-left transition hover:border-cobalt/50 hover:bg-white active:cursor-grabbing"
     >
       <div className="flex h-20 items-center justify-center bg-white p-2">
         <img
           src={asset.src}
           alt=""
+          draggable={false}
           className="max-h-full max-w-full object-contain"
         />
       </div>

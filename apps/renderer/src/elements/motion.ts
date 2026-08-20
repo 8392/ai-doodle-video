@@ -15,6 +15,18 @@ export type ElementMotion = {
   drawProgress: number;
 };
 
+export function isDrawAnimationActive(
+  element: Element,
+  localFrame: number,
+): boolean {
+  const animation = element.animation;
+  if (animation?.type !== "draw") {
+    return false;
+  }
+  const delay = animation.delayInFrames ?? 0;
+  return localFrame >= delay && localFrame < delay + animation.durationInFrames;
+}
+
 export function computeElementMotion(
   element: Element,
   localFrame: number,

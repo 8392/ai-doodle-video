@@ -22,9 +22,9 @@ export function CaptionRenderer({ captions }: { captions: Caption[] }) {
     <div
       style={{
         position: "absolute",
-        left: 40,
-        right: 40,
-        bottom: 72,
+        left: 48,
+        right: 48,
+        bottom: 64,
         textAlign: "center",
         opacity: fade,
         zIndex: 80,
@@ -34,17 +34,19 @@ export function CaptionRenderer({ captions }: { captions: Caption[] }) {
       <span
         style={{
           display: "inline-block",
-          fontSize: caption.style?.fontSize ?? 44,
-          color: caption.style?.color ?? "#ffffff",
+          maxWidth: "100%",
+          padding: "12px 22px",
+          borderRadius: 18,
+          background: caption.style?.backgroundColor ?? "rgba(255,255,255,0.88)",
+          fontSize: caption.style?.fontSize ?? 40,
+          color: caption.style?.color ?? "#171717",
           fontFamily:
             caption.style?.fontFamily ??
             '"Microsoft YaHei", "Noto Sans SC", "Segoe UI", sans-serif',
-          lineHeight: 1.25,
-          fontWeight: 800,
-          letterSpacing: "0.02em",
-          WebkitTextStroke: "7px #111111",
-          paintOrder: "stroke fill",
-          textShadow: "0 2px 0 #111",
+          lineHeight: 1.45,
+          fontWeight: 600,
+          letterSpacing: "0.01em",
+          boxShadow: "0 8px 24px rgba(23,23,23,0.08)",
         }}
       >
         {caption.text}

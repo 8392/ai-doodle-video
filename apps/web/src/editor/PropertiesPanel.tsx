@@ -1,6 +1,19 @@
 import { getAsset } from "@ai-doodle/asset-library";
+import { DEFAULT_TRANSITION } from "@ai-doodle/renderer";
+import type { TransitionConfig, TransitionType } from "@ai-doodle/video-schema";
+import { Trash2 } from "lucide-react";
+import { useEffect } from "react";
 import { findElement, findScene } from "./project-edits";
 import { useEditorStore } from "../stores/editor-store";
+
+const TRANSITION_TYPES: { id: TransitionType; label: string }[] = [
+  { id: "none", label: "无" },
+  { id: "fade", label: "淡入淡出" },
+  { id: "slide-left", label: "向左滑入" },
+  { id: "slide-right", label: "向右滑入" },
+  { id: "slide-up", label: "向上滑入" },
+  { id: "slide-down", label: "向下滑入" },
+];
 
 export function PropertiesPanel() {
   const project = useEditorStore((state) => state.project);
@@ -8,6 +21,32 @@ export function PropertiesPanel() {
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const selectElement = useEditorStore((state) => state.selectElement);
   const patchElement = useEditorStore((state) => state.patchElement);
+  const patchDefaultTransition = useEditorStore((state) => state.patchDefaultTransition);
+  const patchSceneTransition = useEditorStore((state) => state.patchSceneTransition);
+  const removeSelectedElement = useEditorStore((state) => state.removeSelectedElement);
+
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key !== "Delete" && event.key !== "Backspace") {
+        return;
+      }
+      const target = event.target;
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        (target instanceof HTMLElement && target.isContentEditable)
+      ) {
+        return;
+      }
+      if (!useEditorStore.getState().selectedElementId) {
+        return;
+      }
+      event.preventDefault();
+      removeSelectedElement();
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [removeSelectedElement]);
 
   if (!project) {
     return null;
@@ -17,7 +56,7 @@ export function PropertiesPanel() {
   const element = findElement(project, selectedElementId);
 
   return (
-    <aside className="flex h-full min-h-0 flex-col border-l border-ink/10 bg-white">
+    <aside className="flex h-full w-[280px] min-h-0 shrink-0 flex-col border-l border-ink/10 bg-white">
       <div className="border-b border-ink/10 px-4 py-3">
         <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-ink/45">
           属性
@@ -25,7 +64,14 @@ export function PropertiesPanel() {
         <h2 className="mt-2 font-display text-lg">{scene?.id ?? "未选择场景"}</h2>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3">
-        <p className="mb-2 text-xs text-ink/45">当前 Scene 元素</p>
+        <TransitionSettings
+          projectDefault={project.defaultTransition}
+          sceneTransition={scene?.transition}
+          onChangeDefault={patchDefaultTransition}
+          onChangeScene={patchSceneTransition}
+        />
+
+        <p className="mb-2 mt-5 text-xs text-ink/45">当前 Scene 元素</p>
         <ul className="space-y-1">
           {scene?.elements.map((item) => (
             <li key={item.id}>
@@ -46,6 +92,19 @@ export function PropertiesPanel() {
 
         {element ? (
           <div className="mt-5 space-y-3">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-sm font-medium">
+                {getAsset(element.assetId ?? "")?.name ?? element.id}
+              </p>
+              <button
+                type="button"
+                onClick={removeSelectedElement}
+                className="inline-flex items-center gap-1 rounded-lg border border-red-200 px-2 py-1 text-xs text-red-600 hover:bg-red-50"
+              >
+                <Trash2 size={12} />
+                删除
+              </button>
+            </div>
             <NumberField
               label="x"
               value={element.x}
@@ -74,10 +133,105 @@ export function PropertiesPanel() {
             />
           </div>
         ) : (
-          <p className="mt-6 text-sm text-ink/45">选择一个元素后可调整位置和缩放。</p>
+          <p className="mt-6 text-sm text-ink/45">
+            在预览中点击图标选中，可拖动改位置；右侧可删除。
+          </p>
         )}
       </div>
     </aside>
+  );
+}
+
+function TransitionSettings({
+  projectDefault,
+  sceneTransition,
+  onChangeDefault,
+  onChangeScene,
+}: {
+  projectDefault: TransitionConfig | undefined;
+  sceneTransition: TransitionConfig | undefined;
+  onChangeDefault: (transition: TransitionConfig) => void;
+  onChangeScene: (transition: TransitionConfig | undefined) => void;
+}) {
+  const globalTransition = projectDefault ?? DEFAULT_TRANSITION;
+  const usesGlobal = !sceneTransition;
+  const sceneValue = sceneTransition ?? globalTransition;
+
+  return (
+    <div className="space-y-4 border-b border-ink/10 pb-4">
+      <div>
+        <p className="mb-2 text-xs text-ink/45">全局切换动画</p>
+        <TransitionFields
+          value={globalTransition}
+          onChange={onChangeDefault}
+        />
+      </div>
+      <div>
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <p className="text-xs text-ink/45">当前页切换动画</p>
+          <label className="flex items-center gap-1.5 text-[11px] text-ink/55">
+            <input
+              type="checkbox"
+              checked={usesGlobal}
+              onChange={(event) => {
+                if (event.target.checked) {
+                  onChangeScene(undefined);
+                  return;
+                }
+                onChangeScene({ ...globalTransition });
+              }}
+            />
+            跟随全局
+          </label>
+        </div>
+        <TransitionFields
+          value={sceneValue}
+          disabled={usesGlobal}
+          onChange={onChangeScene}
+        />
+      </div>
+    </div>
+  );
+}
+
+function TransitionFields({
+  value,
+  onChange,
+  disabled = false,
+}: {
+  value: TransitionConfig;
+  onChange: (transition: TransitionConfig) => void;
+  disabled?: boolean;
+}) {
+  return (
+    <div className={`space-y-2 ${disabled ? "pointer-events-none opacity-50" : ""}`}>
+      <label className="block">
+        <span className="mb-1 block text-[11px] uppercase tracking-wider text-ink/40">
+          效果
+        </span>
+        <select
+          disabled={disabled}
+          value={value.type}
+          onChange={(event) =>
+            onChange({ ...value, type: event.target.value as TransitionType })
+          }
+          className="w-full rounded-lg border border-ink/10 bg-paper px-2.5 py-1.5 text-sm outline-none focus:border-cobalt"
+        >
+          {TRANSITION_TYPES.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+      </label>
+      <NumberField
+        label="时长 (帧)"
+        value={value.durationInFrames}
+        onChange={(durationInFrames) =>
+          onChange({ ...value, durationInFrames: Math.max(1, durationInFrames) })
+        }
+      />
+    </div>
   );
 }
 

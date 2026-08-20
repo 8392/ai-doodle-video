@@ -2,6 +2,7 @@ import { z } from "zod";
 import { audioTrackSchema } from "./audio";
 import { captionSchema } from "./caption";
 import { sceneSchema } from "./scene";
+import { transitionSchema } from "./transition";
 
 export const paperBackgroundSchema = z.object({
   type: z.literal("paper"),
@@ -21,6 +22,7 @@ export const videoProjectSchema = z.object({
   music: audioTrackSchema.optional(),
   scenes: z.array(sceneSchema).min(1, "VideoProject must contain at least one scene"),
   captions: z.array(captionSchema).optional(),
+  defaultTransition: transitionSchema.optional(),
 });
 
 export type PaperBackground = z.infer<typeof paperBackgroundSchema>;

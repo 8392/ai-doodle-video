@@ -76,6 +76,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@ai-doodle/animation-engine':
+        specifier: workspace:*
+        version: link:../../packages/animation-engine
       '@ai-doodle/asset-library':
         specifier: workspace:*
         version: link:../../packages/asset-library

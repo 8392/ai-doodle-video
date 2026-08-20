@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@ai-doodle/animation-engine": "workspace:*",
     "@ai-doodle/asset-library": "workspace:*",
     "@ai-doodle/renderer": "workspace:*",
     "@ai-doodle/video-schema": "workspace:*",

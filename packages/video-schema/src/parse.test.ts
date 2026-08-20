@@ -66,4 +66,19 @@ describe("parseVideoProject", () => {
       }),
     ).toThrow(/missing assetId/);
   });
+
+  it("accepts project and scene transitions", () => {
+    const project = parseVideoProject({
+      ...validProject,
+      defaultTransition: { type: "fade", durationInFrames: 12 },
+      scenes: [
+        {
+          ...validProject.scenes[0],
+          transition: { type: "slide-left", durationInFrames: 10 },
+        },
+      ],
+    });
+    expect(project.defaultTransition?.type).toBe("fade");
+    expect(project.scenes[0]?.transition?.type).toBe("slide-left");
+  });
 });

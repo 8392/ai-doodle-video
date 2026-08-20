@@ -1,5 +1,10 @@
 import type { AssetDefinition } from "@ai-doodle/asset-library";
-import type { Element, Scene, VideoProject } from "@ai-doodle/video-schema";
+import type {
+  Element,
+  Scene,
+  TransitionConfig,
+  VideoProject,
+} from "@ai-doodle/video-schema";
 
 function replaceScene(
   project: VideoProject,
@@ -11,6 +16,31 @@ function replaceScene(
     scenes: project.scenes.map((scene) =>
       scene.id === sceneId ? updater(scene) : scene,
     ),
+  };
+}
+
+export function findSceneIndexAtFrame(
+  project: VideoProject,
+  frame: number,
+): number {
+  const index = project.scenes.findIndex(
+    (scene) =>
+      frame >= scene.startFrame &&
+      frame < scene.startFrame + scene.durationInFrames,
+  );
+  return index >= 0 ? index : Math.max(0, project.scenes.length - 1);
+}
+
+export function resolveCameraAtFrame(
+  project: VideoProject,
+  frame: number,
+): { x: number; y: number; scale: number } {
+  const sceneIndex = findSceneIndexAtFrame(project, frame);
+  const camera = project.scenes[sceneIndex]?.camera;
+  return {
+    x: camera?.x ?? 0,
+    y: camera?.y ?? 0,
+    scale: camera?.scale ?? 1,
   };
 }
 
@@ -44,20 +74,77 @@ export function setProjectName(project: VideoProject, name: string): VideoProjec
   return { ...project, name };
 }
 
+export function flattenSceneCameras(project: VideoProject): VideoProject {
+  const originX = project.width / 2;
+  const originY = project.height / 2;
+  return {
+    ...project,
+    scenes: project.scenes.map((scene) => {
+      const camera = scene.camera;
+      if (!camera || (camera.x === 0 && camera.y === 0 && (camera.scale ?? 1) === 1)) {
+        return scene;
+      }
+      const scale = camera.scale || 1;
+      return {
+        ...scene,
+        camera: { x: 0, y: 0, scale: 1, durationInFrames: 1 },
+        elements: scene.elements.map((element) => ({
+          ...element,
+          x: Math.round((element.x - originX) * scale + originX + camera.x),
+          y: Math.round((element.y - originY) * scale + originY + camera.y),
+        })),
+      };
+    }),
+  };
+}
+
+export function setDefaultTransition(
+  project: VideoProject,
+  transition: TransitionConfig,
+): VideoProject {
+  return { ...project, defaultTransition: transition };
+}
+
+export function setSceneTransition(
+  project: VideoProject,
+  sceneId: string,
+  transition: TransitionConfig | undefined,
+): VideoProject {
+  return replaceScene(project, sceneId, (scene) => {
+    if (!transition) {
+      const { transition: _removed, ...rest } = scene;
+      return rest;
+    }
+    return { ...scene, transition };
+  });
+}
+
+function defaultElementSize(project: VideoProject): { width: number; height: number } {
+  const width = Math.round(project.width * 0.42);
+  return { width, height: Math.round(width * 0.82) };
+}
+
 export function addAssetToScene(
   project: VideoProject,
   sceneId: string,
   asset: AssetDefinition,
+  position?: { x: number; y: number },
 ): { project: VideoProject; elementId: string } {
   const elementId = `el-${asset.id}-${crypto.randomUUID().slice(0, 8)}`;
-  const width = Math.round(project.width * 0.42);
-  const height = Math.round(width * 0.82);
+  const { width, height } = defaultElementSize(project);
+  const x =
+    position?.x ??
+    Math.round(project.width * 0.29);
+  const y =
+    position?.y ??
+    Math.round(project.height * 0.28);
+
   const element: Element = {
     id: elementId,
     type: asset.type === "svg" ? "svg" : "image",
     assetId: asset.id,
-    x: Math.round(project.width * 0.29),
-    y: Math.round(project.height * 0.28),
+    x: Math.round(x),
+    y: Math.round(y),
     width,
     height,
     zIndex: 2,
@@ -88,6 +175,19 @@ export function updateElement(
       elements: scene.elements.map((element) =>
         element.id === elementId ? { ...element, ...patch } : element,
       ),
+    })),
+  };
+}
+
+export function removeElement(
+  project: VideoProject,
+  elementId: string,
+): VideoProject {
+  return {
+    ...project,
+    scenes: project.scenes.map((scene) => ({
+      ...scene,
+      elements: scene.elements.filter((element) => element.id !== elementId),
     })),
   };
 }
