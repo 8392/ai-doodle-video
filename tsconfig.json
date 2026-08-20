@@ -4,6 +4,7 @@
     { "path": "./packages/video-schema" },
     { "path": "./packages/animation-engine" },
     { "path": "./packages/asset-library" },
+    { "path": "./packages/ai" },
     { "path": "./apps/renderer" },
     { "path": "./apps/web" }
   ]

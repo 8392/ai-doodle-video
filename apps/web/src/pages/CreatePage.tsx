@@ -1,3 +1,4 @@
+import { EmptyScriptError, generateVideoProject } from "@ai-doodle/ai";
 import { loadDemoProject, VideoComposition } from "@ai-doodle/renderer";
 import { Player } from "@remotion/player";
 import { useMemo, useState } from "react";
@@ -14,24 +15,56 @@ export function CreatePage() {
   const [voice, setVoice] = useState("female");
   const [aspect, setAspect] = useState<(typeof ASPECTS)[number]>("9:16");
   const [style, setStyle] = useState("whiteboard");
+  const [generating, setGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const preview = useMemo(
     () => applyAspectRatio(loadDemoProject(), aspect),
     [aspect],
   );
 
+  async function handleGenerate() {
+    setError(null);
+    if (!script.trim()) {
+      setError("请先输入文案");
+      return;
+    }
+    setGenerating(true);
+    try {
+      await wait(450);
+      const project = generateVideoProject({
+        script,
+        language,
+        voice,
+        aspect,
+        style,
+      });
+      saveProjectJson(project.id, JSON.stringify(project));
+      navigate(`/editor/${project.id}`);
+    } catch (cause) {
+      if (cause instanceof EmptyScriptError) {
+        setError(cause.message);
+      } else {
+        setError(cause instanceof Error ? cause.message : "生成分镜失败，请稍后再试");
+      }
+    } finally {
+      setGenerating(false);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-paper px-6 py-8 text-ink">
       <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,420px)]">
         <section className="max-w-xl">
           <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink/45">
-            Phase 2 · Editor
+            Phase 3 · Mock storyboard
           </p>
           <h1 className="mt-3 font-display text-4xl leading-tight">
             把文案变成白板手绘视频
           </h1>
           <p className="mt-3 text-sm leading-6 text-ink/55">
-            生成按钮在 Phase 3 才会接 Mock AI。现在可以调整比例，然后打开编辑器改 Scene、素材和属性。
+            「生成视频」用本地规则拆句、匹配图标并写出 VideoProject JSON，不是
+            OpenAI。生成后会进入编辑器，可继续改画布、预览和导出 MP4。
           </p>
 
           <label className="mt-8 block">
@@ -80,10 +113,11 @@ export function CreatePage() {
           <div className="mt-6 flex flex-wrap gap-3">
             <button
               type="button"
-              disabled
-              className="rounded-xl bg-ink/20 px-4 py-2.5 text-sm text-white"
+              disabled={generating}
+              onClick={() => void handleGenerate()}
+              className="rounded-xl bg-ink px-4 py-2.5 text-sm text-paper disabled:bg-ink/20 disabled:text-white"
             >
-              生成视频
+              {generating ? "正在生成分镜…" : "生成视频"}
             </button>
             <button
               type="button"
@@ -96,14 +130,18 @@ export function CreatePage() {
                 saveProjectJson(project.id, JSON.stringify(project));
                 navigate("/editor/demo");
               }}
-              className="rounded-xl bg-ink px-4 py-2.5 text-sm text-paper"
+              className="rounded-xl border border-ink/15 bg-white px-4 py-2.5 text-sm text-ink"
             >
               打开编辑器
             </button>
           </div>
-          <p className="mt-3 text-xs leading-5 text-ink/45">
-            「生成视频」当前不可用（没有 AI）。编辑器里「导出 MP4」会在本机渲染当前项目。
-          </p>
+          {error ? (
+            <p className="mt-3 text-xs leading-5 text-red-700">{error}</p>
+          ) : (
+            <p className="mt-3 text-xs leading-5 text-ink/45">
+              声音选项本阶段不会更换音频，「打开编辑器」仍加载 demo 方便对照。
+            </p>
+          )}
         </section>
 
         <section className="overflow-hidden rounded-2xl border border-ink/10 bg-black">
@@ -125,6 +163,12 @@ export function CreatePage() {
       </div>
     </div>
   );
+}
+
+function wait(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
 }
 
 function SelectField({

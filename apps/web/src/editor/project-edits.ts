@@ -1,10 +1,13 @@
 import type { AssetDefinition } from "@ai-doodle/asset-library";
-import type {
-  Element,
-  Scene,
-  TransitionConfig,
-  VideoProject,
+import {
+  retimeProject,
+  type Element,
+  type Scene,
+  type TransitionConfig,
+  type VideoProject,
 } from "@ai-doodle/video-schema";
+
+export { retimeProject };
 
 function replaceScene(
   project: VideoProject,
@@ -189,35 +192,6 @@ export function removeElement(
       ...scene,
       elements: scene.elements.filter((element) => element.id !== elementId),
     })),
-  };
-}
-
-export function retimeProject(project: VideoProject): VideoProject {
-  let startFrame = 0;
-  const scenes = project.scenes.map((scene) => {
-    const next = { ...scene, startFrame };
-    startFrame += Math.max(1, scene.durationInFrames);
-    return next;
-  });
-  const captionsBySceneId = new Map(
-    project.scenes.map((scene, index) => [scene.id, project.captions?.[index]]),
-  );
-  const durationInFrames = Math.max(1, startFrame);
-  const captions = scenes.map((scene, index) => {
-    const previous = captionsBySceneId.get(scene.id);
-    const narration = scene.narration?.trim();
-    return {
-      text: narration || previous?.text?.trim() || `Scene ${index + 1}`,
-      startFrame: scene.startFrame,
-      endFrame: scene.startFrame + scene.durationInFrames,
-      style: previous?.style,
-    };
-  });
-  return {
-    ...project,
-    scenes,
-    durationInFrames,
-    captions,
   };
 }
 

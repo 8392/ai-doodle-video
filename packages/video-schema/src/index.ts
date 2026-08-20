@@ -27,6 +27,7 @@ export {
   type PaperBackground,
   type VideoProject,
 } from "./project";
+export { retimeProject } from "./retime";
 export {
   cameraSchema,
   sceneSchema,

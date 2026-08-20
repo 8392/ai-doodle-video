@@ -13,6 +13,7 @@ export default defineConfig({
   resolve: {
     dedupe: ["react", "react-dom", "remotion"],
     alias: {
+      "@ai-doodle/ai": path.join(repoRoot, "packages/ai/src/index.ts"),
       "@ai-doodle/video-schema": path.join(repoRoot, "packages/video-schema/src/index.ts"),
       "@ai-doodle/animation-engine": path.join(repoRoot, "packages/animation-engine/src/index.ts"),
       "@ai-doodle/asset-library": path.join(repoRoot, "packages/asset-library/src/index.ts"),
@@ -34,6 +35,7 @@ export default defineConfig({
       "mediabunny",
     ],
     exclude: [
+      "@ai-doodle/ai",
       "@ai-doodle/renderer",
       "@ai-doodle/video-schema",
       "@ai-doodle/animation-engine",

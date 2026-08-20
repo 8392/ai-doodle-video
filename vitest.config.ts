@@ -7,6 +7,7 @@ const root = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   resolve: {
     alias: {
+      "@ai-doodle/ai": path.join(root, "packages/ai/src/index.ts"),
       "@ai-doodle/animation-engine": path.join(
         root,
         "packages/animation-engine/src/index.ts",
