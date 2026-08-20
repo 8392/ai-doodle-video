@@ -4,7 +4,7 @@ import { searchAssets } from "./search";
 
 describe("searchAssets", () => {
   it("returns the full catalog for an empty query", () => {
-    expect(searchAssets("").length).toBeGreaterThan(40);
+    expect(searchAssets("").length).toBeGreaterThan(300);
   });
 
   it("finds USA by Chinese name", () => {
@@ -24,6 +24,13 @@ describe("searchAssets", () => {
     expect(searchAssets("地球").some((asset) => asset.id === "globe")).toBe(true);
     expect(searchAssets("制裁").some((asset) => asset.id === "sanctions")).toBe(true);
     expect(searchAssets("油轮").some((asset) => asset.id === "tanker")).toBe(true);
+  });
+
+  it("indexes the editorial pack", () => {
+    expect(searchAssets("法国").some((asset) => asset.id === "france")).toBe(true);
+    expect(searchAssets("坦克").some((asset) => asset.id === "tank")).toBe(true);
+    expect(searchAssets("芯片").some((asset) => asset.id === "chip")).toBe(true);
+    expect(searchAssets("金字塔").some((asset) => asset.id === "pyramid")).toBe(true);
   });
 });
 

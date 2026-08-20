@@ -8,6 +8,12 @@
     "./demos/demo-project.json": "./demos/demo-project.json"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "generate:pack": "node scripts/generate-editorial-pack.mjs",
+    "vectorize": "node scripts/raster-to-svg.mjs"
+  },
+  "dependencies": {
+    "imagetracerjs": "^1.2.6",
+    "pngjs": "^7.0.0"
   }
 }

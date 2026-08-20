@@ -1,0 +1,86 @@
+[
+  {
+    "id": "tank",
+    "name": "坦克",
+    "category": "military",
+    "tags": ["坦克", "装甲", "陆军"],
+    "prompt": "Editorial whiteboard ink doodle of a main battle tank, three-quarter view, bold black ink contours on cream paper, newspaper explainer sketch, single centered object, no text, no photorealism, no 3D, no watermark"
+  },
+  {
+    "id": "carrier",
+    "name": "航母",
+    "category": "military",
+    "tags": ["航母", "航空母舰", "海军"],
+    "prompt": "Editorial whiteboard ink doodle of an aircraft carrier, side view, bold black ink on cream paper, newspaper explainer sketch, no text, no photorealism, no watermark"
+  },
+  {
+    "id": "fighter",
+    "name": "战机",
+    "category": "military",
+    "tags": ["战机", "空军", "战斗机"],
+    "prompt": "Editorial whiteboard ink doodle of a fighter jet, side silhouette, bold black ink on cream paper, newspaper explainer sketch, no text, no photorealism, no watermark"
+  },
+  {
+    "id": "submarine",
+    "name": "潜艇",
+    "category": "military",
+    "tags": ["潜艇", "海军"],
+    "prompt": "Editorial whiteboard ink doodle of a submarine at periscope depth, bold black ink on cream paper, newspaper explainer sketch, no text, no photorealism, no watermark"
+  },
+  {
+    "id": "pyramid",
+    "name": "金字塔",
+    "category": "history",
+    "tags": ["金字塔", "埃及", "历史"],
+    "prompt": "Editorial whiteboard ink doodle of Egyptian pyramids, bold black ink on cream paper, newspaper explainer sketch, no text, no photorealism, no watermark"
+  },
+  {
+    "id": "great-wall",
+    "name": "长城",
+    "category": "history",
+    "tags": ["长城", "中国", "历史"],
+    "prompt": "Editorial whiteboard ink doodle of the Great Wall snaking over hills, bold black ink on cream paper, newspaper explainer sketch, no text, no photorealism, no watermark"
+  },
+  {
+    "id": "colosseum",
+    "name": "斗兽场",
+    "category": "history",
+    "tags": ["斗兽场", "罗马"],
+    "prompt": "Editorial whiteboard ink doodle of the Roman Colosseum, bold black ink on cream paper, newspaper explainer sketch, no text, no photorealism, no watermark"
+  },
+  {
+    "id": "handshake",
+    "name": "握手",
+    "category": "diplomacy",
+    "tags": ["握手", "协议", "建交"],
+    "prompt": "Editorial whiteboard ink doodle of two diplomats shaking hands, simple iconic figures, bold black ink on cream paper, no photorealistic faces, no text, no watermark"
+  },
+  {
+    "id": "chip",
+    "name": "芯片",
+    "category": "industry",
+    "tags": ["芯片", "半导体"],
+    "prompt": "Editorial whiteboard ink doodle of a semiconductor chip with pins, bold black ink on cream paper, newspaper explainer sketch, no text, no photorealism, no watermark"
+  },
+  {
+    "id": "icbm",
+    "name": "洲际导弹",
+    "category": "military",
+    "tags": ["洲际导弹", "ICBM", "核武"],
+    "prompt": "Editorial whiteboard ink doodle of an ICBM on a launch pad, bold black ink on cream paper, newspaper explainer sketch, no text, no photorealism, no watermark"
+  },
+  {
+    "id": "satellite",
+    "name": "卫星",
+    "category": "objects",
+    "tags": ["卫星", "太空"],
+    "prompt": "Editorial whiteboard ink doodle of an orbiting satellite with solar panels, bold black ink on cream paper, newspaper explainer sketch, no text, no photorealism, no watermark"
+  },
+  {
+    "id": "oil-derrick",
+    "name": "井架",
+    "category": "industry",
+    "tags": ["井架", "石油", "钻井"],
+    "prompt": "Editorial whiteboard ink doodle of an oil derrick, bold black ink on cream paper, newspaper explainer sketch, no text, no photorealism, no watermark"
+  }
+]

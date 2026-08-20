@@ -1,0 +1,3425 @@
+[
+  {
+    "id": "france",
+    "name": "法国",
+    "category": "country",
+    "tags": [
+      "法国",
+      "France",
+      "欧洲"
+    ],
+    "src": "/assets/countries/france.svg",
+    "type": "svg"
+  },
+  {
+    "id": "ukraine",
+    "name": "乌克兰",
+    "category": "country",
+    "tags": [
+      "乌克兰",
+      "Ukraine",
+      "欧洲"
+    ],
+    "src": "/assets/countries/ukraine.svg",
+    "type": "svg"
+  },
+  {
+    "id": "israel",
+    "name": "以色列",
+    "category": "country",
+    "tags": [
+      "以色列",
+      "Israel",
+      "中东"
+    ],
+    "src": "/assets/countries/israel.svg",
+    "type": "svg"
+  },
+  {
+    "id": "turkey",
+    "name": "土耳其",
+    "category": "country",
+    "tags": [
+      "土耳其",
+      "Turkey",
+      "中东"
+    ],
+    "src": "/assets/countries/turkey.svg",
+    "type": "svg"
+  },
+  {
+    "id": "south-korea",
+    "name": "韩国",
+    "category": "country",
+    "tags": [
+      "韩国",
+      "Korea",
+      "东亚"
+    ],
+    "src": "/assets/countries/south-korea.svg",
+    "type": "svg"
+  },
+  {
+    "id": "north-korea",
+    "name": "朝鲜",
+    "category": "country",
+    "tags": [
+      "朝鲜",
+      "North Korea",
+      "东亚"
+    ],
+    "src": "/assets/countries/north-korea.svg",
+    "type": "svg"
+  },
+  {
+    "id": "pakistan",
+    "name": "巴基斯坦",
+    "category": "country",
+    "tags": [
+      "巴基斯坦",
+      "Pakistan",
+      "南亚"
+    ],
+    "src": "/assets/countries/pakistan.svg",
+    "type": "svg"
+  },
+  {
+    "id": "brazil",
+    "name": "巴西",
+    "category": "country",
+    "tags": [
+      "巴西",
+      "Brazil",
+      "拉美"
+    ],
+    "src": "/assets/countries/brazil.svg",
+    "type": "svg"
+  },
+  {
+    "id": "australia",
+    "name": "澳大利亚",
+    "category": "country",
+    "tags": [
+      "澳大利亚",
+      "Australia",
+      "澳洲"
+    ],
+    "src": "/assets/countries/australia.svg",
+    "type": "svg"
+  },
+  {
+    "id": "canada",
+    "name": "加拿大",
+    "category": "country",
+    "tags": [
+      "加拿大",
+      "Canada",
+      "北美"
+    ],
+    "src": "/assets/countries/canada.svg",
+    "type": "svg"
+  },
+  {
+    "id": "italy",
+    "name": "意大利",
+    "category": "country",
+    "tags": [
+      "意大利",
+      "Italy",
+      "欧洲"
+    ],
+    "src": "/assets/countries/italy.svg",
+    "type": "svg"
+  },
+  {
+    "id": "spain",
+    "name": "西班牙",
+    "category": "country",
+    "tags": [
+      "西班牙",
+      "Spain",
+      "欧洲"
+    ],
+    "src": "/assets/countries/spain.svg",
+    "type": "svg"
+  },
+  {
+    "id": "poland",
+    "name": "波兰",
+    "category": "country",
+    "tags": [
+      "波兰",
+      "Poland",
+      "欧洲"
+    ],
+    "src": "/assets/countries/poland.svg",
+    "type": "svg"
+  },
+  {
+    "id": "netherlands",
+    "name": "荷兰",
+    "category": "country",
+    "tags": [
+      "荷兰",
+      "Netherlands",
+      "欧洲"
+    ],
+    "src": "/assets/countries/netherlands.svg",
+    "type": "svg"
+  },
+  {
+    "id": "sweden",
+    "name": "瑞典",
+    "category": "country",
+    "tags": [
+      "瑞典",
+      "Sweden",
+      "北欧"
+    ],
+    "src": "/assets/countries/sweden.svg",
+    "type": "svg"
+  },
+  {
+    "id": "switzerland",
+    "name": "瑞士",
+    "category": "country",
+    "tags": [
+      "瑞士",
+      "Switzerland",
+      "欧洲"
+    ],
+    "src": "/assets/countries/switzerland.svg",
+    "type": "svg"
+  },
+  {
+    "id": "greece",
+    "name": "希腊",
+    "category": "country",
+    "tags": [
+      "希腊",
+      "Greece",
+      "欧洲"
+    ],
+    "src": "/assets/countries/greece.svg",
+    "type": "svg"
+  },
+  {
+    "id": "egypt",
+    "name": "埃及",
+    "category": "country",
+    "tags": [
+      "埃及",
+      "Egypt",
+      "中东",
+      "非洲"
+    ],
+    "src": "/assets/countries/egypt.svg",
+    "type": "svg"
+  },
+  {
+    "id": "uae",
+    "name": "阿联酋",
+    "category": "country",
+    "tags": [
+      "阿联酋",
+      "UAE",
+      "中东"
+    ],
+    "src": "/assets/countries/uae.svg",
+    "type": "svg"
+  },
+  {
+    "id": "qatar",
+    "name": "卡塔尔",
+    "category": "country",
+    "tags": [
+      "卡塔尔",
+      "Qatar",
+      "中东"
+    ],
+    "src": "/assets/countries/qatar.svg",
+    "type": "svg"
+  },
+  {
+    "id": "iraq",
+    "name": "伊拉克",
+    "category": "country",
+    "tags": [
+      "伊拉克",
+      "Iraq",
+      "中东"
+    ],
+    "src": "/assets/countries/iraq.svg",
+    "type": "svg"
+  },
+  {
+    "id": "syria",
+    "name": "叙利亚",
+    "category": "country",
+    "tags": [
+      "叙利亚",
+      "Syria",
+      "中东"
+    ],
+    "src": "/assets/countries/syria.svg",
+    "type": "svg"
+  },
+  {
+    "id": "afghanistan",
+    "name": "阿富汗",
+    "category": "country",
+    "tags": [
+      "阿富汗",
+      "Afghanistan",
+      "中亚"
+    ],
+    "src": "/assets/countries/afghanistan.svg",
+    "type": "svg"
+  },
+  {
+    "id": "vietnam",
+    "name": "越南",
+    "category": "country",
+    "tags": [
+      "越南",
+      "Vietnam",
+      "东南亚"
+    ],
+    "src": "/assets/countries/vietnam.svg",
+    "type": "svg"
+  },
+  {
+    "id": "thailand",
+    "name": "泰国",
+    "category": "country",
+    "tags": [
+      "泰国",
+      "Thailand",
+      "东南亚"
+    ],
+    "src": "/assets/countries/thailand.svg",
+    "type": "svg"
+  },
+  {
+    "id": "indonesia",
+    "name": "印尼",
+    "category": "country",
+    "tags": [
+      "印尼",
+      "Indonesia",
+      "东南亚"
+    ],
+    "src": "/assets/countries/indonesia.svg",
+    "type": "svg"
+  },
+  {
+    "id": "philippines",
+    "name": "菲律宾",
+    "category": "country",
+    "tags": [
+      "菲律宾",
+      "Philippines",
+      "东南亚"
+    ],
+    "src": "/assets/countries/philippines.svg",
+    "type": "svg"
+  },
+  {
+    "id": "nigeria",
+    "name": "尼日利亚",
+    "category": "country",
+    "tags": [
+      "尼日利亚",
+      "Nigeria",
+      "非洲"
+    ],
+    "src": "/assets/countries/nigeria.svg",
+    "type": "svg"
+  },
+  {
+    "id": "south-africa",
+    "name": "南非",
+    "category": "country",
+    "tags": [
+      "南非",
+      "Africa",
+      "非洲"
+    ],
+    "src": "/assets/countries/south-africa.svg",
+    "type": "svg"
+  },
+  {
+    "id": "mexico",
+    "name": "墨西哥",
+    "category": "country",
+    "tags": [
+      "墨西哥",
+      "Mexico",
+      "拉美"
+    ],
+    "src": "/assets/countries/mexico.svg",
+    "type": "svg"
+  },
+  {
+    "id": "argentina",
+    "name": "阿根廷",
+    "category": "country",
+    "tags": [
+      "阿根廷",
+      "Argentina",
+      "拉美"
+    ],
+    "src": "/assets/countries/argentina.svg",
+    "type": "svg"
+  },
+  {
+    "id": "taiwan",
+    "name": "台湾",
+    "category": "country",
+    "tags": [
+      "台湾",
+      "Taiwan",
+      "东亚"
+    ],
+    "src": "/assets/countries/taiwan.svg",
+    "type": "svg"
+  },
+  {
+    "id": "eu",
+    "name": "欧盟",
+    "category": "country",
+    "tags": [
+      "欧盟",
+      "EU",
+      "欧洲"
+    ],
+    "src": "/assets/countries/eu.svg",
+    "type": "svg"
+  },
+  {
+    "id": "nato",
+    "name": "北约",
+    "category": "country",
+    "tags": [
+      "北约",
+      "NATO",
+      "联盟"
+    ],
+    "src": "/assets/countries/nato.svg",
+    "type": "svg"
+  },
+  {
+    "id": "belarus",
+    "name": "白俄罗斯",
+    "category": "country",
+    "tags": [
+      "白俄罗斯",
+      "Belarus",
+      "欧洲"
+    ],
+    "src": "/assets/countries/belarus.svg",
+    "type": "svg"
+  },
+  {
+    "id": "finland",
+    "name": "芬兰",
+    "category": "country",
+    "tags": [
+      "芬兰",
+      "Finland",
+      "北欧"
+    ],
+    "src": "/assets/countries/finland.svg",
+    "type": "svg"
+  },
+  {
+    "id": "norway",
+    "name": "挪威",
+    "category": "country",
+    "tags": [
+      "挪威",
+      "Norway",
+      "北欧"
+    ],
+    "src": "/assets/countries/norway.svg",
+    "type": "svg"
+  },
+  {
+    "id": "kazakhstan",
+    "name": "哈萨克斯坦",
+    "category": "country",
+    "tags": [
+      "哈萨克斯坦",
+      "Kazakhstan",
+      "中亚"
+    ],
+    "src": "/assets/countries/kazakhstan.svg",
+    "type": "svg"
+  },
+  {
+    "id": "mongolia",
+    "name": "蒙古",
+    "category": "country",
+    "tags": [
+      "蒙古",
+      "Mongolia",
+      "东亚"
+    ],
+    "src": "/assets/countries/mongolia.svg",
+    "type": "svg"
+  },
+  {
+    "id": "cuba",
+    "name": "古巴",
+    "category": "country",
+    "tags": [
+      "古巴",
+      "Cuba",
+      "拉美"
+    ],
+    "src": "/assets/countries/cuba.svg",
+    "type": "svg"
+  },
+  {
+    "id": "pyramid",
+    "name": "金字塔",
+    "category": "history",
+    "tags": [
+      "金字塔",
+      "埃及",
+      "历史"
+    ],
+    "src": "/assets/history/pyramid.svg",
+    "type": "svg"
+  },
+  {
+    "id": "sphinx",
+    "name": "狮身人面",
+    "category": "history",
+    "tags": [
+      "狮身人面",
+      "埃及",
+      "历史"
+    ],
+    "src": "/assets/history/sphinx.svg",
+    "type": "svg"
+  },
+  {
+    "id": "parthenon",
+    "name": "帕特农",
+    "category": "history",
+    "tags": [
+      "帕特农",
+      "希腊",
+      "神庙"
+    ],
+    "src": "/assets/history/parthenon.svg",
+    "type": "svg"
+  },
+  {
+    "id": "colosseum",
+    "name": "斗兽场",
+    "category": "history",
+    "tags": [
+      "斗兽场",
+      "罗马",
+      "历史"
+    ],
+    "src": "/assets/history/colosseum.svg",
+    "type": "svg"
+  },
+  {
+    "id": "pagoda",
+    "name": "宝塔",
+    "category": "history",
+    "tags": [
+      "宝塔",
+      "佛塔",
+      "东亚"
+    ],
+    "src": "/assets/history/pagoda.svg",
+    "type": "svg"
+  },
+  {
+    "id": "castle",
+    "name": "城堡",
+    "category": "history",
+    "tags": [
+      "城堡",
+      "中世纪",
+      "要塞"
+    ],
+    "src": "/assets/history/castle.svg",
+    "type": "svg"
+  },
+  {
+    "id": "mosque",
+    "name": "清真寺",
+    "category": "history",
+    "tags": [
+      "清真寺",
+      "伊斯兰",
+      "宗教"
+    ],
+    "src": "/assets/history/mosque.svg",
+    "type": "svg"
+  },
+  {
+    "id": "cathedral",
+    "name": "大教堂",
+    "category": "history",
+    "tags": [
+      "大教堂",
+      "教堂",
+      "欧洲"
+    ],
+    "src": "/assets/history/cathedral.svg",
+    "type": "svg"
+  },
+  {
+    "id": "great-wall",
+    "name": "长城",
+    "category": "history",
+    "tags": [
+      "长城",
+      "中国",
+      "历史"
+    ],
+    "src": "/assets/history/great-wall.svg",
+    "type": "svg"
+  },
+  {
+    "id": "eiffel",
+    "name": "铁塔",
+    "category": "history",
+    "tags": [
+      "铁塔",
+      "巴黎",
+      "地标"
+    ],
+    "src": "/assets/history/eiffel.svg",
+    "type": "svg"
+  },
+  {
+    "id": "obelisk",
+    "name": "方尖碑",
+    "category": "history",
+    "tags": [
+      "方尖碑",
+      "纪念碑",
+      "历史"
+    ],
+    "src": "/assets/history/obelisk.svg",
+    "type": "svg"
+  },
+  {
+    "id": "forbidden-city",
+    "name": "紫禁城",
+    "category": "history",
+    "tags": [
+      "紫禁城",
+      "故宫",
+      "中国"
+    ],
+    "src": "/assets/history/forbidden-city.svg",
+    "type": "svg"
+  },
+  {
+    "id": "statue-liberty",
+    "name": "自由女神",
+    "category": "history",
+    "tags": [
+      "自由女神",
+      "美国",
+      "地标"
+    ],
+    "src": "/assets/history/statue-liberty.svg",
+    "type": "svg"
+  },
+  {
+    "id": "ruins",
+    "name": "遗迹",
+    "category": "history",
+    "tags": [
+      "遗迹",
+      "废墟",
+      "考古"
+    ],
+    "src": "/assets/history/ruins.svg",
+    "type": "svg"
+  },
+  {
+    "id": "temple",
+    "name": "神庙",
+    "category": "history",
+    "tags": [
+      "神庙",
+      "寺庙",
+      "宗教"
+    ],
+    "src": "/assets/history/temple.svg",
+    "type": "svg"
+  },
+  {
+    "id": "church",
+    "name": "教堂",
+    "category": "history",
+    "tags": [
+      "教堂",
+      "基督教"
+    ],
+    "src": "/assets/history/church.svg",
+    "type": "svg"
+  },
+  {
+    "id": "crown",
+    "name": "皇冠",
+    "category": "history",
+    "tags": [
+      "皇冠",
+      "王权",
+      "君主"
+    ],
+    "src": "/assets/history/crown.svg",
+    "type": "svg"
+  },
+  {
+    "id": "scroll",
+    "name": "卷轴",
+    "category": "history",
+    "tags": [
+      "卷轴",
+      "史书",
+      "文献"
+    ],
+    "src": "/assets/history/scroll.svg",
+    "type": "svg"
+  },
+  {
+    "id": "hourglass",
+    "name": "沙漏",
+    "category": "history",
+    "tags": [
+      "沙漏",
+      "时间",
+      "年代"
+    ],
+    "src": "/assets/history/hourglass.svg",
+    "type": "svg"
+  },
+  {
+    "id": "sword",
+    "name": "长剑",
+    "category": "history",
+    "tags": [
+      "长剑",
+      "冷兵器",
+      "战争"
+    ],
+    "src": "/assets/history/sword.svg",
+    "type": "svg"
+  },
+  {
+    "id": "shield",
+    "name": "盾牌",
+    "category": "history",
+    "tags": [
+      "盾牌",
+      "防御",
+      "纹章"
+    ],
+    "src": "/assets/history/shield.svg",
+    "type": "svg"
+  },
+  {
+    "id": "cannon",
+    "name": "火炮",
+    "category": "history",
+    "tags": [
+      "火炮",
+      "大炮",
+      "战争"
+    ],
+    "src": "/assets/history/cannon.svg",
+    "type": "svg"
+  },
+  {
+    "id": "quill",
+    "name": "羽毛笔",
+    "category": "history",
+    "tags": [
+      "羽毛笔",
+      "条约",
+      "书写"
+    ],
+    "src": "/assets/history/quill.svg",
+    "type": "svg"
+  },
+  {
+    "id": "sundial",
+    "name": "日晷",
+    "category": "history",
+    "tags": [
+      "日晷",
+      "古代",
+      "计时"
+    ],
+    "src": "/assets/history/sundial.svg",
+    "type": "svg"
+  },
+  {
+    "id": "chariot",
+    "name": "战车",
+    "category": "history",
+    "tags": [
+      "战车",
+      "古代",
+      "战争"
+    ],
+    "src": "/assets/history/chariot.svg",
+    "type": "svg"
+  },
+  {
+    "id": "knight",
+    "name": "骑士盔",
+    "category": "history",
+    "tags": [
+      "骑士",
+      "盔甲",
+      "中世纪"
+    ],
+    "src": "/assets/history/knight.svg",
+    "type": "svg"
+  },
+  {
+    "id": "printing-press",
+    "name": "印刷术",
+    "category": "history",
+    "tags": [
+      "印刷",
+      "古腾堡",
+      "传播"
+    ],
+    "src": "/assets/history/printing-press.svg",
+    "type": "svg"
+  },
+  {
+    "id": "bronze-ding",
+    "name": "青铜鼎",
+    "category": "history",
+    "tags": [
+      "青铜",
+      "鼎",
+      "中国"
+    ],
+    "src": "/assets/history/bronze-ding.svg",
+    "type": "svg"
+  },
+  {
+    "id": "terracotta",
+    "name": "兵马俑",
+    "category": "history",
+    "tags": [
+      "兵马俑",
+      "秦",
+      "中国"
+    ],
+    "src": "/assets/history/terracotta.svg",
+    "type": "svg"
+  },
+  {
+    "id": "silk-road",
+    "name": "丝绸之路",
+    "category": "history",
+    "tags": [
+      "丝路",
+      "贸易",
+      "历史"
+    ],
+    "src": "/assets/history/silk-road.svg",
+    "type": "svg"
+  },
+  {
+    "id": "compass-rose",
+    "name": "罗盘",
+    "category": "history",
+    "tags": [
+      "罗盘",
+      "航海",
+      "大航海"
+    ],
+    "src": "/assets/history/compass-rose.svg",
+    "type": "svg"
+  },
+  {
+    "id": "astrolabe",
+    "name": "星盘",
+    "category": "history",
+    "tags": [
+      "星盘",
+      "天文",
+      "航海"
+    ],
+    "src": "/assets/history/astrolabe.svg",
+    "type": "svg"
+  },
+  {
+    "id": "viking-ship",
+    "name": "维京船",
+    "category": "history",
+    "tags": [
+      "维京",
+      "长船",
+      "航海"
+    ],
+    "src": "/assets/history/viking-ship.svg",
+    "type": "svg"
+  },
+  {
+    "id": "samurai",
+    "name": "武士盔",
+    "category": "history",
+    "tags": [
+      "武士",
+      "日本",
+      "盔甲"
+    ],
+    "src": "/assets/history/samurai.svg",
+    "type": "svg"
+  },
+  {
+    "id": "dynasty-seal",
+    "name": "玉玺",
+    "category": "history",
+    "tags": [
+      "玉玺",
+      "印章",
+      "皇权"
+    ],
+    "src": "/assets/history/dynasty-seal.svg",
+    "type": "svg"
+  },
+  {
+    "id": "greek-column",
+    "name": "希腊柱",
+    "category": "history",
+    "tags": [
+      "柱式",
+      "希腊",
+      "文明"
+    ],
+    "src": "/assets/history/greek-column.svg",
+    "type": "svg"
+  },
+  {
+    "id": "aqueduct",
+    "name": "引水桥",
+    "category": "history",
+    "tags": [
+      "引水桥",
+      "罗马",
+      "工程"
+    ],
+    "src": "/assets/history/aqueduct.svg",
+    "type": "svg"
+  },
+  {
+    "id": "hieroglyph",
+    "name": "象形文字",
+    "category": "history",
+    "tags": [
+      "象形文字",
+      "埃及",
+      "文字"
+    ],
+    "src": "/assets/history/hieroglyph.svg",
+    "type": "svg"
+  },
+  {
+    "id": "oracle-bone",
+    "name": "甲骨",
+    "category": "history",
+    "tags": [
+      "甲骨文",
+      "商朝",
+      "中国"
+    ],
+    "src": "/assets/history/oracle-bone.svg",
+    "type": "svg"
+  },
+  {
+    "id": "monument",
+    "name": "纪念碑",
+    "category": "history",
+    "tags": [
+      "纪念碑",
+      "纪念",
+      "历史"
+    ],
+    "src": "/assets/history/monument.svg",
+    "type": "svg"
+  },
+  {
+    "id": "throne",
+    "name": "王座",
+    "category": "history",
+    "tags": [
+      "王座",
+      "皇位",
+      "权力"
+    ],
+    "src": "/assets/history/throne.svg",
+    "type": "svg"
+  },
+  {
+    "id": "scepter",
+    "name": "权杖",
+    "category": "history",
+    "tags": [
+      "权杖",
+      "王权"
+    ],
+    "src": "/assets/history/scepter.svg",
+    "type": "svg"
+  },
+  {
+    "id": "amphitheater",
+    "name": "圆形剧场",
+    "category": "history",
+    "tags": [
+      "剧场",
+      "罗马"
+    ],
+    "src": "/assets/history/amphitheater.svg",
+    "type": "svg"
+  },
+  {
+    "id": "forbidden-gate",
+    "name": "宫门",
+    "category": "history",
+    "tags": [
+      "宫门",
+      "皇城"
+    ],
+    "src": "/assets/history/forbidden-gate.svg",
+    "type": "svg"
+  },
+  {
+    "id": "steam-engine",
+    "name": "蒸汽机",
+    "category": "history",
+    "tags": [
+      "蒸汽机",
+      "工业革命"
+    ],
+    "src": "/assets/history/steam-engine.svg",
+    "type": "svg"
+  },
+  {
+    "id": "tank",
+    "name": "坦克",
+    "category": "military",
+    "tags": [
+      "坦克",
+      "装甲",
+      "陆军"
+    ],
+    "src": "/assets/military/tank.svg",
+    "type": "svg"
+  },
+  {
+    "id": "submarine",
+    "name": "潜艇",
+    "category": "military",
+    "tags": [
+      "潜艇",
+      "海军",
+      "水下"
+    ],
+    "src": "/assets/military/submarine.svg",
+    "type": "svg"
+  },
+  {
+    "id": "fighter",
+    "name": "战机",
+    "category": "military",
+    "tags": [
+      "战机",
+      "空军",
+      "战斗机"
+    ],
+    "src": "/assets/military/fighter.svg",
+    "type": "svg"
+  },
+  {
+    "id": "carrier",
+    "name": "航母",
+    "category": "military",
+    "tags": [
+      "航母",
+      "航空母舰",
+      "海军"
+    ],
+    "src": "/assets/military/carrier.svg",
+    "type": "svg"
+  },
+  {
+    "id": "helicopter",
+    "name": "直升机",
+    "category": "military",
+    "tags": [
+      "直升机",
+      "武装直升机"
+    ],
+    "src": "/assets/military/helicopter.svg",
+    "type": "svg"
+  },
+  {
+    "id": "drone",
+    "name": "无人机",
+    "category": "military",
+    "tags": [
+      "无人机",
+      "drone",
+      "侦察"
+    ],
+    "src": "/assets/military/drone.svg",
+    "type": "svg"
+  },
+  {
+    "id": "warship",
+    "name": "军舰",
+    "category": "military",
+    "tags": [
+      "军舰",
+      "驱逐舰",
+      "海军"
+    ],
+    "src": "/assets/military/warship.svg",
+    "type": "svg"
+  },
+  {
+    "id": "rocket",
+    "name": "火箭",
+    "category": "military",
+    "tags": [
+      "火箭",
+      "航天",
+      "导弹"
+    ],
+    "src": "/assets/military/rocket.svg",
+    "type": "svg"
+  },
+  {
+    "id": "icbm",
+    "name": "洲际导弹",
+    "category": "military",
+    "tags": [
+      "洲际导弹",
+      "ICBM",
+      "核武"
+    ],
+    "src": "/assets/military/icbm.svg",
+    "type": "svg"
+  },
+  {
+    "id": "nuclear",
+    "name": "核武",
+    "category": "military",
+    "tags": [
+      "核武",
+      "原子弹",
+      "核"
+    ],
+    "src": "/assets/military/nuclear.svg",
+    "type": "svg"
+  },
+  {
+    "id": "helmet",
+    "name": "钢盔",
+    "category": "military",
+    "tags": [
+      "钢盔",
+      "头盔",
+      "士兵"
+    ],
+    "src": "/assets/military/helmet.svg",
+    "type": "svg"
+  },
+  {
+    "id": "medal",
+    "name": "勋章",
+    "category": "military",
+    "tags": [
+      "勋章",
+      "军功",
+      "荣誉"
+    ],
+    "src": "/assets/military/medal.svg",
+    "type": "svg"
+  },
+  {
+    "id": "radar",
+    "name": "雷达",
+    "category": "military",
+    "tags": [
+      "雷达",
+      "防空",
+      "探测"
+    ],
+    "src": "/assets/military/radar.svg",
+    "type": "svg"
+  },
+  {
+    "id": "chess",
+    "name": "棋局",
+    "category": "military",
+    "tags": [
+      "棋局",
+      "博弈",
+      "战略"
+    ],
+    "src": "/assets/military/chess.svg",
+    "type": "svg"
+  },
+  {
+    "id": "artillery",
+    "name": "火炮阵地",
+    "category": "military",
+    "tags": [
+      "火炮",
+      "炮兵"
+    ],
+    "src": "/assets/military/artillery.svg",
+    "type": "svg"
+  },
+  {
+    "id": "rifle",
+    "name": "步枪",
+    "category": "military",
+    "tags": [
+      "步枪",
+      "枪支",
+      "步兵"
+    ],
+    "src": "/assets/military/rifle.svg",
+    "type": "svg"
+  },
+  {
+    "id": "bunker",
+    "name": "掩体",
+    "category": "military",
+    "tags": [
+      "掩体",
+      "工事",
+      "防线"
+    ],
+    "src": "/assets/military/bunker.svg",
+    "type": "svg"
+  },
+  {
+    "id": "fortress",
+    "name": "要塞",
+    "category": "military",
+    "tags": [
+      "要塞",
+      "堡垒"
+    ],
+    "src": "/assets/military/fortress.svg",
+    "type": "svg"
+  },
+  {
+    "id": "silo",
+    "name": "导弹井",
+    "category": "military",
+    "tags": [
+      "导弹井",
+      "发射井"
+    ],
+    "src": "/assets/military/silo.svg",
+    "type": "svg"
+  },
+  {
+    "id": "aircraft-carrier-jet",
+    "name": "舰载机",
+    "category": "military",
+    "tags": [
+      "舰载机",
+      "航母"
+    ],
+    "src": "/assets/military/aircraft-carrier-jet.svg",
+    "type": "svg"
+  },
+  {
+    "id": "bomber",
+    "name": "轰炸机",
+    "category": "military",
+    "tags": [
+      "轰炸机",
+      "战略空军"
+    ],
+    "src": "/assets/military/bomber.svg",
+    "type": "svg"
+  },
+  {
+    "id": "destroyer",
+    "name": "驱逐舰",
+    "category": "military",
+    "tags": [
+      "驱逐舰",
+      "军舰"
+    ],
+    "src": "/assets/military/destroyer.svg",
+    "type": "svg"
+  },
+  {
+    "id": "frigate",
+    "name": "护卫舰",
+    "category": "military",
+    "tags": [
+      "护卫舰",
+      "海军"
+    ],
+    "src": "/assets/military/frigate.svg",
+    "type": "svg"
+  },
+  {
+    "id": "battleship",
+    "name": "战列舰",
+    "category": "military",
+    "tags": [
+      "战列舰",
+      "巨舰"
+    ],
+    "src": "/assets/military/battleship.svg",
+    "type": "svg"
+  },
+  {
+    "id": "uav",
+    "name": "察打一体",
+    "category": "military",
+    "tags": [
+      "察打",
+      "无人机"
+    ],
+    "src": "/assets/military/uav.svg",
+    "type": "svg"
+  },
+  {
+    "id": "hypersonic",
+    "name": "高超音速",
+    "category": "military",
+    "tags": [
+      "高超音速",
+      "导弹"
+    ],
+    "src": "/assets/military/hypersonic.svg",
+    "type": "svg"
+  },
+  {
+    "id": "missile-defense",
+    "name": "导弹防御",
+    "category": "military",
+    "tags": [
+      "反导",
+      "防御"
+    ],
+    "src": "/assets/military/missile-defense.svg",
+    "type": "svg"
+  },
+  {
+    "id": "camouflage",
+    "name": "迷彩",
+    "category": "military",
+    "tags": [
+      "迷彩",
+      "隐蔽"
+    ],
+    "src": "/assets/military/camouflage.svg",
+    "type": "svg"
+  },
+  {
+    "id": "dog-tag",
+    "name": "士兵牌",
+    "category": "military",
+    "tags": [
+      "士兵牌",
+      "识别"
+    ],
+    "src": "/assets/military/dog-tag.svg",
+    "type": "svg"
+  },
+  {
+    "id": "general-star",
+    "name": "将星",
+    "category": "military",
+    "tags": [
+      "将星",
+      "军衔"
+    ],
+    "src": "/assets/military/general-star.svg",
+    "type": "svg"
+  },
+  {
+    "id": "army",
+    "name": "陆军",
+    "category": "military",
+    "tags": [
+      "陆军",
+      "地面部队"
+    ],
+    "src": "/assets/military/army.svg",
+    "type": "svg"
+  },
+  {
+    "id": "navy",
+    "name": "海军",
+    "category": "military",
+    "tags": [
+      "海军",
+      "舰队"
+    ],
+    "src": "/assets/military/navy.svg",
+    "type": "svg"
+  },
+  {
+    "id": "air-force",
+    "name": "空军",
+    "category": "military",
+    "tags": [
+      "空军",
+      "航空兵"
+    ],
+    "src": "/assets/military/air-force.svg",
+    "type": "svg"
+  },
+  {
+    "id": "space-force",
+    "name": "天军",
+    "category": "military",
+    "tags": [
+      "天军",
+      "太空作战"
+    ],
+    "src": "/assets/military/space-force.svg",
+    "type": "svg"
+  },
+  {
+    "id": "parade",
+    "name": "阅兵",
+    "category": "military",
+    "tags": [
+      "阅兵",
+      "军演"
+    ],
+    "src": "/assets/military/parade.svg",
+    "type": "svg"
+  },
+  {
+    "id": "barbed-wire",
+    "name": "铁丝网",
+    "category": "military",
+    "tags": [
+      "铁丝网",
+      "边境"
+    ],
+    "src": "/assets/military/barbed-wire.svg",
+    "type": "svg"
+  },
+  {
+    "id": "garrison",
+    "name": "驻军",
+    "category": "military",
+    "tags": [
+      "驻军",
+      "基地"
+    ],
+    "src": "/assets/military/garrison.svg",
+    "type": "svg"
+  },
+  {
+    "id": "war-map",
+    "name": "作战地图",
+    "category": "military",
+    "tags": [
+      "作战地图",
+      "推演"
+    ],
+    "src": "/assets/military/war-map.svg",
+    "type": "svg"
+  },
+  {
+    "id": "alliance-star",
+    "name": "军事同盟",
+    "category": "military",
+    "tags": [
+      "同盟",
+      "联盟"
+    ],
+    "src": "/assets/military/alliance-star.svg",
+    "type": "svg"
+  },
+  {
+    "id": "iron-dome",
+    "name": "防空伞",
+    "category": "military",
+    "tags": [
+      "防空",
+      "拦截"
+    ],
+    "src": "/assets/military/iron-dome.svg",
+    "type": "svg"
+  },
+  {
+    "id": "handshake",
+    "name": "握手",
+    "category": "diplomacy",
+    "tags": [
+      "握手",
+      "协议",
+      "建交"
+    ],
+    "src": "/assets/diplomacy/handshake.svg",
+    "type": "svg"
+  },
+  {
+    "id": "olive",
+    "name": "橄榄枝",
+    "category": "diplomacy",
+    "tags": [
+      "橄榄枝",
+      "和平"
+    ],
+    "src": "/assets/diplomacy/olive.svg",
+    "type": "svg"
+  },
+  {
+    "id": "dove",
+    "name": "和平鸽",
+    "category": "diplomacy",
+    "tags": [
+      "和平鸽",
+      "停火"
+    ],
+    "src": "/assets/diplomacy/dove.svg",
+    "type": "svg"
+  },
+  {
+    "id": "embassy",
+    "name": "大使馆",
+    "category": "diplomacy",
+    "tags": [
+      "大使馆",
+      "外交"
+    ],
+    "src": "/assets/diplomacy/embassy.svg",
+    "type": "svg"
+  },
+  {
+    "id": "passport",
+    "name": "护照",
+    "category": "diplomacy",
+    "tags": [
+      "护照",
+      "出入境"
+    ],
+    "src": "/assets/diplomacy/passport.svg",
+    "type": "svg"
+  },
+  {
+    "id": "treaty",
+    "name": "条约",
+    "category": "diplomacy",
+    "tags": [
+      "条约",
+      "协定",
+      "签署"
+    ],
+    "src": "/assets/diplomacy/treaty.svg",
+    "type": "svg"
+  },
+  {
+    "id": "border-gate",
+    "name": "边境口岸",
+    "category": "diplomacy",
+    "tags": [
+      "边境",
+      "口岸",
+      "海关"
+    ],
+    "src": "/assets/diplomacy/border-gate.svg",
+    "type": "svg"
+  },
+  {
+    "id": "summit",
+    "name": "峰会",
+    "category": "diplomacy",
+    "tags": [
+      "峰会",
+      "首脑",
+      "会谈"
+    ],
+    "src": "/assets/diplomacy/summit.svg",
+    "type": "svg"
+  },
+  {
+    "id": "envoy",
+    "name": "特使",
+    "category": "diplomacy",
+    "tags": [
+      "特使",
+      "大使"
+    ],
+    "src": "/assets/diplomacy/envoy.svg",
+    "type": "svg"
+  },
+  {
+    "id": "visa",
+    "name": "签证",
+    "category": "diplomacy",
+    "tags": [
+      "签证",
+      "入境"
+    ],
+    "src": "/assets/diplomacy/visa.svg",
+    "type": "svg"
+  },
+  {
+    "id": "roundtable",
+    "name": "圆桌",
+    "category": "diplomacy",
+    "tags": [
+      "圆桌",
+      "多边"
+    ],
+    "src": "/assets/diplomacy/roundtable.svg",
+    "type": "svg"
+  },
+  {
+    "id": "veto",
+    "name": "否决权",
+    "category": "diplomacy",
+    "tags": [
+      "否决权",
+      "安理会"
+    ],
+    "src": "/assets/diplomacy/veto.svg",
+    "type": "svg"
+  },
+  {
+    "id": "resolution",
+    "name": "决议",
+    "category": "diplomacy",
+    "tags": [
+      "决议",
+      "联合国"
+    ],
+    "src": "/assets/diplomacy/resolution.svg",
+    "type": "svg"
+  },
+  {
+    "id": "white-flag",
+    "name": "白旗",
+    "category": "diplomacy",
+    "tags": [
+      "白旗",
+      "投降",
+      "停火"
+    ],
+    "src": "/assets/diplomacy/white-flag.svg",
+    "type": "svg"
+  },
+  {
+    "id": "credentials",
+    "name": "国书",
+    "category": "diplomacy",
+    "tags": [
+      "国书",
+      "递交"
+    ],
+    "src": "/assets/diplomacy/credentials.svg",
+    "type": "svg"
+  },
+  {
+    "id": "diplomatic-bag",
+    "name": "外交邮袋",
+    "category": "diplomacy",
+    "tags": [
+      "外交邮袋",
+      "豁免"
+    ],
+    "src": "/assets/diplomacy/diplomatic-bag.svg",
+    "type": "svg"
+  },
+  {
+    "id": "bilateral",
+    "name": "双边",
+    "category": "diplomacy",
+    "tags": [
+      "双边",
+      "两国"
+    ],
+    "src": "/assets/diplomacy/bilateral.svg",
+    "type": "svg"
+  },
+  {
+    "id": "multilateral",
+    "name": "多边",
+    "category": "diplomacy",
+    "tags": [
+      "多边",
+      "国际组织"
+    ],
+    "src": "/assets/diplomacy/multilateral.svg",
+    "type": "svg"
+  },
+  {
+    "id": "olive-treaty",
+    "name": "和平协议",
+    "category": "diplomacy",
+    "tags": [
+      "和平协议",
+      "停战"
+    ],
+    "src": "/assets/diplomacy/olive-treaty.svg",
+    "type": "svg"
+  },
+  {
+    "id": "red-phone",
+    "name": "热线",
+    "category": "diplomacy",
+    "tags": [
+      "热线",
+      "危机沟通"
+    ],
+    "src": "/assets/diplomacy/red-phone.svg",
+    "type": "svg"
+  },
+  {
+    "id": "interpreter",
+    "name": "翻译",
+    "category": "diplomacy",
+    "tags": [
+      "翻译",
+      "同传"
+    ],
+    "src": "/assets/diplomacy/interpreter.svg",
+    "type": "svg"
+  },
+  {
+    "id": "checkpoint",
+    "name": "检查站",
+    "category": "diplomacy",
+    "tags": [
+      "检查站",
+      "关卡"
+    ],
+    "src": "/assets/diplomacy/checkpoint.svg",
+    "type": "svg"
+  },
+  {
+    "id": "asylum",
+    "name": "庇护",
+    "category": "diplomacy",
+    "tags": [
+      "庇护",
+      "难民"
+    ],
+    "src": "/assets/diplomacy/asylum.svg",
+    "type": "svg"
+  },
+  {
+    "id": "extradition",
+    "name": "引渡",
+    "category": "diplomacy",
+    "tags": [
+      "引渡",
+      "司法"
+    ],
+    "src": "/assets/diplomacy/extradition.svg",
+    "type": "svg"
+  },
+  {
+    "id": "consulate",
+    "name": "领事馆",
+    "category": "diplomacy",
+    "tags": [
+      "领事馆",
+      "侨民"
+    ],
+    "src": "/assets/diplomacy/consulate.svg",
+    "type": "svg"
+  },
+  {
+    "id": "white-house",
+    "name": "白宫",
+    "category": "politics",
+    "tags": [
+      "白宫",
+      "美国政府"
+    ],
+    "src": "/assets/politics/white-house.svg",
+    "type": "svg"
+  },
+  {
+    "id": "kremlin",
+    "name": "克里姆林",
+    "category": "politics",
+    "tags": [
+      "克里姆林宫",
+      "俄罗斯"
+    ],
+    "src": "/assets/politics/kremlin.svg",
+    "type": "svg"
+  },
+  {
+    "id": "parliament",
+    "name": "议会",
+    "category": "politics",
+    "tags": [
+      "议会",
+      "国会"
+    ],
+    "src": "/assets/politics/parliament.svg",
+    "type": "svg"
+  },
+  {
+    "id": "ballot",
+    "name": "投票箱",
+    "category": "politics",
+    "tags": [
+      "投票",
+      "选举",
+      "选票"
+    ],
+    "src": "/assets/politics/ballot.svg",
+    "type": "svg"
+  },
+  {
+    "id": "podium",
+    "name": "演讲台",
+    "category": "politics",
+    "tags": [
+      "演讲台",
+      "演说"
+    ],
+    "src": "/assets/politics/podium.svg",
+    "type": "svg"
+  },
+  {
+    "id": "scales",
+    "name": "天平",
+    "category": "politics",
+    "tags": [
+      "天平",
+      "司法",
+      "公正"
+    ],
+    "src": "/assets/politics/scales.svg",
+    "type": "svg"
+  },
+  {
+    "id": "constitution",
+    "name": "宪法",
+    "category": "politics",
+    "tags": [
+      "宪法",
+      "根本法"
+    ],
+    "src": "/assets/politics/constitution.svg",
+    "type": "svg"
+  },
+  {
+    "id": "law-book",
+    "name": "法典",
+    "category": "politics",
+    "tags": [
+      "法典",
+      "法律"
+    ],
+    "src": "/assets/politics/law-book.svg",
+    "type": "svg"
+  },
+  {
+    "id": "protest",
+    "name": "抗议",
+    "category": "politics",
+    "tags": [
+      "抗议",
+      "游行",
+      "示威"
+    ],
+    "src": "/assets/politics/protest.svg",
+    "type": "svg"
+  },
+  {
+    "id": "megaphone",
+    "name": "扩音器",
+    "category": "politics",
+    "tags": [
+      "扩音器",
+      "动员"
+    ],
+    "src": "/assets/politics/megaphone.svg",
+    "type": "svg"
+  },
+  {
+    "id": "campaign",
+    "name": "竞选",
+    "category": "politics",
+    "tags": [
+      "竞选",
+      "拉票"
+    ],
+    "src": "/assets/politics/campaign.svg",
+    "type": "svg"
+  },
+  {
+    "id": "impeach",
+    "name": "弹劾",
+    "category": "politics",
+    "tags": [
+      "弹劾",
+      "问责"
+    ],
+    "src": "/assets/politics/impeach.svg",
+    "type": "svg"
+  },
+  {
+    "id": "cabinet",
+    "name": "内阁",
+    "category": "politics",
+    "tags": [
+      "内阁",
+      "政府"
+    ],
+    "src": "/assets/politics/cabinet.svg",
+    "type": "svg"
+  },
+  {
+    "id": "monarchy",
+    "name": "君主制",
+    "category": "politics",
+    "tags": [
+      "君主制",
+      "王室"
+    ],
+    "src": "/assets/politics/monarchy.svg",
+    "type": "svg"
+  },
+  {
+    "id": "republic",
+    "name": "共和",
+    "category": "politics",
+    "tags": [
+      "共和",
+      "共和制"
+    ],
+    "src": "/assets/politics/republic.svg",
+    "type": "svg"
+  },
+  {
+    "id": "federal",
+    "name": "联邦",
+    "category": "politics",
+    "tags": [
+      "联邦",
+      "州"
+    ],
+    "src": "/assets/politics/federal.svg",
+    "type": "svg"
+  },
+  {
+    "id": "petition",
+    "name": "请愿",
+    "category": "politics",
+    "tags": [
+      "请愿",
+      "联名"
+    ],
+    "src": "/assets/politics/petition.svg",
+    "type": "svg"
+  },
+  {
+    "id": "senate",
+    "name": "参议院",
+    "category": "politics",
+    "tags": [
+      "参议院",
+      "上院"
+    ],
+    "src": "/assets/politics/senate.svg",
+    "type": "svg"
+  },
+  {
+    "id": "congress",
+    "name": "国会大厦",
+    "category": "politics",
+    "tags": [
+      "国会大厦",
+      "立法"
+    ],
+    "src": "/assets/politics/congress.svg",
+    "type": "svg"
+  },
+  {
+    "id": "judge",
+    "name": "法官",
+    "category": "politics",
+    "tags": [
+      "法官",
+      "法院"
+    ],
+    "src": "/assets/politics/judge.svg",
+    "type": "svg"
+  },
+  {
+    "id": "anatomy-state",
+    "name": "国家机器",
+    "category": "politics",
+    "tags": [
+      "国家机器",
+      "政权"
+    ],
+    "src": "/assets/politics/anatomy-state.svg",
+    "type": "svg"
+  },
+  {
+    "id": "ideology",
+    "name": "意识形态",
+    "category": "politics",
+    "tags": [
+      "意识形态",
+      "主义"
+    ],
+    "src": "/assets/politics/ideology.svg",
+    "type": "svg"
+  },
+  {
+    "id": "referendum",
+    "name": "公投",
+    "category": "politics",
+    "tags": [
+      "公投",
+      "公决"
+    ],
+    "src": "/assets/politics/referendum.svg",
+    "type": "svg"
+  },
+  {
+    "id": "inauguration",
+    "name": "就职",
+    "category": "politics",
+    "tags": [
+      "就职",
+      "宣誓"
+    ],
+    "src": "/assets/politics/inauguration.svg",
+    "type": "svg"
+  },
+  {
+    "id": "national-seal",
+    "name": "国徽",
+    "category": "politics",
+    "tags": [
+      "国徽",
+      "纹章"
+    ],
+    "src": "/assets/politics/national-seal.svg",
+    "type": "svg"
+  },
+  {
+    "id": "yuan",
+    "name": "人民币",
+    "category": "economy",
+    "tags": [
+      "人民币",
+      "元",
+      "中国货币"
+    ],
+    "src": "/assets/economy/yuan.svg",
+    "type": "svg"
+  },
+  {
+    "id": "euro",
+    "name": "欧元",
+    "category": "economy",
+    "tags": [
+      "欧元",
+      "Euro",
+      "欧洲货币"
+    ],
+    "src": "/assets/economy/euro.svg",
+    "type": "svg"
+  },
+  {
+    "id": "yen",
+    "name": "日元",
+    "category": "economy",
+    "tags": [
+      "日元",
+      "Yen",
+      "日本货币"
+    ],
+    "src": "/assets/economy/yen.svg",
+    "type": "svg"
+  },
+  {
+    "id": "gold-bar",
+    "name": "金条",
+    "category": "economy",
+    "tags": [
+      "金条",
+      "黄金",
+      "储备"
+    ],
+    "src": "/assets/economy/gold-bar.svg",
+    "type": "svg"
+  },
+  {
+    "id": "container",
+    "name": "集装箱",
+    "category": "economy",
+    "tags": [
+      "集装箱",
+      "外贸",
+      "航运"
+    ],
+    "src": "/assets/economy/container.svg",
+    "type": "svg"
+  },
+  {
+    "id": "tariff",
+    "name": "关税",
+    "category": "economy",
+    "tags": [
+      "关税",
+      "贸易壁垒"
+    ],
+    "src": "/assets/economy/tariff.svg",
+    "type": "svg"
+  },
+  {
+    "id": "inflation",
+    "name": "通胀",
+    "category": "economy",
+    "tags": [
+      "通胀",
+      "物价"
+    ],
+    "src": "/assets/economy/inflation.svg",
+    "type": "svg"
+  },
+  {
+    "id": "gdp",
+    "name": "GDP",
+    "category": "economy",
+    "tags": [
+      "GDP",
+      "增长",
+      "经济总量"
+    ],
+    "src": "/assets/economy/gdp.svg",
+    "type": "svg"
+  },
+  {
+    "id": "debt",
+    "name": "债务",
+    "category": "economy",
+    "tags": [
+      "债务",
+      "国债"
+    ],
+    "src": "/assets/economy/debt.svg",
+    "type": "svg"
+  },
+  {
+    "id": "bond",
+    "name": "债券",
+    "category": "economy",
+    "tags": [
+      "债券",
+      "国债"
+    ],
+    "src": "/assets/economy/bond.svg",
+    "type": "svg"
+  },
+  {
+    "id": "interest",
+    "name": "利率",
+    "category": "economy",
+    "tags": [
+      "利率",
+      "加息",
+      "降息"
+    ],
+    "src": "/assets/economy/interest.svg",
+    "type": "svg"
+  },
+  {
+    "id": "recession",
+    "name": "衰退",
+    "category": "economy",
+    "tags": [
+      "衰退",
+      "萧条"
+    ],
+    "src": "/assets/economy/recession.svg",
+    "type": "svg"
+  },
+  {
+    "id": "supply-chain",
+    "name": "供应链",
+    "category": "economy",
+    "tags": [
+      "供应链",
+      "物流"
+    ],
+    "src": "/assets/economy/supply-chain.svg",
+    "type": "svg"
+  },
+  {
+    "id": "wto",
+    "name": "世贸",
+    "category": "economy",
+    "tags": [
+      "世贸",
+      "WTO",
+      "贸易"
+    ],
+    "src": "/assets/economy/wto.svg",
+    "type": "svg"
+  },
+  {
+    "id": "imf",
+    "name": "IMF",
+    "category": "economy",
+    "tags": [
+      "IMF",
+      "基金组织"
+    ],
+    "src": "/assets/economy/imf.svg",
+    "type": "svg"
+  },
+  {
+    "id": "world-bank",
+    "name": "世界银行",
+    "category": "economy",
+    "tags": [
+      "世界银行",
+      "贷款"
+    ],
+    "src": "/assets/economy/world-bank.svg",
+    "type": "svg"
+  },
+  {
+    "id": "customs",
+    "name": "海关",
+    "category": "economy",
+    "tags": [
+      "海关",
+      "清关"
+    ],
+    "src": "/assets/economy/customs.svg",
+    "type": "svg"
+  },
+  {
+    "id": "port-crane",
+    "name": "港口吊机",
+    "category": "economy",
+    "tags": [
+      "港口",
+      "吊机",
+      "码头"
+    ],
+    "src": "/assets/economy/port-crane.svg",
+    "type": "svg"
+  },
+  {
+    "id": "bull",
+    "name": "牛市",
+    "category": "economy",
+    "tags": [
+      "牛市",
+      "上涨"
+    ],
+    "src": "/assets/economy/bull.svg",
+    "type": "svg"
+  },
+  {
+    "id": "bear",
+    "name": "熊市",
+    "category": "economy",
+    "tags": [
+      "熊市",
+      "下跌"
+    ],
+    "src": "/assets/economy/bear.svg",
+    "type": "svg"
+  },
+  {
+    "id": "subsidy",
+    "name": "补贴",
+    "category": "economy",
+    "tags": [
+      "补贴",
+      "产业政策"
+    ],
+    "src": "/assets/economy/subsidy.svg",
+    "type": "svg"
+  },
+  {
+    "id": "sanction-stamp",
+    "name": "制裁章",
+    "category": "economy",
+    "tags": [
+      "制裁",
+      "禁运"
+    ],
+    "src": "/assets/economy/sanction-stamp.svg",
+    "type": "svg"
+  },
+  {
+    "id": "reserve",
+    "name": "外汇储备",
+    "category": "economy",
+    "tags": [
+      "外汇储备",
+      "美元储备"
+    ],
+    "src": "/assets/economy/reserve.svg",
+    "type": "svg"
+  },
+  {
+    "id": "trade-war",
+    "name": "贸易战",
+    "category": "economy",
+    "tags": [
+      "贸易战",
+      "加征关税"
+    ],
+    "src": "/assets/economy/trade-war.svg",
+    "type": "svg"
+  },
+  {
+    "id": "chip-ban",
+    "name": "芯片管制",
+    "category": "economy",
+    "tags": [
+      "芯片管制",
+      "出口管制"
+    ],
+    "src": "/assets/economy/chip-ban.svg",
+    "type": "svg"
+  },
+  {
+    "id": "rare-earth",
+    "name": "稀土",
+    "category": "economy",
+    "tags": [
+      "稀土",
+      "矿产"
+    ],
+    "src": "/assets/economy/rare-earth.svg",
+    "type": "svg"
+  },
+  {
+    "id": "lithium",
+    "name": "锂矿",
+    "category": "economy",
+    "tags": [
+      "锂",
+      "电池",
+      "矿产"
+    ],
+    "src": "/assets/economy/lithium.svg",
+    "type": "svg"
+  },
+  {
+    "id": "lng",
+    "name": "LNG",
+    "category": "economy",
+    "tags": [
+      "LNG",
+      "液化天然气"
+    ],
+    "src": "/assets/economy/lng.svg",
+    "type": "svg"
+  },
+  {
+    "id": "coal",
+    "name": "煤炭",
+    "category": "economy",
+    "tags": [
+      "煤炭",
+      "煤电"
+    ],
+    "src": "/assets/economy/coal.svg",
+    "type": "svg"
+  },
+  {
+    "id": "gas",
+    "name": "天然气",
+    "category": "economy",
+    "tags": [
+      "天然气",
+      "管道气"
+    ],
+    "src": "/assets/economy/gas.svg",
+    "type": "svg"
+  },
+  {
+    "id": "offshore",
+    "name": "离岸",
+    "category": "economy",
+    "tags": [
+      "离岸",
+      "避税"
+    ],
+    "src": "/assets/economy/offshore.svg",
+    "type": "svg"
+  },
+  {
+    "id": "swift",
+    "name": "SWIFT",
+    "category": "economy",
+    "tags": [
+      "SWIFT",
+      "结算",
+      "金融"
+    ],
+    "src": "/assets/economy/swift.svg",
+    "type": "svg"
+  },
+  {
+    "id": "stock-crash",
+    "name": "股灾",
+    "category": "economy",
+    "tags": [
+      "股灾",
+      "崩盘"
+    ],
+    "src": "/assets/economy/stock-crash.svg",
+    "type": "svg"
+  },
+  {
+    "id": "ipo",
+    "name": "上市",
+    "category": "economy",
+    "tags": [
+      "上市",
+      "IPO"
+    ],
+    "src": "/assets/economy/ipo.svg",
+    "type": "svg"
+  },
+  {
+    "id": "central-bank",
+    "name": "央行",
+    "category": "economy",
+    "tags": [
+      "央行",
+      "货币政策"
+    ],
+    "src": "/assets/economy/central-bank.svg",
+    "type": "svg"
+  },
+  {
+    "id": "chip",
+    "name": "芯片",
+    "category": "industry",
+    "tags": [
+      "芯片",
+      "半导体",
+      "晶圆"
+    ],
+    "src": "/assets/industry/chip.svg",
+    "type": "svg"
+  },
+  {
+    "id": "semiconductor",
+    "name": "半导体",
+    "category": "industry",
+    "tags": [
+      "半导体",
+      "晶圆厂"
+    ],
+    "src": "/assets/industry/semiconductor.svg",
+    "type": "svg"
+  },
+  {
+    "id": "data-center",
+    "name": "数据中心",
+    "category": "industry",
+    "tags": [
+      "数据中心",
+      "服务器"
+    ],
+    "src": "/assets/industry/data-center.svg",
+    "type": "svg"
+  },
+  {
+    "id": "5g-tower",
+    "name": "5G基站",
+    "category": "industry",
+    "tags": [
+      "5G",
+      "基站",
+      "通信"
+    ],
+    "src": "/assets/industry/5g-tower.svg",
+    "type": "svg"
+  },
+  {
+    "id": "fiber",
+    "name": "光缆",
+    "category": "industry",
+    "tags": [
+      "光缆",
+      "海底光缆"
+    ],
+    "src": "/assets/industry/fiber.svg",
+    "type": "svg"
+  },
+  {
+    "id": "nuclear-plant",
+    "name": "核电站",
+    "category": "industry",
+    "tags": [
+      "核电站",
+      "核能"
+    ],
+    "src": "/assets/industry/nuclear-plant.svg",
+    "type": "svg"
+  },
+  {
+    "id": "solar",
+    "name": "光伏",
+    "category": "industry",
+    "tags": [
+      "光伏",
+      "太阳能"
+    ],
+    "src": "/assets/industry/solar.svg",
+    "type": "svg"
+  },
+  {
+    "id": "wind",
+    "name": "风电",
+    "category": "industry",
+    "tags": [
+      "风电",
+      "风机"
+    ],
+    "src": "/assets/industry/wind.svg",
+    "type": "svg"
+  },
+  {
+    "id": "battery",
+    "name": "电池",
+    "category": "industry",
+    "tags": [
+      "电池",
+      "储能"
+    ],
+    "src": "/assets/industry/battery.svg",
+    "type": "svg"
+  },
+  {
+    "id": "ev",
+    "name": "电动车",
+    "category": "industry",
+    "tags": [
+      "电动车",
+      "新能源车"
+    ],
+    "src": "/assets/industry/ev.svg",
+    "type": "svg"
+  },
+  {
+    "id": "high-speed-rail",
+    "name": "高铁",
+    "category": "industry",
+    "tags": [
+      "高铁",
+      "铁路"
+    ],
+    "src": "/assets/industry/high-speed-rail.svg",
+    "type": "svg"
+  },
+  {
+    "id": "bridge",
+    "name": "大桥",
+    "category": "industry",
+    "tags": [
+      "大桥",
+      "基建"
+    ],
+    "src": "/assets/industry/bridge.svg",
+    "type": "svg"
+  },
+  {
+    "id": "dam",
+    "name": "大坝",
+    "category": "industry",
+    "tags": [
+      "大坝",
+      "水利"
+    ],
+    "src": "/assets/industry/dam.svg",
+    "type": "svg"
+  },
+  {
+    "id": "port",
+    "name": "港口",
+    "category": "industry",
+    "tags": [
+      "港口",
+      "码头"
+    ],
+    "src": "/assets/industry/port.svg",
+    "type": "svg"
+  },
+  {
+    "id": "refinery",
+    "name": "炼厂",
+    "category": "industry",
+    "tags": [
+      "炼厂",
+      "石化"
+    ],
+    "src": "/assets/industry/refinery.svg",
+    "type": "svg"
+  },
+  {
+    "id": "steel",
+    "name": "钢铁",
+    "category": "industry",
+    "tags": [
+      "钢铁",
+      "高炉"
+    ],
+    "src": "/assets/industry/steel.svg",
+    "type": "svg"
+  },
+  {
+    "id": "lab",
+    "name": "实验室",
+    "category": "industry",
+    "tags": [
+      "实验室",
+      "研发"
+    ],
+    "src": "/assets/industry/lab.svg",
+    "type": "svg"
+  },
+  {
+    "id": "robot-arm",
+    "name": "机械臂",
+    "category": "industry",
+    "tags": [
+      "机械臂",
+      "自动化"
+    ],
+    "src": "/assets/industry/robot-arm.svg",
+    "type": "svg"
+  },
+  {
+    "id": "warehouse",
+    "name": "仓库",
+    "category": "industry",
+    "tags": [
+      "仓库",
+      "仓储"
+    ],
+    "src": "/assets/industry/warehouse.svg",
+    "type": "svg"
+  },
+  {
+    "id": "highway",
+    "name": "公路",
+    "category": "industry",
+    "tags": [
+      "公路",
+      "交通"
+    ],
+    "src": "/assets/industry/highway.svg",
+    "type": "svg"
+  },
+  {
+    "id": "tunnel",
+    "name": "隧道",
+    "category": "industry",
+    "tags": [
+      "隧道",
+      "基建"
+    ],
+    "src": "/assets/industry/tunnel.svg",
+    "type": "svg"
+  },
+  {
+    "id": "space-station",
+    "name": "空间站",
+    "category": "industry",
+    "tags": [
+      "空间站",
+      "航天"
+    ],
+    "src": "/assets/industry/space-station.svg",
+    "type": "svg"
+  },
+  {
+    "id": "gps",
+    "name": "卫星导航",
+    "category": "industry",
+    "tags": [
+      "GPS",
+      "北斗",
+      "导航"
+    ],
+    "src": "/assets/industry/gps.svg",
+    "type": "svg"
+  },
+  {
+    "id": "encryption",
+    "name": "加密",
+    "category": "industry",
+    "tags": [
+      "加密",
+      "密码"
+    ],
+    "src": "/assets/industry/encryption.svg",
+    "type": "svg"
+  },
+  {
+    "id": "ai-chip",
+    "name": "AI算力",
+    "category": "industry",
+    "tags": [
+      "AI",
+      "算力",
+      "大模型"
+    ],
+    "src": "/assets/industry/ai-chip.svg",
+    "type": "svg"
+  },
+  {
+    "id": "microphone",
+    "name": "麦克风",
+    "category": "media",
+    "tags": [
+      "麦克风",
+      "采访",
+      "广播"
+    ],
+    "src": "/assets/media/microphone.svg",
+    "type": "svg"
+  },
+  {
+    "id": "camera",
+    "name": "摄像机",
+    "category": "media",
+    "tags": [
+      "摄像机",
+      "新闻",
+      "镜头"
+    ],
+    "src": "/assets/media/camera.svg",
+    "type": "svg"
+  },
+  {
+    "id": "television",
+    "name": "电视",
+    "category": "media",
+    "tags": [
+      "电视",
+      "新闻联播"
+    ],
+    "src": "/assets/media/television.svg",
+    "type": "svg"
+  },
+  {
+    "id": "radio",
+    "name": "电台",
+    "category": "media",
+    "tags": [
+      "电台",
+      "广播"
+    ],
+    "src": "/assets/media/radio.svg",
+    "type": "svg"
+  },
+  {
+    "id": "headline",
+    "name": "头条",
+    "category": "media",
+    "tags": [
+      "头条",
+      "新闻"
+    ],
+    "src": "/assets/media/headline.svg",
+    "type": "svg"
+  },
+  {
+    "id": "press",
+    "name": "新闻发布",
+    "category": "media",
+    "tags": [
+      "新闻发布会",
+      "记者会"
+    ],
+    "src": "/assets/media/press.svg",
+    "type": "svg"
+  },
+  {
+    "id": "journalist",
+    "name": "记者",
+    "category": "media",
+    "tags": [
+      "记者",
+      "媒体"
+    ],
+    "src": "/assets/media/journalist.svg",
+    "type": "svg"
+  },
+  {
+    "id": "broadcast",
+    "name": "直播",
+    "category": "media",
+    "tags": [
+      "直播",
+      "播出"
+    ],
+    "src": "/assets/media/broadcast.svg",
+    "type": "svg"
+  },
+  {
+    "id": "interview",
+    "name": "访谈",
+    "category": "media",
+    "tags": [
+      "访谈",
+      "专访"
+    ],
+    "src": "/assets/media/interview.svg",
+    "type": "svg"
+  },
+  {
+    "id": "printing",
+    "name": "印刷",
+    "category": "media",
+    "tags": [
+      "印刷",
+      "出版"
+    ],
+    "src": "/assets/media/printing.svg",
+    "type": "svg"
+  },
+  {
+    "id": "studio",
+    "name": "演播室",
+    "category": "media",
+    "tags": [
+      "演播室",
+      "录制"
+    ],
+    "src": "/assets/media/studio.svg",
+    "type": "svg"
+  },
+  {
+    "id": "podcast",
+    "name": "播客",
+    "category": "media",
+    "tags": [
+      "播客",
+      "音频"
+    ],
+    "src": "/assets/media/podcast.svg",
+    "type": "svg"
+  },
+  {
+    "id": "satellite-tv",
+    "name": "卫星电视",
+    "category": "media",
+    "tags": [
+      "卫星电视",
+      "转播"
+    ],
+    "src": "/assets/media/satellite-tv.svg",
+    "type": "svg"
+  },
+  {
+    "id": "breaking",
+    "name": "突发",
+    "category": "media",
+    "tags": [
+      "突发新闻",
+      "快讯"
+    ],
+    "src": "/assets/media/breaking.svg",
+    "type": "svg"
+  },
+  {
+    "id": "editorial",
+    "name": "社论",
+    "category": "media",
+    "tags": [
+      "社论",
+      "评论"
+    ],
+    "src": "/assets/media/editorial.svg",
+    "type": "svg"
+  },
+  {
+    "id": "photojournalism",
+    "name": "摄影报道",
+    "category": "media",
+    "tags": [
+      "新闻摄影"
+    ],
+    "src": "/assets/media/photojournalism.svg",
+    "type": "svg"
+  },
+  {
+    "id": "typewriter",
+    "name": "打字机",
+    "category": "media",
+    "tags": [
+      "打字机",
+      "写作"
+    ],
+    "src": "/assets/media/typewriter.svg",
+    "type": "svg"
+  },
+  {
+    "id": "antenna",
+    "name": "发射塔",
+    "category": "media",
+    "tags": [
+      "发射塔",
+      "信号"
+    ],
+    "src": "/assets/media/antenna.svg",
+    "type": "svg"
+  },
+  {
+    "id": "press-pass",
+    "name": "记者证",
+    "category": "media",
+    "tags": [
+      "记者证",
+      "采访证"
+    ],
+    "src": "/assets/media/press-pass.svg",
+    "type": "svg"
+  },
+  {
+    "id": "social",
+    "name": "社交传播",
+    "category": "media",
+    "tags": [
+      "社交",
+      "舆论"
+    ],
+    "src": "/assets/media/social.svg",
+    "type": "svg"
+  },
+  {
+    "id": "censor",
+    "name": "审查",
+    "category": "media",
+    "tags": [
+      "审查",
+      "管控"
+    ],
+    "src": "/assets/media/censor.svg",
+    "type": "svg"
+  },
+  {
+    "id": "leak",
+    "name": "爆料",
+    "category": "media",
+    "tags": [
+      "爆料",
+      "泄密"
+    ],
+    "src": "/assets/media/leak.svg",
+    "type": "svg"
+  },
+  {
+    "id": "archive",
+    "name": "档案",
+    "category": "media",
+    "tags": [
+      "档案",
+      "史料"
+    ],
+    "src": "/assets/media/archive.svg",
+    "type": "svg"
+  },
+  {
+    "id": "wire",
+    "name": "通讯社",
+    "category": "media",
+    "tags": [
+      "通讯社",
+      "电讯"
+    ],
+    "src": "/assets/media/wire.svg",
+    "type": "svg"
+  },
+  {
+    "id": "opinion",
+    "name": "舆论",
+    "category": "media",
+    "tags": [
+      "舆论",
+      "民意"
+    ],
+    "src": "/assets/media/opinion.svg",
+    "type": "svg"
+  },
+  {
+    "id": "king",
+    "name": "国王",
+    "category": "people",
+    "tags": [
+      "国王",
+      "君主"
+    ],
+    "src": "/assets/people/king.svg",
+    "type": "svg"
+  },
+  {
+    "id": "emperor",
+    "name": "皇帝",
+    "category": "people",
+    "tags": [
+      "皇帝",
+      "天子"
+    ],
+    "src": "/assets/people/emperor.svg",
+    "type": "svg"
+  },
+  {
+    "id": "queen",
+    "name": "女王",
+    "category": "people",
+    "tags": [
+      "女王",
+      "王室"
+    ],
+    "src": "/assets/people/queen.svg",
+    "type": "svg"
+  },
+  {
+    "id": "general",
+    "name": "将军",
+    "category": "people",
+    "tags": [
+      "将军",
+      "指挥官"
+    ],
+    "src": "/assets/people/general.svg",
+    "type": "svg"
+  },
+  {
+    "id": "diplomat",
+    "name": "外交官",
+    "category": "people",
+    "tags": [
+      "外交官",
+      "大使"
+    ],
+    "src": "/assets/people/diplomat.svg",
+    "type": "svg"
+  },
+  {
+    "id": "scholar",
+    "name": "学者",
+    "category": "people",
+    "tags": [
+      "学者",
+      "知识分子"
+    ],
+    "src": "/assets/people/scholar.svg",
+    "type": "svg"
+  },
+  {
+    "id": "farmer",
+    "name": "农民",
+    "category": "people",
+    "tags": [
+      "农民",
+      "农业"
+    ],
+    "src": "/assets/people/farmer.svg",
+    "type": "svg"
+  },
+  {
+    "id": "refugee",
+    "name": "难民",
+    "category": "people",
+    "tags": [
+      "难民",
+      "流离"
+    ],
+    "src": "/assets/people/refugee.svg",
+    "type": "svg"
+  },
+  {
+    "id": "spy",
+    "name": "间谍",
+    "category": "people",
+    "tags": [
+      "间谍",
+      "情报"
+    ],
+    "src": "/assets/people/spy.svg",
+    "type": "svg"
+  },
+  {
+    "id": "reporter",
+    "name": "记者人",
+    "category": "people",
+    "tags": [
+      "记者",
+      "媒体人"
+    ],
+    "src": "/assets/people/reporter.svg",
+    "type": "svg"
+  },
+  {
+    "id": "scientist",
+    "name": "科学家",
+    "category": "people",
+    "tags": [
+      "科学家",
+      "研究"
+    ],
+    "src": "/assets/people/scientist.svg",
+    "type": "svg"
+  },
+  {
+    "id": "engineer",
+    "name": "工程师",
+    "category": "people",
+    "tags": [
+      "工程师",
+      "技术"
+    ],
+    "src": "/assets/people/engineer.svg",
+    "type": "svg"
+  },
+  {
+    "id": "president",
+    "name": "总统",
+    "category": "people",
+    "tags": [
+      "总统",
+      "元首"
+    ],
+    "src": "/assets/people/president.svg",
+    "type": "svg"
+  },
+  {
+    "id": "minister",
+    "name": "部长",
+    "category": "people",
+    "tags": [
+      "部长",
+      "大臣"
+    ],
+    "src": "/assets/people/minister.svg",
+    "type": "svg"
+  },
+  {
+    "id": "ambassador",
+    "name": "大使",
+    "category": "people",
+    "tags": [
+      "大使",
+      "使节"
+    ],
+    "src": "/assets/people/ambassador.svg",
+    "type": "svg"
+  },
+  {
+    "id": "protester",
+    "name": "抗议者",
+    "category": "people",
+    "tags": [
+      "抗议者",
+      "示威者"
+    ],
+    "src": "/assets/people/protester.svg",
+    "type": "svg"
+  },
+  {
+    "id": "judge-person",
+    "name": "审判者",
+    "category": "people",
+    "tags": [
+      "法官",
+      "审判"
+    ],
+    "src": "/assets/people/judge-person.svg",
+    "type": "svg"
+  },
+  {
+    "id": "monk",
+    "name": "僧侣",
+    "category": "people",
+    "tags": [
+      "僧侣",
+      "宗教人士"
+    ],
+    "src": "/assets/people/monk.svg",
+    "type": "svg"
+  },
+  {
+    "id": "knight-person",
+    "name": "骑士",
+    "category": "people",
+    "tags": [
+      "骑士",
+      "武士"
+    ],
+    "src": "/assets/people/knight-person.svg",
+    "type": "svg"
+  },
+  {
+    "id": "leader",
+    "name": "领袖",
+    "category": "people",
+    "tags": [
+      "领袖",
+      "领导人"
+    ],
+    "src": "/assets/people/leader.svg",
+    "type": "svg"
+  },
+  {
+    "id": "mountain",
+    "name": "山脉",
+    "category": "objects",
+    "tags": [
+      "山脉",
+      "高原",
+      "地理"
+    ],
+    "src": "/assets/objects/mountain.svg",
+    "type": "svg"
+  },
+  {
+    "id": "ocean",
+    "name": "海洋",
+    "category": "objects",
+    "tags": [
+      "海洋",
+      "海权"
+    ],
+    "src": "/assets/objects/ocean.svg",
+    "type": "svg"
+  },
+  {
+    "id": "strait",
+    "name": "海峡",
+    "category": "objects",
+    "tags": [
+      "海峡",
+      "水道",
+      "马六甲"
+    ],
+    "src": "/assets/objects/strait.svg",
+    "type": "svg"
+  },
+  {
+    "id": "canal",
+    "name": "运河",
+    "category": "objects",
+    "tags": [
+      "运河",
+      "苏伊士",
+      "巴拿马"
+    ],
+    "src": "/assets/objects/canal.svg",
+    "type": "svg"
+  },
+  {
+    "id": "map",
+    "name": "地图",
+    "category": "objects",
+    "tags": [
+      "地图",
+      "疆域"
+    ],
+    "src": "/assets/objects/map.svg",
+    "type": "svg"
+  },
+  {
+    "id": "compass",
+    "name": "指南针",
+    "category": "objects",
+    "tags": [
+      "指南针",
+      "方位"
+    ],
+    "src": "/assets/objects/compass.svg",
+    "type": "svg"
+  },
+  {
+    "id": "island",
+    "name": "岛屿",
+    "category": "objects",
+    "tags": [
+      "岛屿",
+      "岛链"
+    ],
+    "src": "/assets/objects/island.svg",
+    "type": "svg"
+  },
+  {
+    "id": "desert",
+    "name": "沙漠",
+    "category": "objects",
+    "tags": [
+      "沙漠",
+      "干旱"
+    ],
+    "src": "/assets/objects/desert.svg",
+    "type": "svg"
+  },
+  {
+    "id": "arctic",
+    "name": "北极",
+    "category": "objects",
+    "tags": [
+      "北极",
+      "北极航道"
+    ],
+    "src": "/assets/objects/arctic.svg",
+    "type": "svg"
+  },
+  {
+    "id": "volcano",
+    "name": "火山",
+    "category": "objects",
+    "tags": [
+      "火山",
+      "喷发"
+    ],
+    "src": "/assets/objects/volcano.svg",
+    "type": "svg"
+  },
+  {
+    "id": "earthquake",
+    "name": "地震",
+    "category": "objects",
+    "tags": [
+      "地震",
+      "灾害"
+    ],
+    "src": "/assets/objects/earthquake.svg",
+    "type": "svg"
+  },
+  {
+    "id": "typhoon",
+    "name": "台风",
+    "category": "objects",
+    "tags": [
+      "台风",
+      "飓风"
+    ],
+    "src": "/assets/objects/typhoon.svg",
+    "type": "svg"
+  },
+  {
+    "id": "suez",
+    "name": "苏伊士",
+    "category": "objects",
+    "tags": [
+      "苏伊士",
+      "运河"
+    ],
+    "src": "/assets/objects/suez.svg",
+    "type": "svg"
+  },
+  {
+    "id": "panama",
+    "name": "巴拿马",
+    "category": "objects",
+    "tags": [
+      "巴拿马",
+      "运河"
+    ],
+    "src": "/assets/objects/panama.svg",
+    "type": "svg"
+  },
+  {
+    "id": "malacca",
+    "name": "马六甲",
+    "category": "objects",
+    "tags": [
+      "马六甲",
+      "海峡"
+    ],
+    "src": "/assets/objects/malacca.svg",
+    "type": "svg"
+  },
+  {
+    "id": "himalaya",
+    "name": "喜马拉雅",
+    "category": "objects",
+    "tags": [
+      "喜马拉雅",
+      "高原"
+    ],
+    "src": "/assets/objects/himalaya.svg",
+    "type": "svg"
+  },
+  {
+    "id": "satellite",
+    "name": "卫星",
+    "category": "objects",
+    "tags": [
+      "卫星",
+      "太空"
+    ],
+    "src": "/assets/objects/satellite.svg",
+    "type": "svg"
+  },
+  {
+    "id": "moon",
+    "name": "月球",
+    "category": "objects",
+    "tags": [
+      "月球",
+      "登月"
+    ],
+    "src": "/assets/objects/moon.svg",
+    "type": "svg"
+  },
+  {
+    "id": "telescope",
+    "name": "望远镜",
+    "category": "objects",
+    "tags": [
+      "望远镜",
+      "观测"
+    ],
+    "src": "/assets/objects/telescope.svg",
+    "type": "svg"
+  },
+  {
+    "id": "ai",
+    "name": "人工智能",
+    "category": "objects",
+    "tags": [
+      "人工智能",
+      "AI"
+    ],
+    "src": "/assets/objects/ai.svg",
+    "type": "svg"
+  }
+]

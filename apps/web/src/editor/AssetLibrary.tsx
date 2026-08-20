@@ -9,8 +9,12 @@ const CATEGORY_LABEL: Record<AssetCategory, string> = {
   people: "人物",
   economy: "经济",
   industry: "工业",
-  objects: "物体",
+  history: "历史",
+  military: "军事",
+  diplomacy: "外交",
   politics: "政治",
+  media: "传媒",
+  objects: "地理",
   hands: "手",
 };
 
@@ -38,7 +42,7 @@ export function AssetLibrary() {
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="搜索 美国 / 石油"
+            placeholder="搜索 法国 / 坦克 / 芯片"
             className="w-full bg-transparent text-sm outline-none placeholder:text-ink/35"
           />
         </label>

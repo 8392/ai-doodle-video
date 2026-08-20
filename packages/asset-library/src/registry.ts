@@ -1,3 +1,6 @@
+import editorialPack from "./editorial-pack.json";
+import illustratedPack from "./illustrated-pack.json";
+
 export type AssetCategory =
   | "country"
   | "people"
@@ -5,6 +8,10 @@ export type AssetCategory =
   | "industry"
   | "objects"
   | "politics"
+  | "history"
+  | "military"
+  | "media"
+  | "diplomacy"
   | "hands";
 
 export type AssetDefinition = {
@@ -16,7 +23,7 @@ export type AssetDefinition = {
   type: "svg" | "image";
 };
 
-export const assets: AssetDefinition[] = [
+export const coreAssets: AssetDefinition[] = [
   {
     id: "usa",
     name: "美国",
@@ -434,6 +441,22 @@ export const assets: AssetDefinition[] = [
     type: "image",
   },
 ];
+
+export const assets: AssetDefinition[] = mergeAssets(
+  coreAssets,
+  editorialPack as AssetDefinition[],
+  illustratedPack as AssetDefinition[],
+);
+
+function mergeAssets(...lists: AssetDefinition[][]): AssetDefinition[] {
+  const byId = new Map<string, AssetDefinition>();
+  for (const list of lists) {
+    for (const asset of list) {
+      byId.set(asset.id, asset);
+    }
+  }
+  return [...byId.values()];
+}
 
 const assetsById = new Map(assets.map((asset) => [asset.id, asset]));
 

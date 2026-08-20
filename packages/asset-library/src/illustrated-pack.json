@@ -1,0 +1,32 @@
+[
+  {
+    "id": "a",
+    "name": "a",
+    "category": "objects",
+    "tags": [
+      "a"
+    ],
+    "src": "/assets/objects/a.svg",
+    "type": "svg"
+  },
+  {
+    "id": "c",
+    "name": "c",
+    "category": "objects",
+    "tags": [
+      "c"
+    ],
+    "src": "/assets/objects/c.svg",
+    "type": "svg"
+  },
+  {
+    "id": "cs",
+    "name": "cs",
+    "category": "objects",
+    "tags": [
+      "cs"
+    ],
+    "src": "/assets/objects/cs.svg",
+    "type": "svg"
+  }
+]
