@@ -1,6 +1,13 @@
 import { staticFile } from "remotion";
 
 export function toStaticSrc(src: string): string {
-  const relative = src.startsWith("/") ? src.slice(1) : src;
-  return staticFile(relative);
+  if (src.startsWith("data:") || src.startsWith("blob:") || /^https?:\/\//i.test(src)) {
+    return src;
+  }
+  const [pathPart, query = ""] = src.split("?");
+  const relative = (pathPart ?? src).startsWith("/")
+    ? (pathPart ?? src).slice(1)
+    : (pathPart ?? src);
+  const resolved = staticFile(relative);
+  return query ? `${resolved}?${query}` : resolved;
 }

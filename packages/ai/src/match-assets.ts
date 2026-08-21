@@ -4,9 +4,15 @@ import {
   searchAssets,
   type AssetDefinition,
 } from "@ai-doodle/asset-library";
+import {
+  assetMatchesTheme,
+  inferTheme,
+  shortlistAssetsForTheme,
+  themeBoost,
+  type AssetTheme,
+} from "./themes";
 
 const GENERIC_TOKEN_ASSET_COUNT = 8;
-const FALLBACK_IDS = ["globe", "newspaper"] as const;
 const STRONG_SCORE = 4;
 
 export type KeywordSpan = {
@@ -15,10 +21,20 @@ export type KeywordSpan = {
   token: string;
 };
 
-export function findKeywordSpans(text: string): KeywordSpan[] {
+export type MatchAssetsOptions = {
+  theme?: AssetTheme;
+  /** Extra candidates (e.g. user uploads mapped as pseudo-assets). */
+  extraAssets?: AssetDefinition[];
+  scriptContext?: string;
+};
+
+export function findKeywordSpans(
+  text: string,
+  pool: AssetDefinition[] = assets,
+): KeywordSpan[] {
   const occupied = new Array<boolean>(text.length).fill(false);
   const spans: KeywordSpan[] = [];
-  for (const token of catalogTokens()) {
+  for (const token of catalogTokens(pool)) {
     const haystack = text.toLowerCase();
     const needle = token.toLowerCase();
     let from = 0;
@@ -41,23 +57,46 @@ export function findKeywordSpans(text: string): KeywordSpan[] {
   return spans.sort((a, b) => a.start - b.start);
 }
 
+export function resolveAssetsByIds(ids: string[]): AssetDefinition[] {
+  const seen = new Set<string>();
+  const resolved: AssetDefinition[] = [];
+  for (const id of ids) {
+    if (seen.has(id)) {
+      continue;
+    }
+    const asset = getAsset(id);
+    if (!asset || !isSceneIcon(asset)) {
+      continue;
+    }
+    seen.add(id);
+    resolved.push(asset);
+  }
+  return resolved;
+}
+
 export function matchAssetsForNarration(
   narration: string,
   usedAssetIds: string[] = [],
+  options: MatchAssetsOptions = {},
 ): AssetDefinition[] {
   const used = new Set(usedAssetIds);
-  const fromKeywords = pickFromKeywordSpans(narration, used);
+  const theme =
+    options.theme ??
+    inferTheme(options.scriptContext ? `${options.scriptContext}\n${narration}` : narration);
+  const pool = buildPool(theme, options.extraAssets);
+
+  const fromKeywords = pickFromKeywordSpans(narration, used, pool, theme);
   if (fromKeywords.length > 0) {
     return fromKeywords;
   }
 
-  const ranked = rankAssets(narration);
+  const ranked = rankAssets(narration, pool, theme);
   const unusedStrong = ranked.filter((asset) => !used.has(asset.id));
   if (unusedStrong[0]) {
     return [unusedStrong[0]];
   }
 
-  const unusedFallback = uniqueFallback(used);
+  const unusedFallback = uniqueFallback(used, narration, pool, theme);
   if (unusedFallback && !used.has(unusedFallback.id)) {
     return [unusedFallback];
   }
@@ -69,17 +108,46 @@ export function matchAssetsForNarration(
   return unusedFallback ? [unusedFallback] : [];
 }
 
+function buildPool(
+  theme: AssetTheme,
+  extraAssets: AssetDefinition[] | undefined,
+): AssetDefinition[] {
+  const base = assets.filter(isSceneIcon);
+  const themed = shortlistAssetsForTheme(
+    base.filter((asset) => assetMatchesTheme(asset, theme) || theme === "general"),
+    theme,
+    theme === "general" ? base.length : 180,
+  );
+  const byId = new Map(themed.map((asset) => [asset.id, asset]));
+  for (const asset of extraAssets ?? []) {
+    if (isSceneIcon(asset)) {
+      byId.set(asset.id, asset);
+    }
+  }
+  // Keep full themed shortlist; if too small, merge remaining matching icons.
+  if (byId.size < 40 && theme !== "general") {
+    for (const asset of base) {
+      if (assetMatchesTheme(asset, theme)) {
+        byId.set(asset.id, asset);
+      }
+    }
+  }
+  return [...byId.values()];
+}
+
 function pickFromKeywordSpans(
   narration: string,
   used: Set<string>,
+  pool: AssetDefinition[],
+  theme: AssetTheme,
 ): AssetDefinition[] {
   const picked: AssetDefinition[] = [];
   const pickedIds = new Set<string>();
-  for (const span of findKeywordSpans(narration)) {
+  for (const span of findKeywordSpans(narration, pool)) {
     if (picked.length >= 3) {
       break;
     }
-    const ranked = rankAssets(span.token);
+    const ranked = rankAssets(span.token, pool, theme);
     const next = ranked.find(
       (asset) => !used.has(asset.id) && !pickedIds.has(asset.id),
     );
@@ -92,18 +160,23 @@ function pickFromKeywordSpans(
   return picked;
 }
 
-function rankAssets(narration: string): AssetDefinition[] {
+function rankAssets(
+  narration: string,
+  pool: AssetDefinition[],
+  theme: AssetTheme,
+): AssetDefinition[] {
+  const poolIds = new Set(pool.map((asset) => asset.id));
   const scores = new Map<string, number>();
   for (const token of tokenize(narration)) {
-    if (isGenericToken(token)) {
+    if (isGenericToken(token, pool)) {
       continue;
     }
-    for (const asset of searchAssets(token)) {
-      if (!isSceneIcon(asset)) {
+    for (const asset of searchInPool(token, pool)) {
+      if (!isSceneIcon(asset) || !poolIds.has(asset.id)) {
         continue;
       }
-      const points = scoreToken(asset, token);
-      if (points < STRONG_SCORE) {
+      const points = scoreToken(asset, token) + themeBoost(asset, theme);
+      if (scoreToken(asset, token) < STRONG_SCORE) {
         continue;
       }
       scores.set(asset.id, (scores.get(asset.id) ?? 0) + points);
@@ -117,8 +190,22 @@ function rankAssets(narration: string): AssetDefinition[] {
   const named = ranked.filter(([, score]) => score >= 8);
   const chosen = named.length > 0 ? named : ranked.filter(([, score]) => score >= top);
   return chosen
-    .map(([id]) => getAsset(id))
+    .map(([id]) => pool.find((asset) => asset.id === id) ?? getAsset(id))
     .filter((asset): asset is AssetDefinition => Boolean(asset));
+}
+
+function searchInPool(token: string, pool: AssetDefinition[]): AssetDefinition[] {
+  const fromSearch = searchAssets(token).filter((asset) =>
+    pool.some((item) => item.id === asset.id),
+  );
+  if (fromSearch.length > 0) {
+    return fromSearch;
+  }
+  const lower = token.toLowerCase();
+  return pool.filter((asset) => {
+    const values = [asset.id, asset.name, ...asset.tags, ...(asset.aliases ?? [])];
+    return values.some((value) => value.toLowerCase() === lower || value === token);
+  });
 }
 
 function scoreToken(asset: AssetDefinition, token: string): number {
@@ -129,7 +216,10 @@ function scoreToken(asset: AssetDefinition, token: string): number {
   if (asset.id.toLowerCase() === lower) {
     return 8;
   }
-  if (asset.tags.some((tag) => tag === token || tag.toLowerCase() === lower)) {
+  if (
+    asset.tags.some((tag) => tag === token || tag.toLowerCase() === lower) ||
+    (asset.aliases ?? []).some((alias) => alias === token || alias.toLowerCase() === lower)
+  ) {
     return 4;
   }
   return 1;
@@ -155,14 +245,14 @@ function tokenize(text: string): string[] {
   return [...tokens];
 }
 
-function catalogTokens(): string[] {
+function catalogTokens(pool: AssetDefinition[]): string[] {
   const counts = new Map<string, number>();
   const tokens = new Set<string>();
-  for (const asset of assets) {
+  for (const asset of pool) {
     if (!isSceneIcon(asset)) {
       continue;
     }
-    const values = [asset.id, asset.name, ...asset.tags];
+    const values = [asset.id, asset.name, ...asset.tags, ...(asset.aliases ?? [])];
     for (const value of values) {
       const token = value.trim();
       if (token.length < 2) {
@@ -177,15 +267,18 @@ function catalogTokens(): string[] {
     .sort((a, b) => b.length - a.length || a.localeCompare(b));
 }
 
-function isGenericToken(token: string): boolean {
+function isGenericToken(token: string, pool: AssetDefinition[]): boolean {
   let count = 0;
-  for (const asset of assets) {
+  for (const asset of pool) {
     if (!isSceneIcon(asset)) {
       continue;
     }
     if (
       asset.name === token ||
-      asset.tags.some((tag) => tag === token || tag.toLowerCase() === token.toLowerCase())
+      asset.tags.some((tag) => tag === token || tag.toLowerCase() === token.toLowerCase()) ||
+      (asset.aliases ?? []).some(
+        (alias) => alias === token || alias.toLowerCase() === token.toLowerCase(),
+      )
     ) {
       count += 1;
       if (count > GENERIC_TOKEN_ASSET_COUNT) {
@@ -200,13 +293,40 @@ function isSceneIcon(asset: AssetDefinition): boolean {
   return asset.category !== "hands" && asset.type === "svg";
 }
 
-function uniqueFallback(used: Set<string>): AssetDefinition | undefined {
-  const icons = assets.filter(isSceneIcon);
-  const preferred = FALLBACK_IDS.map((id) => getAsset(id)).filter(
-    (asset): asset is AssetDefinition => asset !== undefined && isSceneIcon(asset),
+function uniqueFallback(
+  used: Set<string>,
+  narration: string,
+  pool: AssetDefinition[],
+  theme: AssetTheme,
+): AssetDefinition | undefined {
+  const preferred = pool.filter(
+    (asset) =>
+      !used.has(asset.id) &&
+      asset.id !== "globe" &&
+      asset.id !== "newspaper" &&
+      (theme === "general" || assetMatchesTheme(asset, theme)),
   );
-  const preferredIds = new Set<string>(FALLBACK_IDS);
-  const rest = icons.filter((asset) => !preferredIds.has(asset.id));
-  const queue = [...preferred, ...rest];
-  return queue.find((asset) => !used.has(asset.id)) ?? queue[0];
+  const symbols = preferred.filter(
+    (asset) => asset.category === "objects" || asset.themes?.includes("science"),
+  );
+  const choices =
+    symbols.length > 0
+      ? symbols
+      : preferred.length > 0
+        ? preferred
+        : pool.filter((asset) => !used.has(asset.id));
+  if (choices.length === 0) {
+    return undefined;
+  }
+  return choices[hashText(narration) % choices.length];
 }
+
+function hashText(text: string): number {
+  let hash = 0;
+  for (const char of text) {
+    hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+  }
+  return hash;
+}
+
+export { inferTheme, shortlistAssetsForTheme };

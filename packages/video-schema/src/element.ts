@@ -14,6 +14,7 @@ export const elementSchema = z.object({
   id: z.string().min(1),
   type: elementTypeSchema,
   assetId: z.string().min(1).optional(),
+  src: z.string().min(1).optional(),
   x: z.number(),
   y: z.number(),
   width: z.number().positive().optional(),
@@ -23,6 +24,8 @@ export const elementSchema = z.object({
   opacity: z.number().min(0).max(1).optional(),
   zIndex: z.number().int().optional(),
   text: z.string().optional(),
+  /** When animation is draw: whether the drawing hand should follow this stroke. */
+  showHand: z.boolean().optional(),
   animation: animationConfigSchema.optional(),
 });
 

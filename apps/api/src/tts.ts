@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
+import { azureTtsConfigured, synthesizeAzureToFile } from "./azure-tts";
 
 export function escapeXml(value: string): string {
   return value
@@ -22,6 +23,26 @@ function durationFromMp3Bytes(byteLength: number): number {
 }
 
 export async function synthesizeToFile(options: {
+  text: string;
+  voiceName: string;
+  outPath: string;
+}): Promise<{ durationSec: number; provider: "azure" | "edge" }> {
+  if (azureTtsConfigured()) {
+    try {
+      const durationSec = await synthesizeAzureToFile(options);
+      return { durationSec, provider: "azure" };
+    } catch (error) {
+      console.warn(
+        "[tts] Azure failed, falling back to Edge:",
+        error instanceof Error ? error.message : error,
+      );
+    }
+  }
+  const durationSec = await synthesizeEdgeToFile(options);
+  return { durationSec, provider: "edge" };
+}
+
+async function synthesizeEdgeToFile(options: {
   text: string;
   voiceName: string;
   outPath: string;

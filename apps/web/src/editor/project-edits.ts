@@ -141,6 +141,9 @@ export function addAssetToScene(
   const y =
     position?.y ??
     Math.round(project.height * 0.28);
+  const defaultAnimation = project.drawing?.defaultAnimation ?? "draw";
+  const animationType =
+    asset.type === "svg" ? defaultAnimation : ("fade" as const);
 
   const element: Element = {
     id: elementId,
@@ -152,9 +155,9 @@ export function addAssetToScene(
     height,
     zIndex: 2,
     animation:
-      asset.type === "svg"
+      animationType === "draw"
         ? { type: "draw", durationInFrames: 48, easing: "linear" }
-        : { type: "fade", durationInFrames: 18 },
+        : { type: animationType, durationInFrames: 18 },
   };
 
   return {
@@ -169,7 +172,21 @@ export function addAssetToScene(
 export function updateElement(
   project: VideoProject,
   elementId: string,
-  patch: Partial<Pick<Element, "x" | "y" | "scale" | "rotation" | "opacity" | "width" | "height">>,
+  patch: Partial<
+    Pick<
+      Element,
+      | "x"
+      | "y"
+      | "scale"
+      | "rotation"
+      | "opacity"
+      | "width"
+      | "height"
+      | "text"
+      | "animation"
+      | "showHand"
+    >
+  >,
 ): VideoProject {
   return {
     ...project,
@@ -252,7 +269,7 @@ export function moveScene(
 export function updateScene(
   project: VideoProject,
   sceneId: string,
-  patch: Partial<Pick<Scene, "durationInFrames" | "narration">>,
+  patch: Partial<Pick<Scene, "durationInFrames" | "narration" | "camera" | "layout">>,
 ): VideoProject {
   return retimeProject(
     replaceScene(project, sceneId, (scene) => ({
@@ -295,5 +312,160 @@ export function applyAspectRatio(
       : ratio === "1:1"
         ? { width: 1080, height: 1080 }
         : { width: 1080, height: 1920 };
-  return { ...project, ...size };
+  return scaleProjectToSize(project, size.width, size.height);
+}
+
+export function scaleProjectToSize(
+  project: VideoProject,
+  width: number,
+  height: number,
+): VideoProject {
+  if (project.width === width && project.height === height) {
+    return project;
+  }
+  const sx = width / project.width;
+  const sy = height / project.height;
+  return {
+    ...project,
+    width,
+    height,
+    scenes: project.scenes.map((scene) => ({
+      ...scene,
+      camera: scene.camera
+        ? {
+            ...scene.camera,
+            x: Math.round(scene.camera.x * sx),
+            y: Math.round(scene.camera.y * sy),
+          }
+        : scene.camera,
+      elements: scene.elements.map((element) => ({
+        ...element,
+        x: Math.round(element.x * sx),
+        y: Math.round(element.y * sy),
+        width: element.width ? Math.max(1, Math.round(element.width * sx)) : element.width,
+        height: element.height
+          ? Math.max(1, Math.round(element.height * sy))
+          : element.height,
+      })),
+    })),
+  };
+}
+
+export function addPrimitiveToScene(
+  project: VideoProject,
+  sceneId: string,
+  type: "text" | "arrow" | "shape",
+  position?: { x: number; y: number },
+): { project: VideoProject; elementId: string } {
+  const elementId = `el-${type}-${crypto.randomUUID().slice(0, 8)}`;
+  const x = position?.x ?? Math.round(project.width * 0.3);
+  const y = position?.y ?? Math.round(project.height * 0.32);
+  const element: Element =
+    type === "text"
+      ? {
+          id: elementId,
+          type: "text",
+          text: "新标题",
+          x,
+          y,
+          width: Math.round(project.width * 0.4),
+          height: 80,
+          zIndex: 6,
+          animation: { type: "fade", durationInFrames: 18 },
+        }
+      : type === "arrow"
+        ? {
+            id: elementId,
+            type: "arrow",
+            x,
+            y,
+            width: 220,
+            height: 80,
+            zIndex: 5,
+            animation: { type: "fade", durationInFrames: 16 },
+          }
+        : {
+            id: elementId,
+            type: "shape",
+            x,
+            y,
+            width: 180,
+            height: 180,
+            zIndex: 4,
+            animation: { type: "pop", durationInFrames: 16 },
+          };
+  return {
+    elementId,
+    project: replaceScene(project, sceneId, (scene) => ({
+      ...scene,
+      elements: [...scene.elements, element],
+    })),
+  };
+}
+
+export function addImageSrcToScene(
+  project: VideoProject,
+  sceneId: string,
+  src: string,
+  position?: { x: number; y: number },
+  meta?: { name?: string; id?: string; type?: "svg" | "image" },
+): { project: VideoProject; elementId: string } {
+  const elementId = `el-upload-${crypto.randomUUID().slice(0, 8)}`;
+  const width = Math.round(project.width * 0.36);
+  const isSvg = meta?.type === "svg" || /\.svg($|\?)/i.test(src);
+  const defaultAnimation = project.drawing?.defaultAnimation ?? "draw";
+  const element: Element = {
+    id: elementId,
+    type: isSvg ? "svg" : "image",
+    src,
+    x: position?.x ?? Math.round(project.width * 0.32),
+    y: position?.y ?? Math.round(project.height * 0.28),
+    width,
+    height: Math.round(width * 0.82),
+    zIndex: 3,
+    animation: isSvg
+      ? defaultAnimation === "draw"
+        ? { type: "draw", durationInFrames: 48, easing: "linear" }
+        : { type: defaultAnimation, durationInFrames: 18 }
+      : { type: "fade", durationInFrames: 18 },
+  };
+  const userAsset = {
+    id: meta?.id ?? `up-${crypto.randomUUID().slice(0, 10)}`,
+    name: meta?.name ?? "上传图片",
+    src,
+    type: (isSvg ? "svg" : "image") as "svg" | "image",
+    createdAt: Date.now(),
+  };
+  const userAssets = [
+    userAsset,
+    ...(project.userAssets ?? []).filter((item) => item.id !== userAsset.id),
+  ];
+  return {
+    elementId,
+    project: {
+      ...replaceScene(project, sceneId, (scene) => ({
+        ...scene,
+        elements: [...scene.elements, element],
+      })),
+      userAssets,
+    },
+  };
+}
+
+export function setProjectDrawing(
+  project: VideoProject,
+  drawing: NonNullable<VideoProject["drawing"]>,
+): VideoProject {
+  return { ...project, drawing };
+}
+
+export function setProjectMusic(
+  project: VideoProject,
+  music: VideoProject["music"],
+): VideoProject {
+  if (!music) {
+    const { music: _removed, ...rest } = project;
+    return rest;
+  }
+  return { ...project, music };
 }

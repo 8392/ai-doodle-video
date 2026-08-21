@@ -1,4 +1,4 @@
-import { getAssetOrThrow } from "@ai-doodle/asset-library";
+import { getAsset } from "@ai-doodle/asset-library";
 import type { Element } from "@ai-doodle/video-schema";
 import { DrawSvg } from "../animations/DrawSvg";
 
@@ -11,16 +11,18 @@ export function SvgElement({
   drawProgress: number;
   reportStroke: boolean;
 }) {
-  if (!element.assetId) {
-    throw new Error(`SVG element "${element.id}" is missing assetId`);
+  const src =
+    element.src ??
+    (element.assetId ? getAsset(element.assetId)?.src : undefined);
+  if (!src) {
+    throw new Error(`SVG element "${element.id}" is missing src or assetId`);
   }
-  const asset = getAssetOrThrow(element.assetId);
   const width = element.width ?? 320;
   const height = element.height ?? 320;
 
   return (
     <DrawSvg
-      src={asset.src}
+      src={src}
       progress={drawProgress}
       width={width}
       height={height}

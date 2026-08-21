@@ -47,6 +47,12 @@ importers:
 
   apps/api:
     dependencies:
+      '@ai-doodle/ai':
+        specifier: workspace:*
+        version: link:../../packages/ai
+      '@ai-doodle/video-schema':
+        specifier: workspace:*
+        version: link:../../packages/video-schema
       '@hono/node-server':
         specifier: ^1.19.0
         version: 1.19.17(hono@4.13.3)
@@ -185,6 +191,9 @@ importers:
       '@ai-doodle/video-schema':
         specifier: workspace:*
         version: link:../video-schema
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
 
   packages/animation-engine:
     dependencies:

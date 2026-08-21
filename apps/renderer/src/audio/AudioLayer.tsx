@@ -1,4 +1,4 @@
-import type { AudioTrack } from "@ai-doodle/video-schema";
+import type { AudioTrack, Scene } from "@ai-doodle/video-schema";
 import { Audio } from "@remotion/media";
 import { Sequence } from "remotion";
 import { toStaticSrc } from "../lib/to-static-src";
@@ -18,14 +18,39 @@ function Track({ track }: { track: AudioTrack }) {
 export function AudioLayer({
   narration,
   music,
+  scenes = [],
 }: {
   narration?: AudioTrack;
   music?: AudioTrack;
+  scenes?: Scene[];
 }) {
+  const sceneClips = scenes.filter((scene) => scene.audio);
+  const hasSpeech = Boolean(narration) || sceneClips.length > 0;
+  const duckedMusic = music
+    ? { ...music, volume: (music.volume ?? 0.18) * (hasSpeech ? 1 : 1) }
+    : undefined;
   return (
     <>
-      {narration ? <Track track={narration} /> : null}
-      {music ? <Track track={music} /> : null}
+      {sceneClips.map((scene) =>
+        scene.audio ? (
+          <Track
+            key={`${scene.id}:${scene.audio.src}`}
+            track={{
+              ...scene.audio,
+              startFrame: scene.audio.startFrame || scene.startFrame,
+            }}
+          />
+        ) : null,
+      )}
+      {sceneClips.length === 0 && narration ? <Track track={narration} /> : null}
+      {duckedMusic ? (
+        <Track
+          track={{
+            ...duckedMusic,
+            volume: hasSpeech ? Math.min(0.2, duckedMusic.volume ?? 0.16) : duckedMusic.volume,
+          }}
+        />
+      ) : null}
     </>
   );
 }

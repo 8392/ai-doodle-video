@@ -10,6 +10,8 @@
     "test": "vitest run --config ../../vitest.config.ts"
   },
   "dependencies": {
+    "@ai-doodle/ai": "workspace:*",
+    "@ai-doodle/video-schema": "workspace:*",
     "@hono/node-server": "^1.19.0",
     "hono": "^4.9.6",
     "msedge-tts": "^2.0.7"

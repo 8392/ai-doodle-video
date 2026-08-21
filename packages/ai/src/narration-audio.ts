@@ -1,4 +1,5 @@
 import { retimeProject, type VideoProject } from "@ai-doodle/video-schema";
+import { expandCaptionsBySentence } from "@ai-doodle/video-schema";
 
 export type NarrationAudioInput = {
   src: string;
@@ -6,9 +7,13 @@ export type NarrationAudioInput = {
   volume?: number;
 };
 
+export type SceneAudioClip = NarrationAudioInput & {
+  sceneId: string;
+};
+
 /**
  * Attach a synthesized narration track and stretch scene lengths so the
- * timeline roughly matches the spoken audio (by character weight).
+ * timeline matches the spoken audio (by character weight and real duration).
  */
 export function applyNarrationAudio(
   project: VideoProject,
@@ -35,11 +40,14 @@ export function applyNarrationAudio(
       frames = Math.max(minFrames, durationInFrames - allocated - minFrames);
     }
     allocated += frames;
-    return { ...scene, durationInFrames: frames };
+    const camera = scene.camera
+      ? { ...scene.camera, durationInFrames: frames }
+      : scene.camera;
+    return { ...scene, durationInFrames: frames, camera };
   });
 
   const timed = retimeProject({ ...project, scenes });
-  return {
+  const withAudio: VideoProject = {
     ...timed,
     narration: {
       src: audio.src,
@@ -47,7 +55,59 @@ export function applyNarrationAudio(
       durationInFrames: Math.max(timed.durationInFrames, durationInFrames),
       volume: audio.volume ?? 0.85,
     },
+    music: timed.music
+      ? { ...timed.music, durationInFrames: timed.durationInFrames }
+      : undefined,
   };
+  return expandCaptionsBySentence(withAudio);
+}
+
+export function applySceneAudioClips(
+  project: VideoProject,
+  clips: SceneAudioClip[],
+): VideoProject {
+  const byId = new Map(clips.map((clip) => [clip.sceneId, clip]));
+  const pad = Math.max(1, Math.round(project.fps * 0.25));
+  const scenes = project.scenes.map((scene) => {
+    const clip = byId.get(scene.id);
+    if (!clip) {
+      return scene;
+    }
+    const durationInFrames = Math.max(
+      Math.round(project.fps * 1.5),
+      clip.durationInFrames + pad,
+    );
+    return {
+      ...scene,
+      durationInFrames,
+      camera: scene.camera
+        ? { ...scene.camera, durationInFrames }
+        : scene.camera,
+      audio: {
+        src: clip.src,
+        startFrame: 0,
+        durationInFrames: clip.durationInFrames,
+        volume: clip.volume ?? 0.85,
+      },
+    };
+  });
+  const timed = retimeProject({ ...project, scenes });
+  const aligned = {
+    ...timed,
+    scenes: timed.scenes.map((scene) =>
+      scene.audio
+        ? {
+            ...scene,
+            audio: { ...scene.audio, startFrame: scene.startFrame },
+          }
+        : scene,
+    ),
+    music: timed.music
+      ? { ...timed.music, durationInFrames: timed.durationInFrames }
+      : undefined,
+  };
+  const { narration: _removed, ...rest } = aligned;
+  return expandCaptionsBySentence(rest);
 }
 
 export function buildNarrationScript(project: VideoProject): string {

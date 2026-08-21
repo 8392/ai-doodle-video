@@ -38,8 +38,10 @@ export function SceneRenderer({ project }: { project: VideoProject }) {
     currentScene.durationInFrames,
   );
 
+  const handEnabled = project.drawing?.handEnabled !== false;
+
   const activeDrawId = useMemo(() => {
-    if (progress < 1) {
+    if (progress < 1 || !handEnabled) {
       return null;
     }
     for (const scene of scenes) {
@@ -48,13 +50,16 @@ export function SceneRenderer({ project }: { project: VideoProject }) {
       }
       const sceneLocal = frame - scene.startFrame;
       for (const element of sequenceElementAnimations(scene.elements)) {
+        if (element.showHand === false) {
+          continue;
+        }
         if (isDrawAnimationActive(element, sceneLocal)) {
           return element.id;
         }
       }
     }
     return null;
-  }, [currentScene.id, frame, progress, scenes]);
+  }, [currentScene.id, frame, handEnabled, progress, scenes]);
 
   return (
     <StrokeProvider point={stroke} setPoint={setStroke}>
@@ -97,7 +102,7 @@ export function SceneRenderer({ project }: { project: VideoProject }) {
           </div>
         );
       })}
-      <DrawingHand point={stroke} camera={camera} />
+      {handEnabled ? <DrawingHand point={stroke} camera={camera} /> : null}
     </StrokeProvider>
   );
 }

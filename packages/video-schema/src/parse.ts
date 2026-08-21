@@ -40,8 +40,14 @@ function collectSemanticIssues(project: VideoProject): string[] {
       }
       elementIds.add(element.id);
 
-      if ((element.type === "svg" || element.type === "image") && !element.assetId) {
-        issues.push(`element "${element.id}" of type ${element.type} is missing assetId`);
+      if (
+        (element.type === "svg" || element.type === "image") &&
+        !element.assetId &&
+        !element.src
+      ) {
+        issues.push(
+          `element "${element.id}" of type ${element.type} is missing assetId or src`,
+        );
       }
     }
   }

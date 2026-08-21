@@ -82,17 +82,18 @@ export function createTtsRouter(repoRoot: string): Hono {
     const { relativeSrc, outPath } = audioOutPath(repoRoot, fileId);
 
     try {
-      const durationSec = await synthesizeToFile({
+      const result = await synthesizeToFile({
         text,
         voiceName: neuralId,
         outPath,
       });
-      const durationInFrames = Math.max(1, Math.round(durationSec * fps));
+      const durationInFrames = Math.max(1, Math.round(result.durationSec * fps));
       return c.json({
         src: relativeSrc,
-        durationSec,
+        durationSec: result.durationSec,
         durationInFrames,
         voice: neuralId,
+        provider: result.provider,
       });
     } catch (error) {
       console.error(error instanceof Error ? error.message : String(error));

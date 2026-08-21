@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { audioTrackSchema } from "./audio";
 import { elementSchema } from "./element";
 import { transitionSchema } from "./transition";
 
@@ -10,15 +11,27 @@ export const cameraSchema = z.object({
   easing: z.string().optional(),
 });
 
+export const sceneLayoutSchema = z.enum([
+  "focus",
+  "compare",
+  "flow",
+  "map",
+  "define",
+  "cause",
+]);
+
 export const sceneSchema = z.object({
   id: z.string().min(1),
   startFrame: z.number().int().nonnegative(),
   durationInFrames: z.number().positive(),
   narration: z.string().optional(),
+  layout: sceneLayoutSchema.optional(),
   elements: z.array(elementSchema),
   camera: cameraSchema.optional(),
+  audio: audioTrackSchema.optional(),
   transition: transitionSchema.optional(),
 });
 
 export type Camera = z.infer<typeof cameraSchema>;
+export type SceneLayout = z.infer<typeof sceneLayoutSchema>;
 export type Scene = z.infer<typeof sceneSchema>;

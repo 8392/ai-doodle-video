@@ -1,5 +1,7 @@
 import editorialPack from "./editorial-pack.json";
 import illustratedPack from "./illustrated-pack.json";
+import { assetMetaOverlays } from "./meta-overlays";
+import opensourcePack from "./opensource-pack.json";
 
 export type AssetCategory =
   | "country"
@@ -12,7 +14,21 @@ export type AssetCategory =
   | "military"
   | "media"
   | "diplomacy"
-  | "hands";
+  | "hands"
+  | "science"
+  | "education"
+  | "tech"
+  | "symbols";
+
+export type AssetThemeTag =
+  | "science"
+  | "finance"
+  | "product"
+  | "tutorial"
+  | "geopolitics"
+  | "general"
+  | "media"
+  | "history";
 
 export type AssetDefinition = {
   id: string;
@@ -21,6 +37,11 @@ export type AssetDefinition = {
   tags: string[];
   src: string;
   type: "svg" | "image";
+  aliases?: string[];
+  themes?: AssetThemeTag[];
+  pack?: string;
+  license?: string;
+  source?: string;
 };
 
 export const coreAssets: AssetDefinition[] = [
@@ -442,10 +463,13 @@ export const coreAssets: AssetDefinition[] = [
   },
 ];
 
-export const assets: AssetDefinition[] = mergeAssets(
-  coreAssets,
-  editorialPack as AssetDefinition[],
-  illustratedPack as AssetDefinition[],
+export const assets: AssetDefinition[] = applyMetaOverlays(
+  mergeAssets(
+    coreAssets,
+    editorialPack as AssetDefinition[],
+    illustratedPack as AssetDefinition[],
+    opensourcePack as AssetDefinition[],
+  ),
 );
 
 function mergeAssets(...lists: AssetDefinition[][]): AssetDefinition[] {
@@ -456,6 +480,48 @@ function mergeAssets(...lists: AssetDefinition[][]): AssetDefinition[] {
     }
   }
   return [...byId.values()];
+}
+
+function applyMetaOverlays(list: AssetDefinition[]): AssetDefinition[] {
+  const overlays = new Map(assetMetaOverlays.map((item) => [item.id, item]));
+  return list.map((asset) => {
+    const overlay = overlays.get(asset.id);
+    if (!overlay) {
+      return asset;
+    }
+    const tags = uniqueStrings([...(asset.tags ?? []), ...(overlay.tags ?? [])]);
+    const aliases = uniqueStrings([...(asset.aliases ?? []), ...(overlay.aliases ?? [])]);
+    const themes = uniqueStrings([
+      ...(asset.themes ?? []),
+      ...((overlay.themes ?? []) as AssetThemeTag[]),
+    ]) as AssetThemeTag[];
+    return {
+      ...asset,
+      ...(overlay.category
+        ? { category: overlay.category as AssetCategory }
+        : {}),
+      tags,
+      aliases: aliases.length > 0 ? aliases : undefined,
+      themes: themes.length > 0 ? themes : undefined,
+      pack: overlay.pack ?? asset.pack,
+      license: overlay.license ?? asset.license,
+      source: overlay.source ?? asset.source,
+    };
+  });
+}
+
+function uniqueStrings(values: string[]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const value of values) {
+    const key = value.trim();
+    if (!key || seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    out.push(key);
+  }
+  return out;
 }
 
 const assetsById = new Map(assets.map((asset) => [asset.id, asset]));

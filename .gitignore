@@ -12,4 +12,9 @@ coverage
 *.tsbuildinfo
 .env
 .env.*
+!.env.example
+data
 public/audio/tts/*.mp3
+public/audio/music/*.wav
+public/uploads/*
+!public/uploads/.gitkeep

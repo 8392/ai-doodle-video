@@ -13,18 +13,22 @@ export async function renderProjectOnWeb(
   options: {
     signal?: AbortSignal;
     muted?: boolean;
+    width?: number;
+    height?: number;
     onProgress?: (progress: WebRenderProgress) => void;
   } = {},
 ): Promise<Blob> {
   const totalFrames = Math.max(1, project.durationInFrames);
+  const width = options.width ?? project.width;
+  const height = options.height ?? project.height;
   const { getBlob } = await renderMediaOnWeb({
     composition: {
       id: project.id,
       component: VideoComposition,
       durationInFrames: project.durationInFrames,
       fps: project.fps,
-      width: project.width,
-      height: project.height,
+      width,
+      height,
       defaultProps: { project },
     },
     inputProps: { project },

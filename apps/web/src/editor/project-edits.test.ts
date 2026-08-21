@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { VideoProject } from "@ai-doodle/video-schema";
 import {
   addAssetToScene,
+  addPrimitiveToScene,
   addScene,
   applyAspectRatio,
   flattenSceneCameras,
@@ -10,6 +11,7 @@ import {
   removeElement,
   removeScene,
   retimeProject,
+  scaleProjectToSize,
   setDefaultTransition,
   setProjectName,
   setSceneTransition,
@@ -44,6 +46,25 @@ describe("project-edits", () => {
   it("updates element position", () => {
     const next = updateElement(project, "el-1", { x: 40, y: 80, scale: 1.2 });
     expect(next.scenes[0]?.elements[0]).toMatchObject({ x: 40, y: 80, scale: 1.2 });
+  });
+
+  it("scales project elements when resizing canvas", () => {
+    const next = scaleProjectToSize(project, 1920, 1080);
+    expect(next.width).toBe(1920);
+    expect(next.height).toBe(1080);
+    expect(next.scenes[0]?.elements[0]).toMatchObject({
+      x: Math.round(10 * (1920 / 1080)),
+      y: Math.round(20 * (1080 / 1920)),
+    });
+  });
+
+  it("adds a text primitive to the scene", () => {
+    const { project: next, elementId } = addPrimitiveToScene(project, "s1", "text", {
+      x: 40,
+      y: 80,
+    });
+    const element = next.scenes[0]?.elements.find((item) => item.id === elementId);
+    expect(element).toMatchObject({ type: "text", x: 40, y: 80, text: "新标题" });
   });
 
   it("adds an svg asset to a scene at a custom position", () => {

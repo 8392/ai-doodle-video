@@ -22,18 +22,17 @@ describe("matchAssetsForNarration", () => {
     expect(ids).toContain("sanctions");
   });
 
-  it("falls back when nothing matches", () => {
+  it("falls back when nothing matches without defaulting to globe", () => {
     const ids = matchAssetsForNarration("xyzabc123notatag").map((asset) => asset.id);
     expect(ids.length).toBeGreaterThanOrEqual(1);
-    expect(ids).toContain("globe");
     expect(ids).not.toContain("hand-left");
   });
 
   it("does not reuse the same fallback on later unmatched scenes", () => {
     const first = matchAssetsForNarration("完全没有标签的句子甲");
     const second = matchAssetsForNarration("另一段也不匹配的内容乙", first.map((asset) => asset.id));
-    expect(first[0]?.id).toBe("globe");
-    expect(second[0]?.id).toBe("newspaper");
+    expect(first[0]?.id).toBeTruthy();
+    expect(second[0]?.id).toBeTruthy();
     expect(second[0]?.id).not.toBe(first[0]?.id);
   });
 

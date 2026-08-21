@@ -1,7 +1,9 @@
 import {
   applyNarrationAudio,
+  applySceneAudioClips,
   buildNarrationScript,
   type NarrationAudioInput,
+  type SceneAudioClip,
 } from "@ai-doodle/ai";
 import type { VideoProject } from "@ai-doodle/video-schema";
 
@@ -126,14 +128,72 @@ export async function attachTtsNarration(
   project: VideoProject,
   options: TtsOptions,
 ): Promise<VideoProject> {
+  const stamp = Date.now().toString(36);
+  const clips: SceneAudioClip[] = [];
+  for (const [index, scene] of project.scenes.entries()) {
+    const text = scene.narration?.trim();
+    if (!text) {
+      continue;
+    }
+    // Each scene MUST get its own file — a shared fileId overwrites prior clips
+    // and every scene would play the last scene's speech (e.g. always "伊朗").
+    const audio = await requestTts(text, {
+      ...options,
+      fileId: `${project.id}-${scene.id}-s${index}-${stamp}`,
+      fps: project.fps,
+    });
+    clips.push({
+      sceneId: scene.id,
+      src: withCacheBust(audio.src, stamp),
+      durationInFrames: audio.durationInFrames,
+      volume: audio.volume,
+    });
+  }
+  if (clips.length > 0) {
+    return applySceneAudioClips(project, clips);
+  }
   const text = buildNarrationScript(project);
   if (!text) {
     throw new Error("没有可合成的旁白文案");
   }
   const audio = await requestTts(text, {
     ...options,
-    fileId: options.fileId ?? `${project.id}-narration`,
+    fileId: `${project.id}-narration-${stamp}`,
     fps: project.fps,
   });
-  return applyNarrationAudio(project, audio);
+  return applyNarrationAudio(project, {
+    ...audio,
+    src: withCacheBust(audio.src, stamp),
+  });
+}
+
+function withCacheBust(src: string, stamp: string): string {
+  const base = src.split("?")[0] ?? src;
+  return `${base}?v=${stamp}`;
+}
+
+export async function attachSceneTts(
+  project: VideoProject,
+  sceneId: string,
+  options: TtsOptions,
+): Promise<VideoProject> {
+  const scene = project.scenes.find((item) => item.id === sceneId);
+  const text = scene?.narration?.trim();
+  if (!text) {
+    throw new Error("这一场没有旁白");
+  }
+  const stamp = Date.now().toString(36);
+  const audio = await requestTts(text, {
+    ...options,
+    fileId: `${project.id}-${sceneId}-${stamp}`,
+    fps: project.fps,
+  });
+  return applySceneAudioClips(project, [
+    {
+      sceneId,
+      src: withCacheBust(audio.src, stamp),
+      durationInFrames: audio.durationInFrames,
+      volume: audio.volume,
+    },
+  ]);
 }

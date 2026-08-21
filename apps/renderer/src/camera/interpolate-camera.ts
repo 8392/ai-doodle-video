@@ -1,3 +1,4 @@
+import { applyEasing, lerp } from "@ai-doodle/animation-engine";
 import type { Camera, VideoProject } from "@ai-doodle/video-schema";
 
 const DEFAULT_CAMERA: Camera = {
@@ -28,7 +29,22 @@ export function resolveSceneCamera(
 export function interpolateCamera(
   project: VideoProject,
   sceneIndex: number,
-  _localFrame?: number,
+  localFrame = 0,
 ): ResolvedCamera {
-  return resolveSceneCamera(project, sceneIndex);
+  const scene = project.scenes[sceneIndex];
+  const target = scene?.camera ?? DEFAULT_CAMERA;
+  const duration = Math.max(
+    1,
+    Math.min(target.durationInFrames || 1, scene?.durationInFrames ?? 1),
+  );
+  if (duration <= 1) {
+    return resolveSceneCamera(project, sceneIndex);
+  }
+  const from: ResolvedCamera = { x: 0, y: 0, scale: 1 };
+  const t = applyEasing(localFrame / duration, target.easing ?? "ease-in-out");
+  return {
+    x: lerp(from.x, target.x, t),
+    y: lerp(from.y, target.y, t),
+    scale: lerp(from.scale, target.scale, t),
+  };
 }

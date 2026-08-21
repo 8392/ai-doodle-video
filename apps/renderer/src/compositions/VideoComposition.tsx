@@ -22,6 +22,7 @@ export const VideoComposition = ({
       <AudioLayer
         narration={project.narration}
         music={project.music}
+        scenes={project.scenes}
       />
     </AbsoluteFill>
   );

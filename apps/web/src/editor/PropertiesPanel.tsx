@@ -1,10 +1,16 @@
 import { getAsset } from "@ai-doodle/asset-library";
+import { applyMusic, MUSIC_TRACKS } from "@ai-doodle/ai";
 import { DEFAULT_TRANSITION } from "@ai-doodle/renderer";
-import type { TransitionConfig, TransitionType } from "@ai-doodle/video-schema";
+import type {
+  AnimationType,
+  TransitionConfig,
+  TransitionType,
+} from "@ai-doodle/video-schema";
 import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { findElement, findScene } from "./project-edits";
 import {
+  attachSceneTts,
   attachTtsNarration,
   fetchTtsVoices,
   pickDefaultVoiceId,
@@ -22,6 +28,16 @@ const TRANSITION_TYPES: { id: TransitionType; label: string }[] = [
   { id: "slide-down", label: "向下滑入" },
 ];
 
+const ANIMATION_TYPES: { id: AnimationType; label: string }[] = [
+  { id: "draw", label: "描画" },
+  { id: "fade", label: "淡入" },
+  { id: "pop", label: "弹出" },
+  { id: "slide-left", label: "左滑" },
+  { id: "slide-right", label: "右滑" },
+  { id: "slide-up", label: "上滑" },
+  { id: "slide-down", label: "下滑" },
+];
+
 export function PropertiesPanel() {
   const project = useEditorStore((state) => state.project);
   const selectedSceneId = useEditorStore((state) => state.selectedSceneId);
@@ -35,6 +51,8 @@ export function PropertiesPanel() {
   const removeSelectedElement = useEditorStore((state) => state.removeSelectedElement);
   const replaceProject = useEditorStore((state) => state.replaceProject);
   const persist = useEditorStore((state) => state.persist);
+  const setMusic = useEditorStore((state) => state.setMusic);
+  const patchDrawing = useEditorStore((state) => state.patchDrawing);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -82,18 +100,60 @@ export function PropertiesPanel() {
             projectId={project.id}
             durationInFrames={scene.durationInFrames}
             narration={scene.narration ?? ""}
+            cameraX={scene.camera?.x ?? 0}
+            cameraY={scene.camera?.y ?? 0}
+            cameraScale={scene.camera?.scale ?? 1}
+            cameraDuration={scene.camera?.durationInFrames ?? scene.durationInFrames}
             onChange={patchScene}
             onRegenerateSpeech={async (voiceId) => {
               const next = await attachTtsNarration(project, {
                 voice: voiceId,
                 language: project.language,
-                fileId: `${project.id}-narration-${Date.now().toString(36)}`,
+              });
+              replaceProject(next);
+              persist();
+            }}
+            onRegenerateScene={async () => {
+              const response = await fetch("/api/generate/scene", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  project,
+                  sceneId: scene.id,
+                  narration: scene.narration,
+                }),
+              });
+              const payload = (await response.json()) as {
+                project?: typeof project;
+                error?: string;
+              };
+              if (!response.ok || !payload.project) {
+                throw new Error(payload.error || "重生这一场失败");
+              }
+              replaceProject(payload.project);
+              persist();
+            }}
+            onRegenerateSceneSpeech={async (voiceId) => {
+              const next = await attachSceneTts(project, scene.id, {
+                voice: voiceId,
+                language: project.language,
               });
               replaceProject(next);
               persist();
             }}
           />
         ) : null}
+
+        <MusicSettings
+          currentSrc={project.music?.src}
+          onChange={(trackId) => setMusic(applyMusic(project, trackId).music)}
+        />
+
+        <DrawingSettings
+          handEnabled={project.drawing?.handEnabled !== false}
+          defaultAnimation={project.drawing?.defaultAnimation ?? "draw"}
+          onChange={patchDrawing}
+        />
 
         <TransitionSettings
           projectDefault={project.defaultTransition}
@@ -115,7 +175,7 @@ export function PropertiesPanel() {
                     : "border-transparent hover:bg-paper"
                 }`}
               >
-                {getAsset(item.assetId ?? "")?.name ?? item.id}
+                {elementLabel(item)}
               </button>
               <button
                 type="button"
@@ -143,7 +203,7 @@ export function PropertiesPanel() {
           <div className="mt-5 space-y-3">
             <div className="flex items-center justify-between gap-2">
               <p className="text-sm font-medium">
-                {getAsset(element.assetId ?? "")?.name ?? element.id}
+                {elementLabel(element)}
               </p>
               <button
                 type="button"
@@ -180,6 +240,73 @@ export function PropertiesPanel() {
               value={element.height ?? 320}
               onChange={(value) => patchElement({ height: Math.max(1, value) })}
             />
+            <NumberField
+              label="rotation"
+              value={element.rotation ?? 0}
+              onChange={(value) => patchElement({ rotation: value })}
+            />
+            {element.type === "text" ? (
+              <label className="block">
+                <span className="mb-1 block text-[11px] uppercase tracking-wider text-ink/40">
+                  文字
+                </span>
+                <textarea
+                  rows={2}
+                  value={element.text ?? ""}
+                  onChange={(event) => patchElement({ text: event.target.value })}
+                  className="w-full rounded-lg border border-ink/10 bg-paper px-2.5 py-1.5 text-sm outline-none focus:border-cobalt"
+                />
+              </label>
+            ) : null}
+            <label className="block">
+              <span className="mb-1 block text-[11px] uppercase tracking-wider text-ink/40">
+                动画
+              </span>
+              <select
+                value={element.animation?.type ?? "draw"}
+                onChange={(event) =>
+                  patchElement({
+                    animation: {
+                      type: event.target.value as AnimationType,
+                      durationInFrames: element.animation?.durationInFrames ?? 36,
+                      easing: element.animation?.easing,
+                    },
+                  })
+                }
+                className="w-full rounded-lg border border-ink/10 bg-paper px-2.5 py-1.5 text-sm outline-none focus:border-cobalt"
+              >
+                {ANIMATION_TYPES.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {(element.animation?.type ?? "draw") === "draw" ? (
+              <label className="flex items-center justify-between gap-2 rounded-lg border border-ink/10 px-2.5 py-2 text-sm">
+                <span>显示画手</span>
+                <input
+                  type="checkbox"
+                  checked={element.showHand !== false}
+                  onChange={(event) =>
+                    patchElement({ showHand: event.target.checked })
+                  }
+                />
+              </label>
+            ) : null}
+            <NumberField
+              label="动画时长 (帧)"
+              value={element.animation?.durationInFrames ?? 36}
+              onChange={(value) =>
+                patchElement({
+                  animation: {
+                    type: element.animation?.type ?? "draw",
+                    durationInFrames: Math.max(1, value),
+                    easing: element.animation?.easing,
+                  },
+                })
+              }
+            />
           </div>
         ) : (
           <p className="mt-6 text-sm text-ink/45">
@@ -197,16 +324,32 @@ function SceneSettings({
   projectId,
   durationInFrames,
   narration,
+  cameraX,
+  cameraY,
+  cameraScale,
+  cameraDuration,
   onChange,
   onRegenerateSpeech,
+  onRegenerateScene,
+  onRegenerateSceneSpeech,
 }: {
   fps: number;
   language: string;
   projectId: string;
   durationInFrames: number;
   narration: string;
-  onChange: (patch: { durationInFrames?: number; narration?: string }) => void;
+  cameraX: number;
+  cameraY: number;
+  cameraScale: number;
+  cameraDuration: number;
+  onChange: (patch: {
+    durationInFrames?: number;
+    narration?: string;
+    camera?: { x: number; y: number; scale: number; durationInFrames: number; easing?: string };
+  }) => void;
   onRegenerateSpeech: (voiceId: string) => Promise<void>;
+  onRegenerateScene: () => Promise<void>;
+  onRegenerateSceneSpeech: (voiceId: string) => Promise<void>;
 }) {
   const seconds = Number((durationInFrames / fps).toFixed(2));
   const [voices, setVoices] = useState<TtsVoiceOption[]>([]);
@@ -278,22 +421,22 @@ function SceneSettings({
           className="w-full resize-none rounded-lg border border-ink/10 bg-paper px-2.5 py-1.5 text-sm outline-none focus:border-cobalt"
         />
       </label>
-      <div className="grid grid-cols-[1fr_auto] gap-2">
-        <select
-          value={voice}
-          onChange={(event) => setVoice(event.target.value)}
-          className="rounded-lg border border-ink/10 bg-paper px-2 py-1.5 text-sm outline-none focus:border-cobalt"
-        >
-          {voiceOptions.length > 0 ? (
-            voiceOptions.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.label}
-              </option>
-            ))
-          ) : (
-            <option value={voice}>加载中…</option>
-          )}
-        </select>
+      <select
+        value={voice}
+        onChange={(event) => setVoice(event.target.value)}
+        className="w-full rounded-lg border border-ink/10 bg-paper px-2 py-1.5 text-sm outline-none focus:border-cobalt"
+      >
+        {voiceOptions.length > 0 ? (
+          voiceOptions.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.label}
+            </option>
+          ))
+        ) : (
+          <option value={voice}>加载中…</option>
+        )}
+      </select>
+      <div className="flex flex-col gap-2">
         <button
           type="button"
           disabled={busy || voiceOptions.length === 0}
@@ -301,20 +444,117 @@ function SceneSettings({
             setBusy(true);
             setMessage(null);
             void onRegenerateSpeech(voice)
-              .then(() => setMessage("旁白语音已更新"))
+              .then(() => setMessage("整片旁白已按真实时长对齐"))
               .catch((error: unknown) =>
                 setMessage(error instanceof Error ? error.message : "合成失败"),
               )
               .finally(() => setBusy(false));
           }}
-          className="rounded-lg bg-ink px-3 py-1.5 text-sm text-paper disabled:bg-ink/30"
+          className="w-full shrink-0 whitespace-nowrap rounded-lg bg-ink px-3 py-1.5 text-sm text-paper disabled:bg-ink/30"
         >
-          {busy ? "合成中…" : "生成旁白"}
+          {busy ? "合成中…" : "生成整片旁白"}
         </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => {
+              setBusy(true);
+              setMessage(null);
+              void onRegenerateSceneSpeech(voice)
+                .then(() => setMessage("本场旁白已更新"))
+                .catch((error: unknown) =>
+                  setMessage(error instanceof Error ? error.message : "合成失败"),
+                )
+                .finally(() => setBusy(false));
+            }}
+            className="min-w-0 flex-1 whitespace-nowrap rounded-lg border border-ink/10 px-3 py-1.5 text-xs"
+          >
+            只合成本场
+          </button>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => {
+              setBusy(true);
+              setMessage(null);
+              void onRegenerateScene()
+                .then(() => setMessage("本场画面已重生"))
+                .catch((error: unknown) =>
+                  setMessage(error instanceof Error ? error.message : "重生失败"),
+                )
+                .finally(() => setBusy(false));
+            }}
+            className="min-w-0 flex-1 whitespace-nowrap rounded-lg border border-ink/10 px-3 py-1.5 text-xs"
+          >
+            重生这一场
+          </button>
+        </div>
       </div>
       <p className="text-[11px] leading-4 text-ink/40">
-        会用整片各 Scene 旁白合成一条音轨（{language} / {projectId}），并按字数重排时长。
+        整片合成会按每场旁白时长对齐时间轴（{language} / {projectId}）。
       </p>
+      <NumberField
+        label="镜头 x"
+        value={cameraX}
+        onChange={(value) =>
+          onChange({
+            camera: {
+              x: value,
+              y: cameraY,
+              scale: cameraScale,
+              durationInFrames: cameraDuration,
+              easing: "ease-in-out",
+            },
+          })
+        }
+      />
+      <NumberField
+        label="镜头 y"
+        value={cameraY}
+        onChange={(value) =>
+          onChange({
+            camera: {
+              x: cameraX,
+              y: value,
+              scale: cameraScale,
+              durationInFrames: cameraDuration,
+              easing: "ease-in-out",
+            },
+          })
+        }
+      />
+      <NumberField
+        label="镜头 scale"
+        value={cameraScale}
+        step={0.02}
+        onChange={(value) =>
+          onChange({
+            camera: {
+              x: cameraX,
+              y: cameraY,
+              scale: Math.max(0.5, value),
+              durationInFrames: cameraDuration,
+              easing: "ease-in-out",
+            },
+          })
+        }
+      />
+      <NumberField
+        label="镜头动画帧"
+        value={cameraDuration}
+        onChange={(value) =>
+          onChange({
+            camera: {
+              x: cameraX,
+              y: cameraY,
+              scale: cameraScale,
+              durationInFrames: Math.max(1, value),
+              easing: "ease-in-out",
+            },
+          })
+        }
+      />
       {message ? (
         <p className="text-[11px] leading-4 text-ink/60">{message}</p>
       ) : null}
@@ -439,5 +679,106 @@ function NumberField({
         className="w-full rounded-lg border border-ink/10 bg-paper px-2.5 py-1.5 text-sm outline-none focus:border-cobalt"
       />
     </label>
+  );
+}
+
+function elementLabel(item: {
+  type: string;
+  text?: string;
+  assetId?: string;
+  src?: string;
+  id: string;
+}): string {
+  if (item.type === "text") {
+    return item.text?.trim() || "文字";
+  }
+  if (item.type === "arrow") {
+    return "箭头";
+  }
+  if (item.type === "shape") {
+    return "形状";
+  }
+  if (item.type === "image" || item.type === "svg") {
+    return getAsset(item.assetId ?? "")?.name ?? (item.src ? "上传图片" : "图片");
+  }
+  return getAsset(item.assetId ?? "")?.name ?? item.id;
+}
+
+function DrawingSettings({
+  handEnabled,
+  defaultAnimation,
+  onChange,
+}: {
+  handEnabled: boolean;
+  defaultAnimation: "draw" | "fade" | "pop";
+  onChange: (drawing: {
+    handEnabled: boolean;
+    defaultAnimation: "draw" | "fade" | "pop";
+  }) => void;
+}) {
+  return (
+    <div className="mb-5 space-y-2 border-b border-ink/10 pb-4">
+      <p className="text-xs text-ink/45">手绘模式</p>
+      <label className="flex items-center justify-between gap-2 rounded-lg border border-ink/10 px-2.5 py-2 text-sm">
+        <span>显示画手</span>
+        <input
+          type="checkbox"
+          checked={handEnabled}
+          onChange={(event) =>
+            onChange({
+              handEnabled: event.target.checked,
+              defaultAnimation,
+            })
+          }
+        />
+      </label>
+      <label className="block">
+        <span className="mb-1 block text-[11px] uppercase tracking-wider text-ink/40">
+          新图标默认出现方式
+        </span>
+        <select
+          value={defaultAnimation}
+          onChange={(event) =>
+            onChange({
+              handEnabled,
+              defaultAnimation: event.target.value as "draw" | "fade" | "pop",
+            })
+          }
+          className="w-full rounded-lg border border-ink/10 bg-paper px-2.5 py-1.5 text-sm outline-none focus:border-cobalt"
+        >
+          <option value="draw">手绘描画</option>
+          <option value="fade">淡入</option>
+          <option value="pop">弹出</option>
+        </select>
+      </label>
+    </div>
+  );
+}
+
+function MusicSettings({
+  currentSrc,
+  onChange,
+}: {
+  currentSrc?: string;
+  onChange: (trackId: string | undefined) => void;
+}) {
+  const selected =
+    MUSIC_TRACKS.find((track) => track.src === currentSrc)?.id ?? "";
+  return (
+    <div className="mb-5 space-y-2 border-b border-ink/10 pb-4">
+      <p className="text-xs text-ink/45">背景音乐</p>
+      <select
+        value={selected}
+        onChange={(event) => onChange(event.target.value || undefined)}
+        className="w-full rounded-lg border border-ink/10 bg-paper px-2.5 py-1.5 text-sm outline-none focus:border-cobalt"
+      >
+        <option value="">无配乐</option>
+        {MUSIC_TRACKS.map((track) => (
+          <option key={track.id} value={track.id}>
+            {track.name}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 }

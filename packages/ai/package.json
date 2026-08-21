@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ai-doodle/asset-library": "workspace:*",
-    "@ai-doodle/video-schema": "workspace:*"
+    "@ai-doodle/video-schema": "workspace:*",
+    "zod": "^3.25.76"
   }
 }

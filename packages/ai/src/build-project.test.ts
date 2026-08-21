@@ -22,7 +22,8 @@ describe("generateVideoProject", () => {
     );
     expect(project.width).toBe(1080);
     expect(project.height).toBe(1920);
-    expect(project.narration?.src).toBe("/audio/demo.wav");
+    expect(project.narration).toBeUndefined();
+    expect(project.style).toBe("whiteboard");
 
     const assetIds = project.scenes.flatMap((scene) =>
       scene.elements.map((element) => element.assetId),

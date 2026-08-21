@@ -14,7 +14,10 @@ export function searchAssets(query: string): AssetDefinition[] {
     if (normalize(asset.id).includes(needle) || normalize(asset.name).includes(needle)) {
       return true;
     }
-    return asset.tags.some((tag) => normalize(tag).includes(needle));
+    if (asset.tags.some((tag) => normalize(tag).includes(needle))) {
+      return true;
+    }
+    return (asset.aliases ?? []).some((alias) => normalize(alias).includes(needle));
   });
 }
 

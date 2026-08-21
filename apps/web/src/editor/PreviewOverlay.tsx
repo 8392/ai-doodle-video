@@ -202,7 +202,8 @@ export function PreviewOverlay({
         });
         const selected = element.id === selectedElementId;
         const hovered = element.id === hoverId;
-        const asset = getAsset(element.assetId ?? "");
+        const asset = element.assetId ? getAsset(element.assetId) : undefined;
+        const previewSrc = asset?.src ?? element.src;
         return (
           <div
             key={element.id}
@@ -222,13 +223,17 @@ export function PreviewOverlay({
               height: Math.max(8, rect.height),
             }}
           >
-            {showAssets && asset ? (
+            {showAssets && previewSrc ? (
               <img
-                src={asset.src}
-                alt={asset.name}
+                src={previewSrc}
+                alt={asset?.name ?? element.text ?? "上传图片"}
                 draggable={false}
                 className="pointer-events-none h-full w-full object-contain"
               />
+            ) : showAssets && element.type === "text" ? (
+              <div className="pointer-events-none flex h-full w-full items-center justify-center bg-white/70 px-1 text-center text-[10px] text-ink/70">
+                {element.text || "文字"}
+              </div>
             ) : null}
           </div>
         );
