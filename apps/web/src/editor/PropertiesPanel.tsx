@@ -4,7 +4,13 @@ import type { TransitionConfig, TransitionType } from "@ai-doodle/video-schema";
 import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { findElement, findScene } from "./project-edits";
-import { attachTtsNarration } from "../lib/tts";
+import {
+  attachTtsNarration,
+  fetchTtsVoices,
+  pickDefaultVoiceId,
+  sortVoicesForLanguage,
+  type TtsVoiceOption,
+} from "../lib/tts";
 import { useEditorStore } from "../stores/editor-store";
 
 const TRANSITION_TYPES: { id: TransitionType; label: string }[] = [
@@ -77,9 +83,9 @@ export function PropertiesPanel() {
             durationInFrames={scene.durationInFrames}
             narration={scene.narration ?? ""}
             onChange={patchScene}
-            onRegenerateSpeech={async (voice) => {
+            onRegenerateSpeech={async (voiceId) => {
               const next = await attachTtsNarration(project, {
-                voice,
+                voice: voiceId,
                 language: project.language,
                 fileId: `${project.id}-narration-${Date.now().toString(36)}`,
               });
@@ -200,12 +206,50 @@ function SceneSettings({
   durationInFrames: number;
   narration: string;
   onChange: (patch: { durationInFrames?: number; narration?: string }) => void;
-  onRegenerateSpeech: (voice: string) => Promise<void>;
+  onRegenerateSpeech: (voiceId: string) => Promise<void>;
 }) {
   const seconds = Number((durationInFrames / fps).toFixed(2));
-  const [voice, setVoice] = useState("female");
+  const [voices, setVoices] = useState<TtsVoiceOption[]>([]);
+  const [voice, setVoice] = useState("zh-CN-XiaoxiaoNeural");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    void fetchTtsVoices("all")
+      .then((list) => {
+        if (cancelled) {
+          return;
+        }
+        setVoices(list);
+      })
+      .catch((cause: unknown) => {
+        if (!cancelled) {
+          setVoices([]);
+          setMessage(
+            cause instanceof Error
+              ? `无法加载音色：${cause.message}`
+              : "无法加载音色",
+          );
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (voices.length === 0) {
+      return;
+    }
+    setVoice((current) =>
+      voices.some((item) => item.id === current)
+        ? current
+        : pickDefaultVoiceId(voices, language),
+    );
+  }, [language, voices]);
+
+  const voiceOptions = sortVoicesForLanguage(voices, language);
 
   return (
     <div className="mb-5 space-y-3 border-b border-ink/10 pb-4">
@@ -240,12 +284,19 @@ function SceneSettings({
           onChange={(event) => setVoice(event.target.value)}
           className="rounded-lg border border-ink/10 bg-paper px-2 py-1.5 text-sm outline-none focus:border-cobalt"
         >
-          <option value="female">女声</option>
-          <option value="male">男声</option>
+          {voiceOptions.length > 0 ? (
+            voiceOptions.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.label}
+              </option>
+            ))
+          ) : (
+            <option value={voice}>加载中…</option>
+          )}
         </select>
         <button
           type="button"
-          disabled={busy}
+          disabled={busy || voiceOptions.length === 0}
           onClick={() => {
             setBusy(true);
             setMessage(null);

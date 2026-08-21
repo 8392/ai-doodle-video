@@ -4,7 +4,9 @@
   "type": "module",
   "packageManager": "pnpm@10.33.0",
   "scripts": {
-    "dev": "pnpm --filter @ai-doodle/web dev",
+    "dev": "pnpm -r --parallel --filter @ai-doodle/web --filter @ai-doodle/api dev",
+    "dev:web": "pnpm --filter @ai-doodle/web dev",
+    "dev:api": "pnpm --filter @ai-doodle/api dev",
     "render:demo": "pnpm --filter @ai-doodle/renderer render:demo",
     "render:json": "pnpm --filter @ai-doodle/renderer render:json --",
     "studio": "pnpm --filter @ai-doodle/renderer studio",

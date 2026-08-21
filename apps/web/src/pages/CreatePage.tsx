@@ -6,11 +6,17 @@ import {
 } from "@ai-doodle/ai";
 import { loadDemoProject, VideoComposition } from "@ai-doodle/renderer";
 import { Player } from "@remotion/player";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { applyAspectRatio } from "../editor/project-edits";
 import { saveProjectJson } from "../lib/local-project";
-import { attachTtsNarration } from "../lib/tts";
+import {
+  attachTtsNarration,
+  fetchTtsVoices,
+  pickDefaultVoiceId,
+  sortVoicesForLanguage,
+  type TtsVoiceOption,
+} from "../lib/tts";
 
 const ASPECTS = ["9:16", "16:9", "1:1"] as const;
 
@@ -18,12 +24,51 @@ export function CreatePage() {
   const navigate = useNavigate();
   const [script, setScript] = useState("为什么美国长期制裁伊朗？");
   const [language, setLanguage] = useState("zh");
-  const [voice, setVoice] = useState("female");
+  const [voices, setVoices] = useState<TtsVoiceOption[]>([]);
+  const [voice, setVoice] = useState("zh-CN-XiaoxiaoNeural");
   const [aspect, setAspect] = useState<(typeof ASPECTS)[number]>("9:16");
   const [style, setStyle] = useState("whiteboard");
   const [generating, setGenerating] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    void fetchTtsVoices("all")
+      .then((list) => {
+        if (cancelled) {
+          return;
+        }
+        setVoices(list);
+        setError(null);
+      })
+      .catch((cause: unknown) => {
+        if (!cancelled) {
+          setVoices([]);
+          setError(
+            cause instanceof Error
+              ? `无法加载音色列表：${cause.message}（请确认 api 已启动）`
+              : "无法加载音色列表",
+          );
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (voices.length === 0) {
+      return;
+    }
+    setVoice((current) =>
+      voices.some((item) => item.id === current)
+        ? current
+        : pickDefaultVoiceId(voices, language),
+    );
+  }, [language, voices]);
+
+  const voiceOptions = sortVoicesForLanguage(voices, language);
 
   const preview = useMemo(
     () => applyAspectRatio(loadDemoProject(), aspect),
@@ -120,13 +165,14 @@ export function CreatePage() {
               ]}
             />
             <SelectField
-              label="声音"
+              label={`声音${voiceOptions.length > 0 ? `（${voiceOptions.length}）` : ""}`}
               value={voice}
               onChange={setVoice}
-              options={[
-                ["female", "女声"],
-                ["male", "男声"],
-              ]}
+              options={
+                voiceOptions.length > 0
+                  ? voiceOptions.map((item) => [item.id, item.label])
+                  : [[voice, "加载中…"]]
+              }
             />
             <SelectField
               label="比例"
@@ -171,7 +217,7 @@ export function CreatePage() {
             <p className="mt-3 text-xs leading-5 text-red-700">{error}</p>
           ) : (
             <p className="mt-3 text-xs leading-5 text-ink/45">
-              语音合成需要本机 `pnpm dev` 在线；失败时会回退到占位
+              语音合成需要本机 `pnpm dev`（web + api）在线；失败时会回退到占位
               demo.wav。「打开编辑器」仍加载 demo。
             </p>
           )}
