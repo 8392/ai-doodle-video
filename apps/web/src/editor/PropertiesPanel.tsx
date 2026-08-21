@@ -2,8 +2,9 @@ import { getAsset } from "@ai-doodle/asset-library";
 import { DEFAULT_TRANSITION } from "@ai-doodle/renderer";
 import type { TransitionConfig, TransitionType } from "@ai-doodle/video-schema";
 import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { findElement, findScene } from "./project-edits";
+import { attachTtsNarration } from "../lib/tts";
 import { useEditorStore } from "../stores/editor-store";
 
 const TRANSITION_TYPES: { id: TransitionType; label: string }[] = [
@@ -26,6 +27,8 @@ export function PropertiesPanel() {
   const patchScene = useEditorStore((state) => state.patchScene);
   const reorderElement = useEditorStore((state) => state.reorderElement);
   const removeSelectedElement = useEditorStore((state) => state.removeSelectedElement);
+  const replaceProject = useEditorStore((state) => state.replaceProject);
+  const persist = useEditorStore((state) => state.persist);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -69,9 +72,20 @@ export function PropertiesPanel() {
         {scene ? (
           <SceneSettings
             fps={project.fps}
+            language={project.language}
+            projectId={project.id}
             durationInFrames={scene.durationInFrames}
             narration={scene.narration ?? ""}
             onChange={patchScene}
+            onRegenerateSpeech={async (voice) => {
+              const next = await attachTtsNarration(project, {
+                voice,
+                language: project.language,
+                fileId: `${project.id}-narration-${Date.now().toString(36)}`,
+              });
+              replaceProject(next);
+              persist();
+            }}
           />
         ) : null}
 
@@ -173,16 +187,26 @@ export function PropertiesPanel() {
 
 function SceneSettings({
   fps,
+  language,
+  projectId,
   durationInFrames,
   narration,
   onChange,
+  onRegenerateSpeech,
 }: {
   fps: number;
+  language: string;
+  projectId: string;
   durationInFrames: number;
   narration: string;
   onChange: (patch: { durationInFrames?: number; narration?: string }) => void;
+  onRegenerateSpeech: (voice: string) => Promise<void>;
 }) {
   const seconds = Number((durationInFrames / fps).toFixed(2));
+  const [voice, setVoice] = useState("female");
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+
   return (
     <div className="mb-5 space-y-3 border-b border-ink/10 pb-4">
       <p className="text-xs text-ink/45">当前画布</p>
@@ -210,6 +234,39 @@ function SceneSettings({
           className="w-full resize-none rounded-lg border border-ink/10 bg-paper px-2.5 py-1.5 text-sm outline-none focus:border-cobalt"
         />
       </label>
+      <div className="grid grid-cols-[1fr_auto] gap-2">
+        <select
+          value={voice}
+          onChange={(event) => setVoice(event.target.value)}
+          className="rounded-lg border border-ink/10 bg-paper px-2 py-1.5 text-sm outline-none focus:border-cobalt"
+        >
+          <option value="female">女声</option>
+          <option value="male">男声</option>
+        </select>
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => {
+            setBusy(true);
+            setMessage(null);
+            void onRegenerateSpeech(voice)
+              .then(() => setMessage("旁白语音已更新"))
+              .catch((error: unknown) =>
+                setMessage(error instanceof Error ? error.message : "合成失败"),
+              )
+              .finally(() => setBusy(false));
+          }}
+          className="rounded-lg bg-ink px-3 py-1.5 text-sm text-paper disabled:bg-ink/30"
+        >
+          {busy ? "合成中…" : "生成旁白"}
+        </button>
+      </div>
+      <p className="text-[11px] leading-4 text-ink/40">
+        会用整片各 Scene 旁白合成一条音轨（{language} / {projectId}），并按字数重排时长。
+      </p>
+      {message ? (
+        <p className="text-[11px] leading-4 text-ink/60">{message}</p>
+      ) : null}
     </div>
   );
 }

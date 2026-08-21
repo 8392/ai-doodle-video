@@ -49,4 +49,12 @@ describe("matchAssetsForNarration", () => {
     ).toBe(true);
     expect(second[0]?.id).not.toBe(first[0]?.id);
   });
+
+  it("avoids repeating an already-used strong match across the project", () => {
+    const first = matchAssetsForNarration("美国");
+    expect(first.map((asset) => asset.id)).toContain("usa");
+    const second = matchAssetsForNarration("美国", ["usa"]);
+    expect(second[0]?.id).not.toBe("usa");
+    expect(second[0]?.id).toBeTruthy();
+  });
 });

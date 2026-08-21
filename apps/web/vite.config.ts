@@ -3,12 +3,13 @@ import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { remotionRenderPlugin } from "./vite-plugin-render";
+import { ttsPlugin } from "./vite-plugin-tts";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, "../..");
 
 export default defineConfig({
-  plugins: [react(), remotionRenderPlugin(repoRoot)],
+  plugins: [react(), remotionRenderPlugin(repoRoot), ttsPlugin(repoRoot)],
   publicDir: path.join(repoRoot, "public"),
   resolve: {
     dedupe: ["react", "react-dom", "remotion"],

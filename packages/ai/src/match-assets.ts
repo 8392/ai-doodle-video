@@ -56,12 +56,17 @@ export function matchAssetsForNarration(
   if (unusedStrong[0]) {
     return [unusedStrong[0]];
   }
+
+  const unusedFallback = uniqueFallback(used);
+  if (unusedFallback && !used.has(unusedFallback.id)) {
+    return [unusedFallback];
+  }
+
   if (ranked[0]) {
     return [ranked[0]];
   }
 
-  const fallback = uniqueFallback(used);
-  return fallback ? [fallback] : [];
+  return unusedFallback ? [unusedFallback] : [];
 }
 
 function pickFromKeywordSpans(
@@ -75,9 +80,9 @@ function pickFromKeywordSpans(
       break;
     }
     const ranked = rankAssets(span.token);
-    const next =
-      ranked.find((asset) => !used.has(asset.id) && !pickedIds.has(asset.id)) ??
-      ranked.find((asset) => !pickedIds.has(asset.id));
+    const next = ranked.find(
+      (asset) => !used.has(asset.id) && !pickedIds.has(asset.id),
+    );
     if (!next) {
       continue;
     }

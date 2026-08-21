@@ -42,6 +42,7 @@ type EditorState = {
   patchScene: (patch: { durationInFrames?: number; narration?: string }) => void;
   reorderElement: (elementId: string, direction: -1 | 1) => void;
   removeSelectedElement: () => void;
+  replaceProject: (project: VideoProject) => void;
   persist: () => void;
 };
 
@@ -204,6 +205,24 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     set({
       project: removeElement(project, selectedElementId),
       selectedElementId: null,
+      saveStatus: "idle",
+    });
+  },
+  replaceProject: (project) => {
+    const current = get();
+    const keepScene =
+      project.scenes.find((scene) => scene.id === current.selectedSceneId)?.id ??
+      project.scenes[0]?.id ??
+      null;
+    const keepSceneObj = project.scenes.find((scene) => scene.id === keepScene);
+    const keepElement =
+      keepSceneObj?.elements.find((el) => el.id === current.selectedElementId)?.id ??
+      keepSceneObj?.elements[0]?.id ??
+      null;
+    set({
+      project,
+      selectedSceneId: keepScene,
+      selectedElementId: keepElement,
       saveStatus: "idle",
     });
   },

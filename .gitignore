@@ -12,3 +12,4 @@ coverage
 *.tsbuildinfo
 .env
 .env.*
+public/audio/tts/*.mp3

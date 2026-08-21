@@ -1,7 +1,11 @@
 import { findKeywordSpans } from "./match-assets";
 
-const MIN_SCENES = 3;
-const MAX_SCENES = 6;
+export const MIN_SCENES = 3;
+/** Soft cap so extreme paste does not flood the timeline. */
+export const MAX_SCENES_SOFT = 24;
+/** Prefer roughly one or two short clauses per scene. */
+export const MAX_CHARS_PER_SCENE = 32;
+
 const SENTENCE_DELIMS = /[。！？!?；;\n]+/;
 const CLAUSE_DELIMS = /[，,、]+/;
 
@@ -12,26 +16,113 @@ export class EmptyScriptError extends Error {
   }
 }
 
+export type SplitScriptResult = {
+  parts: string[];
+  truncated: boolean;
+};
+
 export function splitScript(script: string): string[] {
+  return splitScriptWithMeta(script).parts;
+}
+
+export function splitScriptWithMeta(script: string): SplitScriptResult {
   const trimmed = script.trim();
   if (!trimmed) {
     throw new EmptyScriptError();
   }
 
-  let parts = splitBy(trimmed, SENTENCE_DELIMS);
+  let parts = splitBy(trimmed, SENTENCE_DELIMS)
+    .flatMap(preferClauseSplit)
+    .flatMap(enforceMaxChars);
   if (parts.length < MIN_SCENES) {
-    parts = parts.flatMap((part) => {
-      const clauses = splitBy(part, CLAUSE_DELIMS);
-      return clauses.length > 1 ? clauses : [part];
-    });
+    parts = parts
+      .flatMap((part) => {
+        const clauses = splitBy(part, CLAUSE_DELIMS);
+        return clauses.length > 1 ? clauses : [part];
+      })
+      .flatMap(enforceMaxChars);
   }
   if (parts.length < MIN_SCENES) {
-    parts = expandShortScript(trimmed);
+    parts = expandShortScript(trimmed).flatMap(enforceMaxChars);
   }
-  if (parts.length > MAX_SCENES) {
-    parts = mergeAdjacentShort(parts, MAX_SCENES);
+
+  let truncated = false;
+  if (parts.length > MAX_SCENES_SOFT) {
+    parts = mergeAdjacentShort(parts, MAX_SCENES_SOFT);
+    truncated = true;
   }
-  return parts.slice(0, MAX_SCENES);
+
+  return { parts, truncated };
+}
+
+function charCount(text: string): number {
+  return [...text].length;
+}
+
+/** Prefer breaking on commas once a sentence is longer than a short subtitle. */
+function preferClauseSplit(text: string): string[] {
+  const trimmed = text.trim();
+  if (!trimmed) {
+    return [];
+  }
+  if (charCount(trimmed) <= 18) {
+    return [trimmed];
+  }
+  const clauses = splitBy(trimmed, CLAUSE_DELIMS);
+  return clauses.length > 1 ? clauses : [trimmed];
+}
+
+function enforceMaxChars(text: string): string[] {
+  const trimmed = text.trim();
+  if (!trimmed) {
+    return [];
+  }
+  if (charCount(trimmed) <= MAX_CHARS_PER_SCENE) {
+    return [trimmed];
+  }
+
+  const clauses = splitBy(trimmed, CLAUSE_DELIMS);
+  if (clauses.length > 1) {
+    const nested = clauses.flatMap(enforceMaxChars);
+    if (nested.every((part) => charCount(part) <= MAX_CHARS_PER_SCENE)) {
+      return nested;
+    }
+    return nested.flatMap((part) =>
+      charCount(part) <= MAX_CHARS_PER_SCENE ? [part] : splitByMaxChars(part),
+    );
+  }
+
+  return splitByMaxChars(trimmed);
+}
+
+function splitByMaxChars(text: string): string[] {
+  const chars = [...text];
+  const parts: string[] = [];
+  let cursor = 0;
+  while (cursor < chars.length) {
+    if (chars.length - cursor <= MAX_CHARS_PER_SCENE) {
+      const rest = chars.slice(cursor).join("").trim();
+      if (rest) {
+        parts.push(rest);
+      }
+      break;
+    }
+    let end = cursor + MAX_CHARS_PER_SCENE;
+    const windowStart = Math.max(cursor + Math.floor(MAX_CHARS_PER_SCENE * 0.55), cursor + 1);
+    for (let i = end - 1; i >= windowStart; i -= 1) {
+      const ch = chars[i];
+      if (ch && /[，,、\s]/.test(ch)) {
+        end = i + 1;
+        break;
+      }
+    }
+    const chunk = chars.slice(cursor, end).join("").trim();
+    if (chunk) {
+      parts.push(chunk);
+    }
+    cursor = end;
+  }
+  return parts;
 }
 
 function splitBy(text: string, delim: RegExp): string[] {
@@ -103,7 +194,7 @@ function mergeAdjacentShort(parts: string[], max: number): string[] {
     for (let i = 0; i < next.length - 1; i++) {
       const left = next[i] ?? "";
       const right = next[i + 1] ?? "";
-      const score = left.length + right.length;
+      const score = charCount(left) + charCount(right);
       if (score < bestScore) {
         bestScore = score;
         bestIndex = i;

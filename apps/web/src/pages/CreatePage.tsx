@@ -1,10 +1,16 @@
-import { EmptyScriptError, generateVideoProject } from "@ai-doodle/ai";
+import {
+  EmptyScriptError,
+  generateVideoProject,
+  MAX_SCENES_SOFT,
+  splitScriptWithMeta,
+} from "@ai-doodle/ai";
 import { loadDemoProject, VideoComposition } from "@ai-doodle/renderer";
 import { Player } from "@remotion/player";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { applyAspectRatio } from "../editor/project-edits";
 import { saveProjectJson } from "../lib/local-project";
+import { attachTtsNarration } from "../lib/tts";
 
 const ASPECTS = ["9:16", "16:9", "1:1"] as const;
 
@@ -16,6 +22,7 @@ export function CreatePage() {
   const [aspect, setAspect] = useState<(typeof ASPECTS)[number]>("9:16");
   const [style, setStyle] = useState("whiteboard");
   const [generating, setGenerating] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const preview = useMemo(
@@ -25,20 +32,43 @@ export function CreatePage() {
 
   async function handleGenerate() {
     setError(null);
+    setStatus(null);
     if (!script.trim()) {
       setError("请先输入文案");
       return;
     }
     setGenerating(true);
     try {
-      await wait(450);
-      const project = generateVideoProject({
+      const previewSplit = splitScriptWithMeta(script);
+      setStatus(
+        previewSplit.truncated
+          ? `正在生成分镜（文案较长，将截断到 ${MAX_SCENES_SOFT} 镜）…`
+          : `正在生成分镜（约 ${previewSplit.parts.length} 镜）…`,
+      );
+      await wait(300);
+      let project = generateVideoProject({
         script,
         language,
         voice,
         aspect,
         style,
       });
+
+      setStatus("正在合成旁白语音…");
+      try {
+        project = await attachTtsNarration(project, {
+          voice,
+          language,
+          fileId: `${project.id}-narration-${Date.now().toString(36)}`,
+        });
+      } catch (ttsError) {
+        setStatus(
+          ttsError instanceof Error
+            ? `分镜已生成，但语音合成失败：${ttsError.message}（仍使用占位音轨）`
+            : "分镜已生成，但语音合成失败（仍使用占位音轨）",
+        );
+      }
+
       saveProjectJson(project.id, JSON.stringify(project));
       navigate(`/editor/${project.id}`);
     } catch (cause) {
@@ -49,6 +79,7 @@ export function CreatePage() {
       }
     } finally {
       setGenerating(false);
+      setStatus(null);
     }
   }
 
@@ -57,14 +88,15 @@ export function CreatePage() {
       <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,420px)]">
         <section className="max-w-xl">
           <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink/45">
-            Phase 3 · Mock storyboard
+            Phase 3 · Mock storyboard + TTS
           </p>
           <h1 className="mt-3 font-display text-4xl leading-tight">
             把文案变成白板手绘视频
           </h1>
           <p className="mt-3 text-sm leading-6 text-ink/55">
-            「生成视频」用本地规则拆句、匹配图标并写出 VideoProject JSON，不是
-            OpenAI。生成后会进入编辑器，可继续改画布、预览和导出 MP4。
+            「生成视频」会按句号/逗号把长文案拆成多镜（单镜约 30
+            字内），再合成旁白语音写入时间轴。短文至少 3
+            镜；特别长的文案最多 {MAX_SCENES_SOFT} 镜。
           </p>
 
           <label className="mt-8 block">
@@ -92,8 +124,8 @@ export function CreatePage() {
               value={voice}
               onChange={setVoice}
               options={[
-                ["female", "女声（占位）"],
-                ["male", "男声（占位）"],
+                ["female", "女声"],
+                ["male", "男声"],
               ]}
             />
             <SelectField
@@ -117,7 +149,7 @@ export function CreatePage() {
               onClick={() => void handleGenerate()}
               className="rounded-xl bg-ink px-4 py-2.5 text-sm text-paper disabled:bg-ink/20 disabled:text-white"
             >
-              {generating ? "正在生成分镜…" : "生成视频"}
+              {generating ? status || "正在生成…" : "生成视频"}
             </button>
             <button
               type="button"
@@ -139,7 +171,8 @@ export function CreatePage() {
             <p className="mt-3 text-xs leading-5 text-red-700">{error}</p>
           ) : (
             <p className="mt-3 text-xs leading-5 text-ink/45">
-              声音选项本阶段不会更换音频，「打开编辑器」仍加载 demo 方便对照。
+              语音合成需要本机 `pnpm dev` 在线；失败时会回退到占位
+              demo.wav。「打开编辑器」仍加载 demo。
             </p>
           )}
         </section>

@@ -17,7 +17,6 @@ describe("generateVideoProject", () => {
     expect(() => parseVideoProject(project)).not.toThrow();
     expect(project.scenes.length).toBe(project.captions?.length);
     expect(project.scenes.length).toBeGreaterThanOrEqual(3);
-    expect(project.scenes.length).toBeLessThanOrEqual(6);
     expect(project.durationInFrames).toBe(
       project.scenes.reduce((sum, scene) => sum + scene.durationInFrames, 0),
     );
@@ -81,5 +80,23 @@ describe("generateVideoProject", () => {
         style: "whiteboard",
       }),
     ).toThrow(EmptyScriptError);
+  });
+
+  it("creates more than six scenes for a long script", () => {
+    const script = [
+      "美国希望通过展示强大的军事力量让伊朗意识到继续发展核能力攻击盟友将付出巨大代价",
+      "不过军事打击也存在巨大风险可能造成地区战争扩大油价上涨以及美国自身人员伤亡问题",
+      "因此美国打伊朗并不能简单理解为只是为了石油资源或者只是为了解决核武器问题本身",
+      "核问题以色列安全地区霸权竞争伊朗代理人武装霍尔木兹海峡以及美国全球战略利益共同构成原因",
+    ].join("。");
+    const project = generateVideoProject({
+      script,
+      language: "zh",
+      voice: "female",
+      aspect: "9:16",
+      style: "whiteboard",
+    });
+    expect(project.scenes.length).toBeGreaterThan(6);
+    expect(project.scenes.length).toBe(project.captions?.length);
   });
 });
